@@ -3,7 +3,7 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-206.14%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.95%20KB-blue)
@@ -16,19 +16,49 @@ The Bluetooth SIG CGM Profile is a Bluetooth Low Energy (BLE) profile that can h
 
 This project focuses on managing and interacting with the Continuous Glucose Monitoring service in Bluetooth part, not about the used biological sensors and analog front-end (AFE). Generally, there are no common biological sensors and AFE solutions for the BGM/CGM product in the market; manufacturers have their own proprietary solutions.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Continuous Glucose Monitoring (CGM) Service](#continuous-glucose-monitoring-cgm-service)
+  - [OTA service](#ota-service)
+  - [Application Operation](#application-operation)
+  - [Testing](#testing)
+  - [Report Number of Stored Records – ‘All records’](#report-number-of-stored-records--all-records)
+  - [Get Glucose data periodically](#get-glucose-data-periodically)
+  - [Get requested Glucose data records](#get-requested-glucose-data-records)
+- [PTS test](#pts-test)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [LightBlue app](https://punchthrough.com/lightblue)
 
+---
+
 ## Hardware Required ##
 
 - 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For example, [SLTB010A](https://www.silabs.com/development-tools/thunderboard/thunderboard-bg22-kit) EFR32BG22 Thunderboard Kit
 - 1x smartphone running the 'LightBlue' app
+
+---
 
 ## Connections Required ##
 
@@ -36,15 +66,17 @@ This example uses the LightBlue app to connect to the Thunderboard EFR32BG22 via
 
 ![hardware connection](image/hardware_connect.png)
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-### Create a project based on an example project ###
+### Based on an example project ###
 
 1. From the Launcher Home, add your product name to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "glucose".
 
@@ -70,23 +102,20 @@ To test this application, you can either create a project based on an example pr
 
    - Save the GATT configuration (ctrl-s).
 
-4. Install the software components:
+4. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
 
-    - Open the .slcp file in the project.
-
-    - Select the SOFTWARE COMPONENTS tab.
-
-    - Install the following components:
-        - [Application] → [Timers] → [Sleep timer]
-        - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
-        - [Application] → [Utility] → [Log]
-        - [Platform] → [Board] → [Board Control]: Enable Virtual COM UART.
+   - [Application] → [Timers] → [Sleep timer]
+   - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
+   - [Application] → [Utility] → [Log]
+   - [Platform] → [Board] → [Board Control]: Enable Virtual COM UART.
 
 5. Build and flash this project to your board.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works ##
 
@@ -133,7 +162,7 @@ When the measurement session ends, the measurement reports can be displayed in t
 
 Please refer to [Bluetooth SIG CGM introduction.md](doc/Bluetooth_SIG_CGM_Introduction.md) in the doc folder for more information.
 
-## Testing ##
+### Testing ###
 
 Open the LightBlue app, filter silabs-CGM and connect it.
 
@@ -187,8 +216,20 @@ There are two ways that a client can receive the CGM Measurement Characteristic 
 3. Write HEX 0105 to 0x2A52, which means the reporting of the first record.
 4. There will be 1 notification in 0x2AA7, which is the first record.
 
+---
+
 ## PTS test ##
 
 You can download the CGM specification from <https://www.bluetooth.com/specifications/specs/>, which is already in the doc folder of this repository.
 
 Here you can watch a tutorial video about the Bluetooth PTS Test in Chinese: <https://www.bilibili.com/video/BV1w44y1a7Hj?spm_id_from=333.999.0.0>
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

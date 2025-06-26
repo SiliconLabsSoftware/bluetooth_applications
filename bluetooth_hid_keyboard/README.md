@@ -4,7 +4,7 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-195.85%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.65%20KB-blue)
@@ -15,37 +15,66 @@ This is an example for Bluetooth LE HID device development, which can connect wi
 
 This example implements a simple HID keyboard but can be used as a starting point to make any human interface device.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [HID Introduction](#hid-introduction)
+- [GATT Database for Keyboard Example](#gatt-database-for-keyboard-example)
+- [Keyboard Application](#keyboard-application)
+- [Security](#security)
+- [How It Works](#how-it-works)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
+
+---
 
 ## Hardware Required ##
 
 - 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For simplicity, Silicon Labs recommends the [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
 - 1x smartphone or BLE-supported Computer
 
+---
+
 ## Connections Required ##
 
 - Connect the Bluetooth Development Kits to the PC through a compatible-cable. e.g. A micro USB cable for the BGM220 Bluetooth Module Explorer Kit.
+
+---
 
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
 ### Create a project based on an example project ###
 
 1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "HID".
 
 2. Click **Create** button on the **Bluetooth - HID Keyboard** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![create_project](image/create_project.png)
+
+   ![create_project](image/create_project.png)
 
 3. Build and flash this example to the board.
 
@@ -65,7 +94,7 @@ To test this application, you can either create a project based on an example pr
 
    - Save the GATT configuration (ctrl-s).
 
-4. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
+4. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
 
    - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0**.
    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
@@ -74,9 +103,11 @@ To test this application, you can either create a project based on an example pr
 
 5. Build and flash the project to your device.
 
-**Note:**
+> [!NOTE]
+>
+> - A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## HID Introduction ##
 
@@ -98,6 +129,8 @@ A Bluetooth HID Device must implement the HID over the GATT profile. In addition
 As mentioned earlier, HID devices must meet several requirements. The purpose of this document is to list these requirements and provide a working solution to make the device successfully enumerate. To be accepted by the Host, the device needs to have properly initialized identification data and the right level of security.
 
 The most important GATT characteristics will be described in detail with a practical example in the next section. These properties can be customized easily in the GATT Configurator.
+
+---
 
 ## GATT Database for Keyboard Example ##
 
@@ -177,6 +210,8 @@ A detailed description of the item types and the structure of this descriptor ca
 
  A *Client Characteristic Configuration descriptor* will be included in each Report characteristic definition where the data contained in the Report characteristic value refers to an Input Report.
 
+---
+
 ## Keyboard Application ##
 
 This application has the basic functionality of a generic keyboard which sends "press key" and "release key" information to the host with input reports.
@@ -199,11 +234,15 @@ An HID Device should include HID Service in the Service UUIDs AD type field of t
 As a simple basis for further development, this example is not energy-optimized.
 Also, use buffers in accordance with resources and application requirements.
 
+---
+
 ## Security ##
 
 HID Devices must bond and use LE Security Mode 1, Security Level 2 or 3, both of which require an encrypted link. In this example, the used security is Level 2: Unauthenticated pairing with encryption.
 
 For iOS compatibility *Report Map Characteristic* and *Report Reference Descriptor* need to have **encrypted read** attribute permission, which means reading the characteristic value requires an encrypted link.
+
+---
 
 ## How It Works ##
 
@@ -212,3 +251,13 @@ This section gives a brief description of the general usage.
 On the host device, open Bluetooth settings and find the device which is called "HID KB". The host device may ask the user to accept pairing, which is necessary for keyboard operation. After the device is connected and paired successfully, press PB0 to send a character. Open a program on the host device (e.g. Note application on Windows) where keystrokes can appear.
 
 ![result](image/logs.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

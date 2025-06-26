@@ -1,17 +1,44 @@
 # Bluetooth - Serial Port Profile (SPP) #
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-194.11%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-196.2%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.55%20KB-blue)
 
 ## Overview ##
 
-This example provides a simple template for SPP-like communication (also know as wire replacement), where Bluetooth serves as a transport channel for serial communication between two devices.  To keep the code as short and simple as possible, the features are minimal. Users are expected to customize the code as needed to match their project requirements.
+This example provides a simple template for SPP-like communication (also know as wire replacement), where Bluetooth serves as a transport channel for serial communication between two devices. To keep the code as short and simple as possible, the features are minimal. Users are expected to customize the code as needed to match their project requirements.
 
 Although the serial communication is symmetric between the two devices, still there is a server and a client in the communication due to the nature of Bluetooth technology. The associated sample code is a single application that implements both server and client roles.
+
+We have implemented a **client-side device**, named [web-bluetooth-spp-application](https://github.com/SiliconLabsSoftware/web-bluetooth-spp-application) to exemplify how to communicate with Silicon Labs wireless micro-controllers via the Web Bluetooth API using the BLE protocol.
+
+---
+
+## Table of Contents ##
+
+- [Description](#description)
+  - [SPP Server](#spp-server)
+  - [SPP Client](#spp-client)
+  - [Power management](#power-management)
+  - [Known Issues](#known-issues)
+- [Overview](#overview)
+- [SDK version](#sdk-version)
+- [Hardware Required](#hardware-required)
+- [Software Required](#software-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Test with 2 EFR boards](#test-with-2-efr-boards)
+  - [Test with Web App](#test-with-web-app)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
 
 ## Description ##
 
@@ -53,7 +80,7 @@ The client is more complex than the server because it needs to detect the SPP se
 
 To use the SPP service, the client needs to know the characteristic handle values. The handles are discovered dynamically so that hard-coded values are not needed. This is essential if the SPP server needs to be ported to some other BLE module and the handle values are not known in advance.
 
-At startup, the client starts discovery by calling `sl_bt_scanner_start `. For each received advertisement packet, the stack will raise event `sl_bt_evt_scanner_scan_report`. To recognize the SPP server, the client scans through each advertisement packet and searches for the 128-bit service UUID that is assigned for the custom SPP service.
+At startup, the client starts discovery by calling `sl_bt_scanner_start`. For each received advertisement packet, the stack will raise event `sl_bt_evt_scanner_scan_report`. To recognize the SPP server, the client scans through each advertisement packet and searches for the 128-bit service UUID that is assigned for the custom SPP service.
 
 Scanning advertisement packets is done with the function `process_scan_response`. Advertising packets include one or more advertising data elements that are encoded as defined in the BT specification. Each advertising element begins with a length byte that indicates the length of that field, which makes scanning through all elements in a while-loop easy.
 
@@ -61,7 +88,7 @@ The second byte in the advertising element is the AD type. The predefined types 
 
 In this use case, types 0x06 and 0x07 that indicate incomplete/complete list of 128-bit service values are relevant. If this AD type is found, the AD payload is compared against the known 128-bit UUID of the SPP service to check if there is a match.
 
-After finding a match in the advertising data, the client opens a connection by calling `sl_bt_connection_open `. When the connection is opened, the next task is to discover services and figure out the handle value that corresponds to the SPP_data characteristic (see XML definition of our custom service attached).
+After finding a match in the advertising data, the client opens a connection by calling `sl_bt_connection_open`. When the connection is opened, the next task is to discover services and figure out the handle value that corresponds to the SPP_data characteristic (see XML definition of our custom service attached).
 
 The service discovery is implemented as a simple state machine and the sequence of operations after connection is opened and summarized below:
 
@@ -81,6 +108,10 @@ Note that on the server application the "SPP Mode ON" string is printed to the c
 
 Data is handled transparently, meaning that the transmitted values can be either ASCII strings or binary data, or a mixture of these.
 
+### SPP web bluetooth application ###
+
+You can check out the source code here: [web-bluetooth-spp-application](https://github.com/SiliconLabsSoftware/web-bluetooth-spp-application) and follow the instructions to run it locally. Alternatively, you can use the live demo online at [https://siliconlabssoftware.github.io/web-bluetooth-spp-application/](https://siliconlabssoftware.github.io/web-bluetooth-spp-application/). A detailed guide is also provided in the [Test with Web App](#test-with-web-app) section, which describes how to use the live demo with the server-side of this application example.
+
 ### Power management ###
 
 USART peripheral is not accessible in EM2 sleep mode. For this reason, both the client and the server applications disable sleeping (EM2 mode) temporarily when the SPP mode is active. **SPP mode** in this context means that the client and server are connected and that the client has enabled notifications for the SPP_data characteristics.
@@ -93,29 +124,40 @@ This example implementation does not guarantee 100% reliable transfer. For incom
 
 To get a more reliable operation, increase the `SL_IOSTREAM_USART_VCOM_RX_BUFFER_SIZE` value. However, even with a large FIFO buffer, some data may get lost if the data rate is very high. If the FIFO buffer in RAM becomes full, the driver will simply drop the bytes that do not fit.
 
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
+- [Web Bluetooth SPP Application](https://github.com/SiliconLabsSoftware/web-bluetooth-spp-application)
+
+---
 
 ## Hardware Required ##
 
 - 2x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For simplicity, Silicon Labs recommends the [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
 
+---
+
 ## Connections Required ##
 
 - Connect the Bluetooth Development Kits to the PC through a compatible-cable. For example, a micro USB cable for the BGM220 Bluetooth Module Explorer Kit.
+
+---
 
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
 ### Create a project based on an example project ###
 
@@ -131,21 +173,23 @@ To test this application, you can either create a project based on an example pr
 1. Create a **Bluetooth - SoC Empty** project for your hardware using Simplicity Studio 5.
 
 2. Copy all attached files in the *inc* and *src* folders into the project root folder (overwriting existing file).
-    - With **Server** device: [bt_spp_server](bt_spp_server)
 
-    - With **client** device: [bt_spp_client](bt_spp_client)
+   - With **Server** device: [bt_spp_server](bt_spp_server)
+   - With **client** device: [bt_spp_client](bt_spp_client)
+
 3. Import the GATT configuration:
 
-    - Open the .slcp file in the project.
+   - Open the .slcp file in the project.
 
-    - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
 
-    - Find the Import button and import the attached files:
-      - With **Server** device: `bt_spp_server/config/btconf/gatt_configuration.btconf`.
-      - With **Client** device: `bt_spp_client/config/btconf/gatt_configuration.btconf`.
+   - Find the Import button and import the attached files:
+     - With **Server** device: `bt_spp_server/config/btconf/gatt_configuration.btconf`.
+     - With **Client** device: `bt_spp_client/config/btconf/gatt_configuration.btconf`.
 
-    - Save the GATT configuration (ctrl-s).
-4. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
+   - Save the GATT configuration (ctrl-s).
+
+4. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
 
    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
 
@@ -155,21 +199,53 @@ To test this application, you can either create a project based on an example pr
 
 5. Build and flash the project to your device.
 
-**NOTE:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works ##
 
-1. Flash one radio board with the client code, and another one with the server code.
-2. Open two instances of your favorite terminal program, and connect to both kits via the virtual COM port (find the JLink CDC UART ports). Use the following UART settings: **baud rate 115200, 8N1, no flow control**.
-3. Press reset button on both kits.
-4. The two kits will automatically find each other and set up a connection. You should see the logs on the terminal programs
+### Test with 2 EFR boards ###
+
+1. Flash one radio board with the client code and another one with the server code.
+
+2. Open two instances of your favorite terminal program and connect to both kits via the virtual COM port (find the JLink CDC UART ports). Use the following UART settings: **baud rate 115200, 8N1, no flow control**.
+
+3. Press the reset button on both kits.
+
+4. The two kits automatically find each other and set up a connection. Logs are visible from the terminal programs.
+
 5. Once the connection is set up and SPP mode is on, type anything to either of the terminal programs and see it appearing on the other terminal.
-![](image/spp_terminal.gif)
 
-**NOTE**: Make sure that you are using the same baud rate and flow control settings in your starter kit and radio board or module firmware as well as your terminal program. For WSTK, this can be checked in Debug Adapters->Launch Console->Admin view, by typing "serial vcom".
+   ![spp_terminal](image/spp_terminal.gif)
 
-![](image/v3_launch_console.png)
+> [!NOTE]
+>
+> Make sure that you are using the same baud rate and flow control settings in your starter kit and radio board or module firmware as well as your terminal program. For WSTK, this can be checked in Debug Adapters->Launch Console->Admin view, by typing "serial vcom".
+>
+> ![v3_launch_console](image/v3_launch_console.png)
+> ![v3_wstk_config](image/v3_wstk_config.png)
 
-![](image/v3_wstk_config.png)
+### Test with Web App ###
+
+1. Flash one radio board with the server code. Open a terminal program(e.g., Tera Term) and connect to server device to see the logs.
+
+2. Follow the guideline from [web-bluetooth-spp-application](https://github.com/SiliconLabsSoftware/web-bluetooth-spp-application) to run the Web Application locally. Or you can use the live demo online here for testing purpose - [https://siliconlabssoftware.github.io/web-bluetooth-spp-application/](https://siliconlabssoftware.github.io/web-bluetooth-spp-application/)
+
+3. From the web browser, press the connect button and choose the server device named: **SPP Exam**. After sucessfully connected, you will be able to send message between the web app client and server device.
+
+   |![Web app](image/web_app.png) |![Server console](image/console_server.png)|
+   |:-:|:-:|
+   | **Web App** | **Server Device** |
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

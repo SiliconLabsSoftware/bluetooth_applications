@@ -3,26 +3,53 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/Sparkfun-Human%20Presence%20Sensor%20Breakout-green)](https://www.sparkfun.com/products/14349)
 [![Required board](https://img.shields.io/badge/Sparkfun-Thing%20Plus%20Matter-green)](https://www.sparkfun.com/products/20270)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-224.66%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-11.23%20KB-blue)
+
 ## Overview ##
 
 This project aims to implement a people counting application using [SparkFun Human Presence Sensor Breakout - AK9753 (Qwiic)](https://www.sparkfun.com/products/14349) and Sparkfun development board [Sparkfun Thing Plus MGM240P](https://www.sparkfun.com/products/20270) with integrated BLE stack.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Application overview](#application-overview)
+  - [GATT Configuration](#gatt-configuration)
+  - [People Counting Implementation](#people-counting-implementation)
+  - [Counting Algorithm](#counting-algorithm)
+  - [OLED Display](#oled-display)
+  - [Use Simplicity Connect Mobile Application](#use-simplicity-connect-mobile-application)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
 
 ## Hardware Required ##
 
@@ -30,6 +57,8 @@ This project aims to implement a people counting application using [SparkFun Hum
 - 1x [SparkFun Human Presence Sensor Breakout - AK9753 (Qwiic)](https://www.sparkfun.com/products/14349)
 - 1x [SparkFun Micro OLED Breakout (Qwiic)](https://www.sparkfun.com/products/14532)
 - 1x smartphone running the 'Simplicity Connect' mobile app
+
+---
 
 ## Connections Required ##
 
@@ -40,25 +69,36 @@ Listed below are the port and pin mappings for working with this example.
 
 - Board: **BRD2704A - SparkFun Thing Plus Matter - MGM240P**
 
-    | GPIO Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | GPIOB | PB00 | Button |
-    | SCL | PB03 | I2C Clock |
-    | SDA | PB04 | I2C Data |
+  | GPIO Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | GPIOB | PB00 | Button |
+  | SCL | PB03 | I2C Clock |
+  | SDA | PB04 | I2C Data |
+
+> [!NOTE]
+>
+> - Some boards do not have an integrated button. In this case, the user has to connect an external button to the board and config this button in accordance with project specifics.
+>
+>   ![btn_config](image/btn_config.png)
+> - To make the driver more stable, use a ceramic capacitor (ex: Ceramic Capacitor 104) to avoid the anti-vibration button used in the project as below:
+>
+>   ![btn_setup](image/btn_setup.png)
+
+---
 
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE:**
-
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
 ### Create a project based on an example project ###
 
-1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "people".
+1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "people".
 
 2. Click **Create** button on the **Bluetooth - People Counting (AK9753)** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
 ![create_project](image/create_project.png)
@@ -73,31 +113,31 @@ To test this application, you can either create a project based on an example pr
 
 3. Import the GATT configuration:
 
-    - Open the .slcp file in the project.
+   - Open the .slcp file in the project.
 
-    - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
 
-    - Find the Import button and import the attached [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) file.
+   - Find the Import button and import the attached [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) file.
 
-    - Save the GATT configuration (ctrl-s).
-4. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
-    - [Platform] → [Driver] → [I2CSPM] → default instance name: **qwiic**
-    - [Platform] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
-    - [Platform] → [Driver] → [Button] → [Simple Button] → instance name: **btn0**. If using the BRD2704A board, configure btn0 to select the "Selected Module" as PB00
-    - [Application] → [Utility] → [Log]
-    - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C] → use default configuaration
-    - [Third Party Hardware Drivers] → [Service] → [GLIB - OLED Graphics Library]
-    - [Third Party Hardware Drivers] → [Sensors] → [AK9753 - Human Presence Sensor (Sparkfun) - I2C]
+   - Save the GATT configuration (ctrl-s).
+
+4. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
+
+   - [Platform] → [Driver] → [I2CSPM] → default instance name: **qwiic**
+   - [Platform] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
+   - [Platform] → [Driver] → [Button] → [Simple Button] → instance name: **btn0**. If using the BRD2704A board, configure btn0 to select the "Selected Module" as PB00
+   - [Application] → [Utility] → [Log]
+   - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C] → use default configuaration
+   - [Third Party Hardware Drivers] → [Service] → [GLIB - OLED Graphics Library]
+   - [Third Party Hardware Drivers] → [Sensors] → [AK9753 - Human Presence Sensor (Sparkfun) - I2C]
+
 5. Build and flash the project to your device.
 
-**NOTE:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- Some boards do not have an integrated button. In this case, the user has to connect an external button to the board and config this button in accordance with project specifics.
-![btn_config](image/btn_config.png)
-To make the driver more stable, use a ceramic capacitor (ex: Ceramic Capacitor 104) to avoid the anti-vibration button used in the project as below:
-![btn_setup](image/btn_setup.png)
-
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How it Works ##
 
@@ -168,10 +208,10 @@ A new custom service (People Counting) with 8 characteristic must be added.
 2. Initialize and load the NVM3 configurations
 
 3. Initialize the AK9753 sensor with the configuration loaded from NVM3:
-    - Upper threshold: 100
-    - Lower threshold: -200
-    - IR Threshold: 800
-    - Hysteresis: 50
+   - Upper threshold: 100
+   - Lower threshold: -200
+   - IR Threshold: 800
+   - Hysteresis: 50
 
 4. Initialize OLED display
 
@@ -250,3 +290,13 @@ For setting a parameter select a characteristic and tap on its write button. Typ
 |IR threshold|Hysteresis|Notification status|Room capacity|
 |-|-|-|-|
 |- **Read** to get the current IR threshold setting <br>- **Write** to set IR threshold setting|- **Read** to get the current hysteresis setting<br>- **Write** to set hyteresis setting|- **Read** to get the current notification status setting<br>- **Write** to set notification status setting|- **Read** to get the current room capacity setting.<br>- **Write** to set room capacity setting|
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

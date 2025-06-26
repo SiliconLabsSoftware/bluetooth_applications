@@ -59,12 +59,10 @@ readme:
   - path: ../README.md
 
 other_file:
-  - path: ../images/create_project.png
-    directory: images
-  - path: ../images/external_repos.png
-    directory: images
-  - path: ../images/log.png
-    directory: images
+  - path: ../image/create_project.png
+    directory: image
+  - path: ../image/log.png
+    directory: image
 
 configuration:
   - name: SL_STACK_SIZE 

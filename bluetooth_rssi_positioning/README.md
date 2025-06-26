@@ -3,11 +3,12 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)%20board-green)](https://www.sparkfun.com/products/14532)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-198.73%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.66%20KB-blue)
+
 ## Description ##
 
 Bluetooth RSSI Positioning is an application intended to showcase a room finder or asset locator service using the BLE stack on Silicon Labs development kits.
@@ -22,15 +23,35 @@ This code example referred to the following code examples. More detailed informa
 
 - [OLED SSD1306 driver](https://github.com/SiliconLabs/platform_hardware_drivers/tree/master/oled_ssd1306_i2c)
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
 
 ## Hardware Required ##
 
@@ -38,9 +59,11 @@ This code example referred to the following code examples. More detailed informa
 - 1x [SparkFun Micro OLED Breakout (Qwiic) board](https://www.sparkfun.com/products/14532) is used for the Asset
 - 1x smartphone running the 'Simplicity Connect' mobile app
 
-**NOTE:**
+> [!NOTE]
+>
+> At least one gateway shall be active, however any number of gateways/rooms could be used.
 
-- At least one gateway shall be active, however any number of gateways/rooms could be used.
+---
 
 ## Connections Required ##
 
@@ -52,13 +75,15 @@ The BGM220 explorer kit and the SparkFun Micro OLED Breakout (Qwiic) board can b
 
 Gateways do not require a display.
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
 ### Create a project based on an example project ###
 
@@ -87,32 +112,36 @@ To test this application, you can either create a project based on an example pr
 
    - Save the GATT configuration (ctrl-s).
 
-5. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
+5. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
 
-    **Asset:**
-    - [Platform] → [Driver] → [I2CSPM] → default instance name: **qwiic**
-    - [Platform] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
-    - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0**
-    - [Application] → [Utility] → [Log]
-    - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
-    - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
+   - **Asset devices:**
+     - [Platform] → [Driver] → [I2CSPM] → default instance name: **qwiic**
+     - [Platform] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
+     - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0**
+     - [Application] → [Utility] → [Log]
+     - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
+     - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
 
-    **Gateway:**
-    - [Platform] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
-    - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0**
-    - [Application] → [Utility] → [Log]
+   - **Gateway device:**
+     - [Platform] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
+     - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0**
+     - [Application] → [Utility] → [Log]
 
 6. Build and flash the projects to your devices.
 
-**NOTE:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
-### BLE RSSI Indoor Positioning Implementation ###
+## BLE RSSI Indoor Positioning Implementation ##
 
 The Initialization software flow is as follows:
 
 ![Flow_diagram_init](image/initialization.png)
+
+---
 
 ## How it Works ##
 
@@ -171,9 +200,9 @@ Follow the below steps to test the example:
 
 6. For both the **Asset** and the **Gateways** the Network Unique Identifiers shall match, so enter the same custom value on all assets and gateways (unsigned 4bytes (0 ... 4294967295))
 
-7. For the **Asset** the _Reporting Interval_ configuration value is the amount of time in seconds the asset recalculates its own position and finds the closest room
+7. For the **Asset** the *Reporting Interval* configuration value is the amount of time in seconds the asset recalculates its own position and finds the closest room
 
-8. You can launch the Console that is integrated on Simplicity Studio or can use a third-party terminal tool like TeraTerm to receive the data from the virtual COM port. Use the following UART settings: baud rate 115200, 8N1, no flow control. You should expect a similar output to the one below.
+8. You can launch the Console that is integrated on Simplicity Studio or can use a third-party terminal tool like Tera Term to receive the data from the virtual COM port. Use the following UART settings: baud rate 115200, 8N1, no flow control. You should expect a similar output to the one below.
 
    |![logs_asset](image/logs_asset.PNG)  | ![logs_config_asset](image/logs_config_asset.PNG)|
    |-|-|
@@ -219,3 +248,13 @@ After the BLE stack's boot event is done, the following message will be displaye
 In case at least one gateway is in range "room finding" will start and will display the name of the closest room:
 
 ![Room found](image/room_found_oled.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

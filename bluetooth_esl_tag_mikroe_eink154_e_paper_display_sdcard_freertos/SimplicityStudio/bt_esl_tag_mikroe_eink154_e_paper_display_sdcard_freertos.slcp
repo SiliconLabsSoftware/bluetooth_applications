@@ -1,0 +1,350 @@
+project_name: bt_esl_tag_mikroe_eink154_e_paper_display_sdcard_freertos
+package: Bluetooth
+label: Bluetooth - ESL Tag with SD card and E-Paper display 1,54inch 200x200 dots from Mikroe (FreeRTOS)
+description: >
+  This example is an evaluation showcase for a Bluetooth Electronic Shelf Label (ESL) Tag application.
+  This demo includes image and display capabilities of an ESL Tag, utilizing an E-Paper display 1,54" 200x200 dots
+  from Mikroe. Images are stored in the SD card by default.
+category: Bluetooth Examples
+quality: experimental
+
+filter:
+  - name: "Wireless Technology"
+    value: ["Bluetooth"]
+  - name: "Device Type"
+    value: ["SoC"]
+  - name: "Project Difficulty"
+    value: ["Advanced"]
+
+component:
+  - id: bluetooth_stack
+  - id: device_init
+  - id: gatt_service_device_information
+  - id: component_catalog
+  - id: mpu
+  - id: sl_memory
+  - id: simple_led
+    instance:
+      - led0
+  - id: sensor_rht_mock
+  - id: simple_button
+    instance:
+      - btn0
+  - id: bt_post_build
+  - id: mikroe_eink_display
+    from: third_party_hw_drivers
+  - id: services_fatfs
+    from: third_party_hw_drivers
+  - id: mikroe_microsd
+    from: third_party_hw_drivers
+  - id: spidrv_eusart
+    instance:
+      - mikroe
+  - id: spidrv
+    instance:
+      - sdcard
+  - id: emlib_iadc
+  - id: nvm3_lib
+  - id: nvm3_default
+  - id: ead_core
+  - id: esl_tag_ots_erver
+  - id: silabs_core_circular_queue
+  - id: bluetooth_feature_gatt_server
+  - id: bluetooth_feature_legacy_advertiser
+  - id: bluetooth_feature_past_receiver
+  - id: bluetooth_feature_connection
+  - id: bluetooth_feature_pawr_sync
+  - id: bluetooth_feature_system
+  - id: bluetooth_feature_sm
+  - id: freertos
+  - id: app_log
+  - id: debug_swo
+  - id: iostream_swo
+
+include:
+  - path: ../inc
+    file_list:
+      - path: app.h
+  - path: ../esl_tag_core/inc
+    directory: esl_tag_core/inc
+    file_list:
+      - path: esl_tag_battery_internal.h
+      - path: esl_tag_core.h
+      - path: esl_tag_crypto.h
+      - path: esl_tag_display_core.h
+      - path: esl_tag_errors.h
+      - path: esl_tag_image_core.h
+      - path: esl_tag_internal.h
+      - path: esl_tag_led_core.h
+      - path: esl_tag_log.h
+      - path: esl_tag_opcodes.h
+      - path: esl_tag_response.h
+      - path: esl_tag_sensor_core.h
+      - path: esl_tag_tlv.h
+  - path: ../esl_tag_display/inc
+    directory: esl_tag_display/inc
+    file_list:
+      - path: esl_tag_display.h
+  - path: ../esl_tag_sdcard_image/inc
+    directory: esl_tag_sdcard_image/inc
+    file_list:
+      - path: esl_tag_image.h
+  - path: ../esl_tag_user_display_driver/inc
+    directory: esl_tag_user_display_driver/inc
+    file_list:
+      - path: esl_tag_user_display_driver.h
+  - path: ../esl_tag_led/inc
+    directory: esl_tag_led/inc
+    file_list:
+      - path: esl_tag_led.h
+  - path: ../esl_tag_sensor/inc
+    directory: esl_tag_sensor/inc
+    file_list:
+      - path: esl_tag_sensor.h
+      - path: sl_btmesh_device_properties.h
+  - path: ../app_scheduler_rtos/inc
+    directory: app_scheduler_rtos/inc
+    file_list:
+      - path: app_scheduler.h
+
+
+source:
+  - path: ../src/main.c
+  - path: ../src/app.c
+  - path: ../esl_tag_core/src/esl_tag_user_display_driver.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_battery_iadc.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_core.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_crypto.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_display_core.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_errors.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_image_core.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_led_core.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_log.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_opcodes.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_response.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_core/src/esl_tag_sensor_core.c
+    directory: esl_tag_core/src
+  - path: ../esl_tag_display/src/esl_tag_display.c
+    directory: esl_tag_display/src
+  - path: ../esl_tag_user_display_driver/src/esl_tag_user_display_driver.c
+    directory: esl_tag_user_display_driver/src
+  - path: ../esl_tag_sdcard_image/src/esl_tag_sdcard_image.c
+    directory: esl_tag_sdcard_image/src
+  - path: ../esl_tag_led/src/esl_tag_led.c
+    directory: esl_tag_led/src
+  - path: ../esl_tag_sensor/src/esl_tag_sensor.c
+    directory: esl_tag_sensor/src
+  - path: ../app_scheduler_rtos/src/app_scheduler.c
+    directory: app_scheduler_rtos/src
+
+config_file:
+  - override:
+      component: gatt_configuration
+      file_id: gatt_configuration_file_id
+    path: ../config/btconf/gatt_configuration.btconf
+    directory: btconf
+  - path: ../app_scheduler_rtos/config/app_scheduler_rtos_config.h
+    file_id: app_scheduler_rtos_config
+  - path: ../esl_tag_core/config/esl_tag_core.xml
+    file_id: esl_tag_core_service
+    directory: btconf
+  - path: ../esl_tag_core/config/esl_tag_core_config.h
+    file_id: esl_tag_core_config
+  - path: ../esl_tag_core/config/esl_log_config.h
+    file_id: esl_log_config
+  - path: ../esl_tag_sdcard_image/config/esl_tag_sdcard_image.xml
+    file_id: esl_tag_sdcard_image_characteristics
+    directory: btconf
+  - path: ../esl_tag_sdcard_image/config/esl_tag_image_config.h
+    file_id: esl_tag_image_config
+  - path: ../esl_tag_display/config/esl_tag_display.xml
+    file_id: esl_tag_display_characteristics
+    directory: btconf
+  - path: ../esl_tag_display/config/esl_tag_display_config.h
+    file_id: esl_tag_display_config
+  - path: ../esl_tag_led/config/esl_tag_led.xml
+    file_id: esl_tag_led_characteristics
+    directory: btconf
+  - path: ../esl_tag_led/config/esl_tag_led_config.h
+    file_id: esl_tag_led_config
+  - path: ../esl_tag_sensor/config/esl_tag_sensor.xml
+    file_id: esl_tag_sensor_characteristics
+    directory: btconf
+  - path: ../esl_tag_sensor/config/esl_tag_sensor_config.h
+    file_id: esl_tag_sensor_config
+  - override:
+      component: spidrv
+      file_id: spidrv_config
+      instance: mikroe
+    path: ../config/brd4182a/sl_spidrv_mikroe_config.h
+    condition: [brd4182a]
+  - override:
+      component: spidrv_eusart
+      file_id: spidrv_eusart_config
+      instance: mikroe
+    path: ../config/brd2703a/sl_spidrv_eusart_mikroe_config.h
+    condition: [brd2703a]
+  - override:
+      component: spidrv
+      file_id: spidrv_config
+      instance: sdcard
+    path: ../config/brd2703a/sl_spidrv_sdcard_config.h
+    condition: [brd2703a]
+
+configuration:
+  - name: SL_BT_RTOS_EVENT_HANDLER_STACK_SIZE
+    value: "3000"
+  - name: ESL_MODE
+    value: "1"
+  - name: SL_STACK_SIZE
+    value: "2752"
+  - name: SL_BT_EAD_CORE_ACCELERATOR
+    value: "SL_BT_EAD_CORE_USE_RADIOAES"
+    condition:
+      - device_series_2
+  - name: SL_PSA_KEY_USER_SLOT_COUNT
+    value: "1"
+    condition:
+      - psa_crypto
+  - name: SL_BT_CONFIG_MAX_CONNECTIONS
+    value: "2"
+  - name: SL_BT_CONFIG_USER_ADVERTISERS
+    value: "2"
+  - name: SL_DEVICE_INIT_LFRCO_PRECISION
+    value: "cmuPrecisionDefault"
+  - name: SL_DEVICE_INIT_LFXO_PRECISION
+    value: "250"
+    condition:
+      - hardware_board_has_lfxo
+  - name: SL_DEVICE_INIT_LFXO_CTUNE
+    value: "37"
+    condition:
+      - hardware_board_has_lfxo
+  - name: SL_DEBUG_SWO_SAMPLE_PC
+    value: "0"
+    condition:
+      - debug_swo
+    unless:
+      - iostream_swo
+  - name: NVM3_DEFAULT_NVM_SIZE
+    value: "49152"
+  - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
+    value: "516"
+  - name: NVM3_DEFAULT_CACHE_SIZE
+    value: "96"
+  - name: SL_IOSTREAM_USART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
+    value: "1"
+    condition:
+      - esl_tag_cli_test_harness
+  - name: SL_SLEEPTIMER_WALLCLOCK_CONFIG
+    value: "1"
+  - name: APP_ASSERT_LOG_ENABLE
+    value: "0"
+  - name: CIRCULAR_QUEUE_LEN_MAX
+    value: "48"
+  - name: APP_SCHEDULER_MAX_DATA_SIZE
+    value: "18"
+  - name: APP_SCHEDULER_MAX_QUEUE_SIZE
+    value: "5"
+  - name: APP_LOG_TIME_ENABLE
+    value: "1"
+  - name: ESL_TAG_MAX_DISPLAYS
+    value: "2"
+    condition:
+      - esl_tag_display
+      - esl_tag_user_display_driver
+  - name: ESL_TAG_MAX_image
+    value: "2"
+  - name: ESL_TAG_RAM_IMAGE_POOL_SIZE
+    value: "4096"
+  - name: ESL_TAG_NVM_IMAGE_POOL_SIZE
+    value: "24576"
+    condition:
+      - esl_tag_nvm_image
+      - esl_tag_wstk_lcd_driver
+    unless:
+      - esl_tag_user_display_driver
+  - name: ESL_TAG_MAX_LEDS
+    value: "2"
+  - name: MIKROE_MICROSD_MMC_FAST_CLOCK
+    value: "20000000"
+
+readme:
+  - path: ../README.md
+
+template_contribution:
+  - name: bluetooth_on_event
+    value:
+      include: esl_tag_internal.h
+      function: esl_core_bt_on_event
+    priority: -8192
+  - name: event_handler
+    value:
+      event: internal_app_init
+      include: esl_tag_internal.h
+      handler: esl_core_init
+    priority: 8
+  - name: event_handler
+    value:
+      event: internal_app_process_action
+      include: esl_tag_internal.h
+      handler: esl_core_step
+  - name: bluetooth_on_event
+    value:
+      include: esl_tag_display.h
+      function: esl_display_bt_on_event
+    priority: -8190
+  - name: bluetooth_on_event
+    value:
+      include: esl_tag_sensor.h
+      function: esl_sensor_bt_on_event
+    priority: -8998  # must be put before esl_core_bt_on_event!
+  - name: bluetooth_on_event
+    value:
+      include: esl_tag_led.h
+      function: esl_led_bt_on_event
+    priority: -8189
+  - name: bluetooth_on_event
+    value:
+      include: app_scheduler.h
+      function: app_scheduler_bt_on_event
+    priority: -8189
+
+other_file:
+  - path: ../image/hardware_connection.png
+    directory: image
+  - path: ../image/hardware_connection_2.png
+    directory: image
+  - path: ../image/project.png
+    directory: image
+  - path: ../image/result1.png
+    directory: image
+
+sdk_extension:
+  - id: third_party_hw_drivers
+    version: 4.1.1
+
+tag:
+  - hardware:device:flash:512
+  - hardware:device:ram:32
+  - hardware:rf:band:2400
+  - hardware:component:button:1+
+  - hardware:component:led:1+
+
+ui_hints:
+  highlight:
+    - path: config/btconf/gatt_configuration.btconf
+      focus: false
+    - path: README.md
+      focus: true

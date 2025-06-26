@@ -1,16 +1,17 @@
-# Bluetooth - CO Monitor (MQ7)
+# Bluetooth - CO Monitor (MQ7) #
 
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Mikroe-Buzzer%202%20Click%20Board-green)](https://www.mikroe.com/buzz-2-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)%20board-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/Mikroe-CO%20CLICK-green)](https://www.mikroe.com/co-click)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-200.75%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.35%20KB-blue)
-## Summary
+
+## Overview ##
 
 This project aims to implement a CO application using Silicon Labs development kits and external sensors integrated with the BLE wireless stack. It can be used to monitor and track carbon monoxide levels in various environments. Users can use this system for monitoring CO levels in offices, warehouses, factories... The wireless CO system incorporates an MQ7 sensor and client devices. The sensor periodically measures the CO level and advertises the processed CO level value to the client devices.
 
@@ -28,17 +29,48 @@ If the BTN0 is pressed during the initialization sequence then the application b
 
 If the BTN0 is released or not pressed during the initialization phase, the application starts scanning the BLE network. The application periodically scans the BLE network looking for a sensor device. The application logic and display updating features are invoked when a sensor device is found and receives at least five advertisement packages from it and each package has different sample counter values.
 
-## SDK version
+---
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+## Table Of Contents ##
 
-## Software Required
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Sensor](#sensor)
+    - [How to calibrate sensor](#how-to-calibrate-sensor)
+    - [Sensor overview](#sensor-overview)
+    - [Sensor Implementation](#sensor-implementation)
+  - [Client](#client)
+    - [Client overview](#client-overview)
+    - [Client GATT Database](#client-gatt-database)
+    - [Client Implementation](#client-implementation)
+  - [Testing](#testing)
+    - [Sensor Result](#sensor-result)
+    - [Client Mode](#client-mode)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
+## SDK version ##
+
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
+
+## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
 
-## Hardware Required
+---
+
+## Hardware Required ##
 
 **Sensor:**
 
@@ -52,7 +84,9 @@ If the BTN0 is released or not pressed during the initialization phase, the appl
 - 1x [SparkFun Micro OLED Breakout (Qwiic) board](https://www.sparkfun.com/products/14532)
 - 1x [Buzzer 2 Click Board](https://www.mikroe.com/buzz-2-click)
 
-## Connections Required
+---
+
+## Connections Required ##
 
 The hardware connection is shown in the image below:
 
@@ -66,17 +100,17 @@ The CO click board can be easily connected to the EFR32 xG24 Explorer Kit via a 
 
 The Sparkfun OLED Display board can be easily connected to the EFR32 xG24 Explorer Kit by using a Qwiic cable. The Buzzer 2 Click connects to the EFR32 xG24 Explorer Kit using PWM via a MikroE connection.
 
-## Setup
+## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project
+### Based on an example project ###
 
 1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "co".
 
@@ -85,7 +119,7 @@ To test this application, you can either create a project based on an example pr
 
 3. Build and flash this example to the board.
 
-### Start with a "Bluetooth - SoC Empty" project
+### Start with a "Bluetooth - SoC Empty" project ###
 
 1. Create a **Bluetooth - SoC Empty** project for your hardware using Simplicity Studio 5.
 
@@ -99,7 +133,7 @@ To test this application, you can either create a project based on an example pr
 
     - Open the .slcp file in the project.
 
-    - Select the SOFTWARE COMPONENTS tab.
+    - Select the **SOFTWARE COMPONENTS tab**.
 
     - Install the following components for **sensor** device:
 
@@ -131,17 +165,21 @@ To test this application, you can either create a project based on an example pr
 
 5. Build and flash this example to the board.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
-## How it Works
+## How it Works ##
 
-### Sensor
+### Sensor ###
 
-#### How to calibrate sensor
+#### How to calibrate sensor ####
 
-- Note: Because the EFR32xG24 Explorer Kit can only measure the voltage range from 0 V to 3.3 V, so you have to turn the rheostat on the CO click to 0 Ohm.
+> [!NOTE]
+>
+> Because the EFR32xG24 Explorer Kit can only measure the voltage range from 0 V to 3.3 V, so you have to turn the rheostat on the CO click to 0 Ohm.
 
 The graph below shows the dependence between Rs/R0 and the value of Ppm
 
@@ -163,11 +201,11 @@ From the blue line, select 2 points and replace the above equation, you will be 
 
 The R0 is calculated by assuming clean air (approx 10 ppm of carbon monoxide) -- it is therefore best to perform this calibration outside. Place the sensor in a place where the air is clean and assume the value of carbon monoxide is 10ppm. Substituting into equation (*) you get the ratio Rs/R0. Then call the function mq7_read_rs to calculate Rs. From Rs and the ratio Rs/R0 you will be able to calculate R0.
 
-#### Sensor overview
+#### Sensor overview ####
 
 ![Application overview](image/co_sensor_overview.png)
 
-#### Sensor Implementation
+#### Sensor Implementation ####
 
 **Application initialization:**
 
@@ -191,13 +229,13 @@ AdvData field in the advertisement packet is as table below:
 - CoLevel: Calculated CO level in ppm
 - Device is not connectable. It sends [manufacturer specific advertisement](https://github.com/SiliconLabs/bluetooth_stack_features/tree/master/advertising/advertising_manufacturer_specific_data) packets.
 
-### Client
+### Client ###
 
-#### Client overview
+#### Client overview ####
 
 ![Application overview](image/co_client_overview.png)
 
-#### Client GATT Database
+#### Client GATT Database ####
 
 Advertisement Packet
 Device name: CO_Client
@@ -217,7 +255,7 @@ GATT Database
     - **[R]** Get Buzzer volume
     - **[W]** Set Buzzer volume value (0 - 10)
 
-#### Client Implementation
+#### Client Implementation ####
 
 **Application initialization:**
 
@@ -269,9 +307,9 @@ If the Client is in the normal mode, the OLED will show CO level and threshold C
 
 ![Display](image/co_display.png)
 
-### Testing
+### Testing ###
 
-#### Sensor
+#### Sensor Result ####
 
 You can use a smartphone application such as the Simplicity Connect application, to see the advertising packet from the Sender.
 
@@ -289,9 +327,9 @@ Follow the below steps to test the example with the Simplicity Connect applicati
 
     ![Sensor Log](image/co_log_sensor.png)
 
-#### Client
+#### Client Mode ####
 
-**Configuration mode**
+For configuration mode:
 
 This mode allows to configure CO threshold for warning, buzzer volume and notification. Default timeout for every step is 25 seconds. If the timer expires, it will reboot to normal mode.
 
@@ -301,7 +339,7 @@ This mode allows to configure CO threshold for warning, buzzer volume and notifi
    ![Configure via App](image/config_via_app.jpg)
 - If you are done with the configuration, wait for the timeout or press reset button on the board to go to normal mode.
 
-**Normal mode**
+For normal mode
 
 - Upon reset, the application will display the Silicon Labs logo on the OLED screen for a few seconds.
 
@@ -313,4 +351,14 @@ This mode allows to configure CO threshold for warning, buzzer volume and notifi
 
 - You should raise the CO level higher than configured CO threshold, enable notification to make the buzzer works for the warning. Feel free to change threshold lower for testing purpose during configuration step.
 
-**Note:** Button PB0 should be pressed during startup (power-on or reset) to run the client in Configuration Mode. The terminal will display the information as below
+> [!NOTE]
+>
+> Button PB0 should be pressed during startup (power-on or reset) to run the client in Configuration Mode. The terminal will display the information as below
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.

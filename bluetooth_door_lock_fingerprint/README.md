@@ -3,25 +3,58 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Mikroe-A-green)](https://www.mikroe.com/fingerprint-2-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)-green)](https://www.sparkfun.com/products/14532)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-228.55%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-13.56%20KB-blue)
+
 ## Overview ##
 
 This example is used for a BLE-based device lock system using one Silicon Labs EFR32xG24 Explorer kit and various hardware components such as MikroE Fingerprint Click 2 (A-172-MRQ) and SparkFun Micro OLED Breakout (Qwiic). The system is using BLE for wireless communication. This example also is the foundation to develop a secure and convenient device system using biometric authentication (fingerprint) and LED display indication. The system will use BLE for wireless communication between the Silicon Labs board and the Simplicity connect mobile application.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Application Overview](#application-overview).
+  - [Application Logic](#application-logic)
+  - [GATT Database](#gatt-database)
+  - [Application initialization](#application-initialization)
+  - [Runtime - Normal Mode](#runtime---normal-mode)
+  - [Runtime - Configuration Mode 1 - Register/Remove Fingerprint](#runtime---configuration-mode-1---registerremove-fingerprint)
+  - [Runtime - Configuration Mode 2 - Show Authorized Fingerprints](#runtime---configuration-mode-2---show-authorized-fingerprints)
+  - [Display](#display).
+  - [Testing](#testing)
+    - [Normal Mode](#normal-mode)
+    - [Configuration Mode 1](#configuration-mode-1)
+    - [Configuration Mode 2](#configuration-mode-2)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
 
 ## Hardware Required ##
 
@@ -29,6 +62,8 @@ This example is used for a BLE-based device lock system using one Silicon Labs E
 - 1x [SparkFun Micro OLED Breakout (Qwiic)](https://www.sparkfun.com/products/14532)
 - 1x [A-172-MRQ - Fingerprint 2 Click](https://www.mikroe.com/fingerprint-2-click)
 - 1x smartphone running the 'Simplicity Connect' mobile app
+
+---
 
 ## Connections Required ##
 
@@ -38,23 +73,25 @@ The following picture shows the system view of how it works.
 
 The SparkFun OLED Display board can be easily connected to the EFR32 xG24 Explorer Kit by using a Qwiic cable. The Fingerprint 2 Click connects to the EFR32xG24 Explorer Kit using USART via MikroE connection.
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project ###
+### Based on an example project ###
 
 1. From the Launcher Home, add your hardware to **My Products**, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "door lock fingerprint".
 
 2. Click **Create** button on the **Bluetooth - Door Lock Fingerprint (A-172-MRQ)** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
 
-    ![create_project](image/create_project.png)
+   ![create_project](image/create_project.png)
 
 3. Build and flash this example to the board.
 
@@ -66,37 +103,39 @@ To test this application, you can either create a project based on an example pr
 
 3. Import the GATT configuration:
 
-    - Open the .slcp file in the project.
+   - Open the .slcp file in the project.
 
-    - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
 
-    - Find the Import button and import the attached [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) file.
+   - Find the Import button and import the attached [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) file.
 
-    - Save the GATT configuration (ctrl-s).
+   - Save the GATT configuration (ctrl-s).
 
 4. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-    - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: **vcom**
+   - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: **vcom**
 
-    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **mikroe** → Set "Receive buffer size" to 800
+   - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **mikroe** → Set "Receive buffer size" to 800
 
-    - [Application] → [Utility] → [Log]
+   - [Application] → [Utility] → [Log]
 
-    - [Platform] → [Driver] → [I2C] → [I2CSPM] → default instance name: **qwiic**
+   - [Platform] → [Driver] → [I2C] → [I2CSPM] → default instance name: **qwiic**
 
-    - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: **led0**
+   - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: **led0**
 
-    - [Third Party Hardware Drivers] → [Human Machine Interface] → [A-172-MRQ - Fingerprint 2 Click (Mikroe)]
+   - [Third Party Hardware Drivers] → [Human Machine Interface] → [A-172-MRQ - Fingerprint 2 Click (Mikroe)]
 
-    - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
+   - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
 
-    - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
+   - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
 
 5. Build and flash the project to your device.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works ##
 
@@ -197,3 +236,13 @@ Moreover, in this mode, when you place the new finger, that is not authorized. T
 #### Configuration Mode 2 ####
 
 The OLED screen will show the index of the authorized fingerprints. Please take a look at the picture in the paragraph marked **Display**.
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

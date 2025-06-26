@@ -13,9 +13,9 @@
 
 # Silicon Labs Bluetooth Applications #
 
-[![Version Badge](https://img.shields.io/badge/-v3.0.0-green)](https://github.com/SiliconLabs/bluetooth_applications/releases)
-[![SDK Badge](https://img.shields.io/badge/SiSDK-v2024.12.0-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
-[![TPHD Version Badge](https://img.shields.io/badge/TPHD-v4.1.0+-green)](https://github.com/SiliconLabs/third_party_hw_drivers_extension/releases)
+[![Version Badge](https://img.shields.io/badge/-v3.1.0-green)](https://github.com/SiliconLabs/bluetooth_applications/releases)
+[![SDK Badge](https://img.shields.io/badge/SiSDK-v2024.12.2-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
+[![TPHD Version Badge](https://img.shields.io/badge/TPHD-v4.3.0-green)](https://github.com/SiliconLabs/third_party_hw_drivers_extension/releases)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
 
 The Silicon Labs Bluetooth stack allows for a wide variety applications to be built on its foundation. This repo showcases some example applications using the Silicon Labs Bluetooth stack.
@@ -87,6 +87,12 @@ This repository provides both SLCP projects (as External Repositories) and SLS p
 | 59 | Bluetooth - DW3000 TWR demo | [Click Here](./bluetooth_uwb_dw3000_slotted_twr/) |
 | 60 | Bluetooth - BThome v2 - People Counting (VL53L1X)  | [Click Here](./bluetooth_bthome_v2_people_counting/) |
 | 61 | Bluetooth - MIDI over BLE  | [Click Here](./bluetooth_midi_over_ble/) |
+| 62 | Bluetooth - SiWx917 - Paxcounter  | [Click Here](./bluetooth_siwx917_paxcounter/) |
+| 63 | Bluetooth - HID Gamepad  | [Click Here](./bluetooth_hid_gamepad/) |
+| 64 | Bluetooth - Channel Sounding Display  | [Click Here](./bluetooth_channel_sounding_display/) |
+| 65 | Bluetooth - Pond Water Quality Monitor  | [Click Here](./bluetooth_pond_water_quality_monitor/) |
+| 66 | Bluetooth - ESL Tag with SD card and E-Paper display 1,54inch 200x200 dots from Mikroe (FreeRTOS)| [Click Here](./bluetooth_esl_tag_mikroe_eink154_e_paper_display_sdcard_freertos/) |
+
 
 ## Requirements ##
 

@@ -3,17 +3,17 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-OLED%20Display-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/Mikroe-Buzzer%202%20Click%20Board-green)](https://www.mikroe.com/buzz-2-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Humidity%20Sensor-green)](https://www.sparkfun.com/products/16467)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-222.71%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-11.27%20KB-blue)
+
 ## Summary
 
-This project aims to implement a thermostat system using Silicon Labs development kits and external sensors integrated with the BLE wireless stack.
-
+This project aims to implement a thermostat system using Silicon Labs development kits and external sensors integrated with the BLE wireless stack.  
 The block diagram of this application is shown in the image below:
 
 ![overview](image/overview.png)
@@ -27,17 +27,48 @@ This code example referred to the following code examples. More detailed informa
 - [SHTC3 Humidity Sensor driver](https://github.com/SiliconLabs/third_party_hw_drivers_extension/tree/master/app/documentation/example/mikroe_temphum9_shtc3)
 - [Buzzer driver](https://github.com/SiliconLabs/third_party_hw_drivers_extension/tree/master/app/documentation/example/mikroe_buzz2_cmt_8540s_smt)
 
+---
+
+## Table Of Contents
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Application Overview](#application-overview)
+  - [GATT Configurator](#gatt-configurator)
+  - [Thermostat Implementation](#thermostat-implementation)
+    - [Application initialization](#application-initialization)
+    - [Application Workflows](#application-workflows)
+    - [Algorithm workflows](#algorithm-workflows)
+  - [OLED Display](#oled-display)
+  - [Button](#button)
+  - [Use Simplicity Connect Mobile Application](#use-simplicity-connect-mobile-application)
+    - [Connect to the device](#connect-to-the-device)
+    - [Read/Write characteristics](#readwrite-characteristics)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
 
-## Required Hardware
+---
+
+## Hardware Required
 
 - 1x [Bluetooth Low Energy Explorer Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For simplicity, Silicon Labs recommends the [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
 - 1x [Humidity Sensor - SHTC3 Board](https://www.sparkfun.com/products/16467)
@@ -45,7 +76,9 @@ This code example referred to the following code examples. More detailed informa
 - 1x [OLED Display - SSD1306](https://www.sparkfun.com/products/14532)
 - 1x smartphone running the 'Simplicity Connect' mobile app
 
-## Hardware Connection
+---
+
+## Connections Required
 
 The hardware connection is shown in the image below:
 
@@ -53,22 +86,25 @@ The hardware connection is shown in the image below:
 
 The I2C connection is made from the BGM220 Bluetooth Module Explorer Kit to the Humidity Sensor board and the Micro OLED Breakout by using the Qwiic cable.
 
+---
+
 ## Setup
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
 ### Create a project based on an example project
 
 1. From the Launcher Home, add your product name to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "thermostat".
 
 2. Click **Create** button on **Bluetooth - Thermostat** project. Example project creation dialog pops up -> click Create and Finish and source code should be generated.
-  ![create example project](image/create_example.png)
+
+   ![create example project](image/create_example.png)
 
 3. Build and flash this example to your board.
 
@@ -80,35 +116,37 @@ To test this application, you can either create a project based on an example pr
 
 3. Import the GATT configuration:
 
-    - Open the .slcp file in the project.
+   - Open the .slcp file in the project.
 
-    - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
 
-    - Find the Import button and import the attached `config/btconf/gatt_configuration.btconf` file.
+   - Find the Import button and import the attached `config/btconf/gatt_configuration.btconf` file.
 
-    - Save the GATT configuration (ctrl-s).
+   - Save the GATT configuration (ctrl-s).
 
-4. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
+4. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-    - [Services] → [Timers] → [Sleep Timer]
-    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: "vcom"
-    - [Application] → [Utility] → [Log]
-    - [Application] → [Utility] → [Assert]
-    - [Third Party] → [Tiny printf]
-    - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: "btn0"
-    - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: "led0"
-    - [Platform] → [Driver] → [PWM] → [PWM] → default instance name: "mikroe"
-    - [Platform] → [Driver] → [I2C] → [I2CSPM] → default instance name: "qwiic"
-    - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
-    - [Third Party Hardware Drivers] → [Audio & Voice] → [CMT_8540S_SMT - Buzz 2 Click (Mikroe)]
-    - [Third Party Hardware Drivers] → [Sensors] → [SHTC3 - Temp&Hum 9 Click (Mikroe)]
-    - [Third Party Hardware Drivers] → [Service] → [GLIB - OLED Graphics Library]
+   - [Services] → [Timers] → [Sleep Timer]
+   - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: "vcom"
+   - [Application] → [Utility] → [Log]
+   - [Application] → [Utility] → [Assert]
+   - [Third Party] → [Tiny printf]
+   - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: "btn0"
+   - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: "led0"
+   - [Platform] → [Driver] → [PWM] → [PWM] → default instance name: "mikroe"
+   - [Platform] → [Driver] → [I2C] → [I2CSPM] → default instance name: "qwiic"
+   - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
+   - [Third Party Hardware Drivers] → [Audio & Voice] → [CMT_8540S_SMT - Buzz 2 Click (Mikroe)]
+   - [Third Party Hardware Drivers] → [Sensors] → [SHTC3 - Temp&Hum 9 Click (Mikroe)]
+   - [Third Party Hardware Drivers] → [Service] → [GLIB - OLED Graphics Library]
 
 5. Build and flash the project to your device.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How it Works
 
@@ -234,8 +272,12 @@ For setting a parameter select a characteristic and tap on its write button. Typ
 | **Upper threshold** | - Read to get upper threshold value | - Write to set upper threshold value - upper_threshold (-3500 <= VAL < Upper threshold value) |
 | **Threshold alarm status** | - Read to get threshold alarm status (0 - disabled, 1 - enabled, 2 - alarm active). | - Write to set threshold alarm status - is_alarm_active (0 - disabled or 1 - enabled) |
 
+---
+
 ## Report Bugs & Get Support
 
 To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
 
 Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

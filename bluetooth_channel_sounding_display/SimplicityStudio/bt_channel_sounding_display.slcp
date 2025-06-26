@@ -1,0 +1,177 @@
+project_name: bluetooth_cs_display
+package: Bluetooth
+label: Bluetooth - Channel Sounding Display
+description: >
+  Channel Sounding (CS) Initiator for Bluetooth LE.
+  This example connects to a CS Reflector device and starts the distance measurement.
+  Results are printed on the display of the main board if available and can be read via the serial port VCOM.
+category: Bluetooth Examples
+quality: experimental
+
+filter:
+  - name: "Wireless Technology"
+    value: ["Bluetooth"]
+  - name: "Device Type"
+    value: ["SoC"]
+  - name: "Project Difficulty"
+    value: ["Advanced"]
+
+component:
+  - id: app_assert
+  - id: app_log
+  - id: bluetooth_stack
+  - id: bluetooth_feature_gap
+  - id: bluetooth_feature_connection
+  - id: bluetooth_feature_sm
+  - id: bluetooth_feature_system
+  - id: bluetooth_feature_extended_scanner
+  - id: bluetooth_feature_legacy_advertiser
+  - id: bluetooth_utility_bgapi_trace
+  - id: ble_peer_manager_common
+  - id: ble_peer_manager_central
+  - id: ble_peer_manager_filter
+  - id: clock_manager
+  - id: component_catalog
+  - id: cs_initiator
+  - id: cs_antenna
+  - id: device_init
+  - id: dmd_memlcd
+  - id: glib
+  - id: rtllib
+  - id: iostream_recommended_stream
+  - id: iostream_bgapi_trace
+  - id: in_place_ota_dfu
+  - id: ls013b7dh03
+    condition:
+      - hardware_board_supports_wstk_lcd
+  - id: mpu
+  - id: simple_button
+    instance:
+      - btn0
+      - btn1
+  - id: simple_led
+    instance:
+      - led0
+  - id: toolchain_gcc
+  - id: sl_system
+  - id: sl_common
+
+
+include:
+  - path: ../inc
+    file_list:
+      - path: app.h
+      - path: rtl_log.h
+      - path: trace.h
+      - path: cs_initiator_display.h
+
+source:
+  - path: ../src/app.c
+  - path: ../src/main.c
+  - path: ../src/rtl_log.c
+  - path: ../src/trace.c
+  - path: ../src/cs_initiator_display.c
+  - path: ../src/fonts/glib_font_ft_characters8x16.c
+    directory: fonts
+  - path: ../src/fonts/glib_font_m_character16x16.c
+    directory: fonts
+  - path: ../src/fonts/glib_font_number_24x40.c
+    directory: fonts
+    
+readme:
+  - path: ../README.md
+
+config_file:
+  - override:
+      component: gatt_configuration
+      file_id: gatt_configuration_file_id
+    path: "../config/btconf/gatt_configuration.btconf"
+    directory: "btconf"
+  - path: ../config/app_config.h
+
+other_file:
+  - path: ../image/connection.png
+    directory: image
+  - path: ../image/console.png
+    directory: image
+  - path: ../image/create_project.png
+    directory: image
+  - path: ../image/cs_works.png
+    directory: image
+  - path: ../image/pbr.png
+    directory: image
+  - path: ../image/result_1.png
+    directory: image
+  - path: ../image/result_2.png
+    directory: image
+  - path: ../image/rtt.png
+    directory: image
+
+configuration:
+  - name: SL_CLOCK_MANAGER_HFRCO_DPLL_EN
+    value: 1
+  - name: SL_CLOCK_MANAGER_DPLL_FREQ
+    value: 80000000
+  - name: SL_CLOCK_MANAGER_SYSCLK_SOURCE
+    value: CMU_SYSCLKCTRL_CLKSEL_HFRCODPLL
+  - name: SL_CLOCK_MANAGER_HFXO_FREQ
+    value: 40000000
+    unless:
+      - hardware_board
+  - name: SL_STACK_SIZE
+    value: 2752
+  - name: SL_BT_CONFIG_BUFFER_SIZE
+    value: 10000
+  - name: SL_PSA_KEY_USER_SLOT_COUNT
+    value: 0
+    condition:
+      - psa_crypto
+  - name: SL_BOARD_ENABLE_DISPLAY
+    value: 1
+    condition:
+      - hardware_board_supports_wstk_lcd
+  - name: SL_BOARD_ENABLE_VCOM
+    value : 1
+  - name: SL_IOSTREAM_USART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
+    value: 0
+    unless:
+      - cli
+  - name: SL_IOSTREAM_EUSART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
+    value: 0
+    unless:
+      - cli
+  - name: CS_INITIATOR_ANTENNA_OFFSET
+    value: 0
+  - name: SL_BGAPI_TRACE_RTT_BUFFER_SIZE
+    value: 4096
+  - name: BUFFER_SIZE_UP
+    value: 4
+  - name: BUFFER_SIZE_DOWN
+    value: 4
+
+define:
+  - name: SLI_BGAPI_TRACE_DISABLE_AUTO_START
+    value: 1
+
+post_build:
+  - profile: bt_common
+    condition: [device_series_2, bootloader_app_properties]
+
+tag:
+  - prebuilt_demo
+  - hardware:rf:band:2400
+
+template_contribution:
+  - name: ble_peer_manager_event_handler
+    value:
+      include: app.h
+      handler: ble_peer_manager_on_event_initiator
+      
+ui_hints:
+  highlight:
+    - path: config/btconf/gatt_configuration.btconf
+    - path: README.md
+      focus: true
+
+library:
+  - system: stdc++

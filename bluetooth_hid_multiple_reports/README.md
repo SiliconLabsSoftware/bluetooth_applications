@@ -3,23 +3,46 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-187.66%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.85%20KB-blue)
+
 ## Description
 
 This is an example for Bluetooth LE HID device development, which can connect wirelessly to HID hosts including Windows, Mac, Android and iOS systems. Bluetooth SIG defines an HID profile that specifies how a device can support HID services over the Bluetooth LE protocol stack using the Generic Attribute Profile.
 
 This example implements a simple HID mouse and HID keyboard to show how to have multiple HID reports for a single device.
 
+---
+
+## Table Of Contents
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Report Map Characteristic](#report-map-characteristic)
+  - [Running the project](#running-the-project)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
 
 ## Software Required
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
+
+---
 
 ## Hardware Required
 
@@ -28,26 +51,28 @@ This example implements a simple HID mouse and HID keyboard to show how to have 
 - Please note the 4001A version does not have an on-board joystick needed for this project.
 - 1x BLE-supported Computer
 
+---
+
 ## Connections Required
 
 The MG21 was selected due to the availabilty of pins which are connected to the on-board joystick of the MB4002A (BRD4002A) Main Board. If you only have the BRD4001A variant, you'll need an external joystick component connected to the external pins.
+
+---
 
 ## Setup
 
 To test this application, you can either create a project based on the example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
 ### Create a project based on an example project
 
 1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "tripwire".
 2. Click **Create** button on the **Bluetooth - HID Multiple Reports** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![example project & demos tab](image/example_projects_and_demos.png)
+   ![example project & demos tab](image/example_projects_and_demos.png)
 3. Build and flash this example to the board.
-
-If you do not see the project, add this repo to Simplicity Studio with these [instructions](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs#example-projects-demos-tab).
 
 ### Start with a "Bluetooth - SoC Empty" project
 
@@ -56,20 +81,22 @@ If you do not see the project, add this repo to Simplicity Studio with these [in
 3. Download [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) that is contained in this repo.
 4. Open the `./config/btconf/gatt_configuration.btconf` file within the project directory in Simplicity Studio. The GATT Configurator should open when opening through Simplicity Studio.
 5. Import the GATT database of this project into the new project. Click the import button as shown below then find the [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) that was downloaded.
-![gatt configurator import](image/gatt_database_import.png)
+   ![gatt configurator import](image/gatt_database_import.png)
 6. Open the \<project name\>.slcp file (for this example, tripwire.slcp) in the top level of the project within Simplicity Studio. A project configurator like below should open in step 7.
 7. Click the SOFTWARE COMPONENTS tab and add the following components to the project:
-    - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0** and **btn1**
-    - [Platform] → [Board Drivers] → [Joystick]
-    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
-    - [Platform] → [Board] → [Board Control] → enable *Virtual COM UART*
-    - [Application] → [Utility] → [Log]
-    ![configurator add components](image/configurator_add_components.png)
+   - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0** and **btn1**
+   - [Platform] → [Board Drivers] → [Joystick]
+   - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
+   - [Platform] → [Board] → [Board Control] → enable *Virtual COM UART*
+   - [Application] → [Utility] → [Log]
+     ![configurator add components](image/configurator_add_components.png)
 8. Build the project and flash.
 
-**Note:**
+> [!NOTE]
+>
+> - A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How it Works
 
@@ -103,14 +130,14 @@ The BLE over GATT Profile should look similar to the following (HID Service cont
   - HID Information characteristic
   - Protocol Mode characteristic
   - HID Control Point characteristic
-  - Report Map characteristic: ...[0x0801][Usage Page Mouse]...[0x0802][Usage Page Keyboard]... ; See [btconf](./config/btconf/gatt_configuration.btconf) file
+  - Report Map characteristic: ...\[0x0801][Usage Page Mouse]...\[0x0802][Usage Page Keyboard]... ; See [btconf](./config/btconf/gatt_configuration.btconf) file
     - External Report Reference descriptor
   - Report Mouse characteristic: input data 8B
     - Report Reference descriptor: 0x0101
   - Report Keyboard characteristic: input data 8B
     - Report Reference descriptor: 0x0102
 
-### Report Map Characteristic:
+### Report Map Characteristic
 
 The mouse report map has been taken from the example given in [Device Class Definition for Human Interface Devices (HID)](https://www.usb.org/sites/default/files/documents/hid1_11.pdf)
 (Appendix E.10: Report Descriptor (Mouse)). The keyboard report map is explained in [BLE HID keyboard example](https://github.com/SiliconLabs/bluetooth_applications/blob/master/bluetooth_hid_keyboard/README.md) as well.
@@ -166,25 +193,28 @@ The mouse report map has been taken from the example given in [Device Class Defi
 | 0x05, 0x01 |    Usage Minimum (Reserved (no event indicated))         |
 | 0x05, 0x01 |    Usage Maximum (Keyboard Application)                  |
 | 0x05, 0x01 |    Input (Data,Array) Key arrays (6 bytes)               |
-| 0xc0 |          End Collection  
+| 0xc0 |          End Collection |
 
 A detailed description of the item types and the structure of this descriptor can be found in section **6.2.2 Report Descriptor** of [Device Class Definition for Human Interface Devices (HID)](https://www.usb.org/sites/default/files/documents/hid1_11.pdf)
 
 ### Running the project
 
-1. Flash the project and the [bootloader](#notes) to the board
+1. Flash the project and the bootloader to the board
 2. Once the device is powered, go into the Bluetooth settings of your computer to connect to the board of BLE. The device name is `keebmouse`. Connect to the device.
 3. Once the device is connected, you can open a text editor of your choise and press BTN1 to write a character. BTN0 is mapped to the LSHIFT key.
 4. Move the joystick to see the mouse cursor move. Press the joystick to perform a Mouse Left Click.
 
-**Note:**
+> [!NOTE]
+>
+> - Like the BLE HID Keyboard example, this example is not energy-optimized. The computer may give warnings that the USB device is at critical power.
+> - Due to the Joystick driver's implementation, the mouse moves in finite increments which can be modified in app.c.
 
-Like the BLE HID Keyboard example, this example is not energy-optimized. The computer may give warnings that the USB device is at critical power.
+---
 
-Due to the Joystick driver's implementation, the mouse moves in finite increments which can be modified in app.c.
+## Report Bugs & Get Support
 
-## Project does not work for some reason? Bootloader
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
 
-If you flash the project and it seems the device is not working e.g. cannot find the device on your PC, the LED does not blink, etc, then the bootloader may be missing. Depending on the part and flash size, there are different bootloader projects. For this project and any BLE-capable part, create the `Bootloader - SoC Bluetooth Apploader OTA DFU` project, build, and flash the bootloader project.
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
 
-More information on the bootloader and apploader can be found in [UG489 Gecko Bootloader User Guide](https://www.silabs.com/documents/public/user-guides/ug489-gecko-bootloader-user-guide-gsdk-4.pdf) and [AN1086 AN1086: Using the Gecko Bootloader with the Silicon Labs Bluetooth® Applications](https://www.silabs.com/documents/public/application-notes/an1086-gecko-bootloader-bluetooth.pdf)
+---

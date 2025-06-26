@@ -1,8 +1,9 @@
 # Bluetooth - BTHome v2 - People Counting (VL53L1X) #
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-Distance%20Sensor%20Breakout-green)](https://www.sparkfun.com/products/14722)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)%20board-green)](https://www.sparkfun.com/products/14532)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
@@ -15,15 +16,46 @@ This project aims to implement a people-counting application using Silicon Labs 
 
 This example can serve as the first step in developing other applications based on it. It can be upgraded to be a part of a people tracking system in a building, factory, or similar environment. Integrated with BLE wireless technology, the system can be easily monitored and controlled by the user.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [GATT Database](#gatt-database)
+  - [People Counting Implementation](#people-counting-algorithm)
+  - [Application Initialization](#application-initialization)
+  - [Testing](#testing)
+    - [OLED Display](#oled-display)
+    - [Button](#button)
+    - [Room status notification](#room-status-notification)
+    - [Reset the counting value](#reset-the-counting-value)
+    - [Connect to Simplicity Connect app](#connect-to-simplicity-connect-app)
+    - [Connect to Home Assistant app](#connect-to-home-assistant-app)
+    - [Console View](#console-view)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Home Assistant OS](https://www.home-assistant.io/)
+
+---
 
 ## Hardware Required ##
 
@@ -33,6 +65,8 @@ This example can serve as the first step in developing other applications based 
 - 1x Raspberry Pi 4 running Home Assistant OS
 - 1x smartphone running Home Assistant application
 
+---
+
 ## Connections Required ##
 
 The I2C connection is made from the BGM220 Bluetooth Module Explorer Kit to the Distance Sensor Breakout board and the Micro OLED Breakout by using the Qwiic cable.
@@ -41,22 +75,24 @@ The hardware connection is shown in the image below:
 
 ![hardware connection](image/hardware_connection.png)
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project ###
+### Based on an example project ###
 
 1. From the Launcher Home, add your hardware to **My Products**, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by **"people counting"**.
 
 2. Click **Create** button on the **Bluetooth - People Counting (VL53L1X) with BThome v2** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![create_project](image/create_project.png)
+   ![create_project](image/create_project.png)
 
 3. Build and flash this example to the board.
 
@@ -68,39 +104,33 @@ To test this application, you can either create a project based on an example pr
 
 3. Import the GATT configuration:
 
-    - Open the .slcp file in the project.
+   - Open the .slcp file in the project.
 
-    - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
 
-    - Find the Import button and import the configuration `bluetooth_people_counting/config/btconfig/gatt_configuration.btconf` file.
+   - Find the Import button and import the configuration `bluetooth_people_counting/config/btconfig/gatt_configuration.btconf` file.
 
-    - Save the GATT configuration (ctrl-s).
+   - Save the GATT configuration (ctrl-s).
 
 4. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
-
-    - [Application] → [Utility] → [Log]
-
-    - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: btn0
-  
-    - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: led0
-
-    - [Platform] → [Driver] → [I2C] → [I2CSPM] → default instance name: qwiic
-
-    - [Third Party Hardware Drives] → [Sensors] → [VL53L1X - Distance Sensor Breakout (Sparkfun)]
-  
-    - [Third Party Hardware Drives] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun - I2C)]
-
-    - [Third Party Hardware Drives] → [Services] → [GLIB - OLED Graphics Library]
-
-    - [Third Party Hardware Drives] → [Services] → [BTHome v2]
+   - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
+   - [Application] → [Utility] → [Log]
+   - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: btn0
+   - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: led0
+   - [Platform] → [Driver] → [I2C] → [I2CSPM] → default instance name: qwiic
+   - [Third Party Hardware Drives] → [Sensors] → [VL53L1X - Distance Sensor Breakout (Sparkfun)]
+   - [Third Party Hardware Drives] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun - I2C)]
+   - [Third Party Hardware Drives] → [Services] → [GLIB - OLED Graphics Library]
+   - [Third Party Hardware Drives] → [Services] → [BTHome v2]
   
 5. Build and flash the project to your device.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works ##
 
@@ -108,61 +138,34 @@ To test this application, you can either create a project based on an example pr
 
 Advertisement Packet Device name: **People Counting**
 
-**GATT Database**
-
 - Device name: **RFID Notify**
 
 - **[Service] People Counting**
-
-    - **[Char] People Entered So Far** UUID: `cf88405b-e223-4976-82aa-78c6b305b0a8`
-
-        - [R] Get the number of people entering the room.
-  
-        - [W] Clear the number of people entering the room.
-  
-    - **[Char] People Count** UUID: `2b9837e1-5560-49e5-a8cf-2f3b0db0bd6b`
-
-        - [R] Get the number of people in the room.
-  
-        - [W] Clear the number of people in the room.
-
-    - **[Char] Min Distance:** UUID: `f2f7c459-e623-4970-ab36-d3a4651a694e`
-
-        - [R] Get minimum distance that is used by counting people algorithm (mm).
-  
-        - [W] Set minimum distance that is used by counting people algorithm (mm).
-
-    - **[Char] Max Distance:** UUID: `d0a946d7-a183-4cb7-a9cb-b9c879cdb6fa`
-
-        - [R] Get maximum distance that is used by counting people algorithm (mm).
-  
-        - [W] Set maximum distance that is used by counting people algorithm (mm).
-
-    - **[Char] Distance Threshold:** UUID: `0192bd9d-cb4f-49cc-b3dc-2d7facc9edcd`
-
-        - [R] Get distance threshold that is used by counting people algorithm (mm).
-  
-        - [W] Set distance threshold that is used by counting people algorithm (mm).
-
-    - **[Char] Timing Budget:** UUID: `01fb0e47-13c9-4369-88cc-07f58759a6a6`
-
-        - [R] Get timing budget that is used by counting people algorithm (ms).
-  
-        - [W] Set timing budget that is used by counting people algorithm (ms).
-
-    - **[Char] Notification Status:** UUID: `ca89196b-76e2-41a0-9e41-342f4a2ff6f1`
-
-        - [R] Get notification status.
-  
-        - [W] Enable & disable notification status.
-
-    - **[Char] Room capacity:** UUID: `c714d394-7e0d-4c6a-a864-1183046a244c`
-
-        - [R] Get room capacity.
-  
-        - [W] Set room capacity.
-  
-        - [N] Get notification of room status( full or empty).
+  - **[Char] People Entered So Far** UUID: `cf88405b-e223-4976-82aa-78c6b305b0a8`
+    - [R] Get the number of people entering the room.
+    - [W] Clear the number of people entering the room.
+  - **[Char] People Count** UUID: `2b9837e1-5560-49e5-a8cf-2f3b0db0bd6b`
+    - [R] Get the number of people in the room.
+    - [W] Clear the number of people in the room.
+  - **[Char] Min Distance:** UUID: `f2f7c459-e623-4970-ab36-d3a4651a694e`
+    - [R] Get minimum distance that is used by counting people algorithm (mm).
+    - [W] Set minimum distance that is used by counting people algorithm (mm).
+  - **[Char] Max Distance:** UUID: `d0a946d7-a183-4cb7-a9cb-b9c879cdb6fa`
+    - [R] Get maximum distance that is used by counting people algorithm (mm).
+    - [W] Set maximum distance that is used by counting people algorithm (mm).
+  - **[Char] Distance Threshold:** UUID: `0192bd9d-cb4f-49cc-b3dc-2d7facc9edcd`
+    - [R] Get distance threshold that is used by counting people algorithm (mm).
+    - [W] Set distance threshold that is used by counting people algorithm (mm).
+  - **[Char] Timing Budget:** UUID: `01fb0e47-13c9-4369-88cc-07f58759a6a6`
+    - [R] Get timing budget that is used by counting people algorithm (ms).
+    - [W] Set timing budget that is used by counting people algorithm (ms).
+  - **[Char] Notification Status:** UUID: `ca89196b-76e2-41a0-9e41-342f4a2ff6f1`
+    - [R] Get notification status.
+    - [W] Enable & disable notification status.
+  - **[Char] Room capacity:** UUID: `c714d394-7e0d-4c6a-a864-1183046a244c`
+    - [R] Get room capacity.
+    - [W] Set room capacity.
+    - [N] Get notification of room status( full or empty).
 
 ### People Counting Implementation ###
 
@@ -186,11 +189,9 @@ Advertisement Packet Device name: **People Counting**
 
 3. Wait for the VL53L1X sensor to be booted and initialize the VL53L1X sensor with the configurations from NVM3:
 
-    - Distance mode: LONG
-
-    - Timing budget: 33 ms
-
-    - Region of interest SPADs: 8x16
+   - Distance mode: LONG
+   - Timing budget: 33 ms
+   - Region of interest SPADs: 8x16
 
 4. Start ranging for the VL53L1X sensor.
 
@@ -198,13 +199,10 @@ Advertisement Packet Device name: **People Counting**
 
 6. Start a periodical timer every second. The timer callback will raise an external event to the BLE stack and the event handler will do:
 
-    - Check if the ranging data is ready.
-
-    - Get a new distance sample.
-
-    - Calculate people counting algorithm with new distance sample.
-
-    - Switch the Region of Interest (ROI) center to other zones (front or back)
+   - Check if the ranging data is ready.
+   - Get a new distance sample.
+   - Calculate people counting algorithm with new distance sample.
+   - Switch the Region of Interest (ROI) center to other zones (front or back)
 
 7. Start a periodical timer with 1000 milliseconds for each periodic period, The timer callback will raise an external event to the BLE stack. The event handler will display people counting data which was calculated by the people counting algorithm. It also sends the data to Home Assistant server.
 
@@ -261,10 +259,12 @@ Follow the below steps to test the example with the Simplicity Connect applicati
 
 - Find your device in the Bluetooth Browser, advertising as *People Counting*, and tap Connect. Then you need accept the pairing request when connected for the first time.
 
-**Note**: The pairing process on Android and iOS devices is different. For more information, refer to Bluetooth security.
-
-| ![device_namae](image/device_name.png) | ![device_pairing](image/device_pairing.png)|![device_characteristics](image/device_characteristics.png)|
-| - | - | -|
+> [!NOTE]
+>
+> The pairing process on Android and iOS devices is different. For more information, refer to Bluetooth security.
+>
+> | ![device_namae](image/device_name.png) | ![device_pairing](image/device_pairing.png)|![device_characteristics](image/device_characteristics.png)|
+> | - | - | -|
 
 #### Connect to Home Assistant app ####
 
@@ -278,6 +278,16 @@ Open the *Home Assistant* application on your smartphone. Click [Settings] → [
 
 #### Console View ####
 
-You can launch Console that's integrated into Simplicity Studio or use a third-party terminal tool like TeraTerm to receive the data from the USB. A screenshot of the console output is shown in the figure below.
+You can launch Console that's integrated into Simplicity Studio or use a third-party terminal tool like Tera Term to receive the data from the USB. A screenshot of the console output is shown in the figure below.
 
 ![console_log](image/console_log.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

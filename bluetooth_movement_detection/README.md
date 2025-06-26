@@ -1,8 +1,9 @@
 # Bluetooth - Movement Detection (BMA400) #
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Mikroe-Accel%205%20click-green)](https://www.mikroe.com/accel-5-click)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-208.88%20KB-blue)
@@ -22,21 +23,47 @@ In normal mode, when the sensor value changes, an interrupt signal is generated 
 
 In the configure mode, the device starts advertising itself. Users can connect to the device via Simplicity Connect app and configure threshold value, wakeup time period, notification time, and notification break time.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Application Overview](#application-overview)
+  - [GATT Configurator](#gatt-configurator)
+  - [Movement Detection implementation](#movement-detection-implementation)
+- [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
 
+---
+
 ## Hardware Required ##
 
 - 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For simplicity, Silicon Labs recommends the [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
 - 1x [MikroE Accel 5 click](https://www.mikroe.com/accel-5-click)
 - 1x smartphone running the 'Simplicity Connect' mobile app
+
+---
 
 ## Connections Required ##
 
@@ -46,15 +73,18 @@ The board also has 4.7k I2C-bus pull-ups. Just be sure that the click board is c
 
 ![hardware connection](image/hardware_connection.png)
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
+nabled for the project to install the required components.
 
 ### Create a project based on an example project ###
 
@@ -83,20 +113,22 @@ To test this application, you can either create a project based on an example pr
 
 4. Open the .slcp file again. Install and configure the following components:
 
-    - [Bluetooth] → [Bluetooth Host (Stack)] → [Additional Features] → [NVM Support]
-    - [Services] → [Timers] → [Sleep Timer]
-    - [Services] → [IO Stream] → [IO Stream: USART] → Default instance name: **vcom**
-    - [Application] → [Utility] → [Log]
-    - [Platform] → [Driver] → [I2C] → [I2CSPM] → Default instance name: **mikroe**
-    - [Platform] → [Driver] → [Button] → [Simple Button] → Default instance name: **btn0**
-    - [Platform] → [Driver] → [LED] → [Simple LED] → Default instance name: **led0**
-    - [Third Party Hardware Drivers] → [Sensors] → [BMA400 - Accel 5 Click (Mikroe) - I2C]
+   - [Bluetooth] → [Bluetooth Host (Stack)] → [Additional Features] → [NVM Support]
+   - [Services] → [Timers] → [Sleep Timer]
+   - [Services] → [IO Stream] → [IO Stream: USART] → Default instance name: **vcom**
+   - [Application] → [Utility] → [Log]
+   - [Platform] → [Driver] → [I2C] → [I2CSPM] → Default instance name: **mikroe**
+   - [Platform] → [Driver] → [Button] → [Simple Button] → Default instance name: **btn0**
+   - [Platform] → [Driver] → [LED] → [Simple LED] → Default instance name: **led0**
+   - [Third Party Hardware Drivers] → [Sensors] → [BMA400 - Accel 5 Click (Mikroe) - I2C]
 
 5. Build and flash the project to your device.
 
-**Note:**
+> [!NOTE]
+>
+> - A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works ##
 
@@ -173,4 +205,15 @@ Follow the below steps to test the example with the Simplicity Connect app when 
 3. Find the unknown service at the below of the Device Information service.
 
 4. Tap on the main service to see the available characteristics. Try to read, write, re-read the characteristics, and check the value. Values for the characteristics are handled by the application as ASCII strings. You should expect a similar output to the one below.
-![logs](image/logs_2.png)
+
+   ![logs](image/logs_2.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

@@ -3,13 +3,14 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/Sparkfun-RFID%20Qwiic%20Kit-green)](https://www.sparkfun.com/products/15209)
 [![Required board](https://img.shields.io/badge/Sparkfun-Thing%20Plus%20Matter-green)](https://www.sparkfun.com/products/20270)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-226.23%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-12.05%20KB-blue)
+
 ## Overview ##
 
 This project aims to implement a doorlock system using Silicon Labs development Kits and external sensors integrated with the BLE wireless stack.
@@ -22,22 +23,49 @@ This code example referred to the following code examples. More detailed informa
 - [Bluetooth security feature](https://github.com/SiliconLabs/bluetooth_stack_features/tree/master/security)
 - [SparkFun RFID Qwiic Kit - ID12LA driver](https://github.com/SiliconLabs/third_party_hw_drivers_extension/blob/master/driver/public/silabs/rfid_id12la)
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Application Overview](#application-overview).
+  - [GATT configurator](#gatt-configurator)
+  - [Doorlock Implementation](#doorlock-implementation)
+  - [Display on OLED](#display-on-oled)
+  - [Use Simplicity Connect Mobile Application](#use-simplicity-connect-mobile-application)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
 
-## Required Hardware ##
+---
+
+## Hardware Required ##
 
 - 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For example, [SparkFun Thing Plus Matter - MGM240P - BRD2704A](https://www.sparkfun.com/products/20270)
 - 1x [SparkFun RFID Qwiic Kit - ID12LA Board](https://www.sparkfun.com/products/15209)
 - 1x [SparkFun Micro OLED Breakout (Qwiic)](https://www.sparkfun.com/products/14532)
 - 1x smartphone running the 'Simplicity Connect' mobile app
+
+---
 
 ## Connections Required ##
 
@@ -51,60 +79,62 @@ Listed below are the port and pin mappings for working with this example.
 
 - Board: **BRD2704A - SparkFun Thing Plus Matter - MGM240P**
 
-    | GPIO Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | GPIOB | PB00 | GPIO input |
-    | SCL | PB03 | I2C Clock |
-    | SDA | PB04 | I2C Data |
+  | GPIO Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | GPIOB | PB00 | GPIO input |
+  | SCL | PB03 | I2C Clock |
+  | SDA | PB04 | I2C Data |
 
 - Board: **BRD2601B - EFR32xG24 Dev Kit- xG24**
 
-    | GPIO Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | GPIOB | PB02 | GPIO input |
-    | SCL | PC04 | I2C Clock |
-    | SDA | PC05 | I2C Data |
+  | GPIO Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | GPIOB | PB02 | GPIO input |
+  | SCL | PC04 | I2C Clock |
+  | SDA | PC05 | I2C Data |
 
 - Board: **BRD2703A - EFR32xG24 Explorer Kit - XG24**
 
-    | GPIO Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | GPIOB | PB02 | GPIO input |
-    | SCL | PC04 | I2C Clock |
-    | SDA | PC05 | I2C Data |
+  | GPIO Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | GPIOB | PB02 | GPIO input |
+  | SCL | PC04 | I2C Clock |
+  | SDA | PC05 | I2C Data |
 
 - Board: **BRD4108A - BG22 Bluetooth SoC Explorer Kit - BG22**
 
-    | GPIO Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | GPIOB | PC07 | GPIO input |
-    | SCL | PD02 | I2C Clock |
-    | SDA | PD03 | I2C Data |
+  | GPIO Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | GPIOB | PC07 | GPIO input |
+  | SCL | PD02 | I2C Clock |
+  | SDA | PD03 | I2C Data |
 
 - Board: **BRD4314 Bluetooth Module Explorer Kit**
 
-    | GPIO Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | GPIOB | PB00 | GPIO input |
-    | SCL | PD02 | I2C Clock |
-    | SDA | PD03 | I2C Data |
+  | GPIO Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | GPIOB | PB00 | GPIO input |
+  | SCL | PD02 | I2C Clock |
+  | SDA | PD03 | I2C Data |
+
+---
 
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+### Based on an example project ###
 
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project ###
-
-1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "rfid".
+1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "rfid".
 
 2. Click the **Create** button on the **Bluetooth - Door Lock RFID (ID-12LA)** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![setup](image/create_example.png)
+   ![setup](image/create_example.png)
 
 ### Start with a "Bluetooth - SoC Empty" project ###
 
@@ -112,22 +142,16 @@ To test this application, you can either create a project based on an example pr
 
 2. Copy all attached files in *inc* and *src* folders into the project root folder (overwriting existing the app.c file).
 
-3. Install the software components:
+3. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-    - Open the .slcp file in the project.
-
-    - Select the SOFTWARE COMPONENTS tab.
-
-    - Install the following components:
-
-        - [Services] → [Timers] → [Sleep Timer]
-        - [Bluetooth] → [Bluetooth Host (Stack)] → [Additional Features] → [NVM Support]
-        - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
-        - [Application] → [Utility] → [Log]
-        - [Platform] → [Driver] → [I2C] → [I2CSPM] → instance name: **qwiic**. Configure this instance to suit your hardware.
-        - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
-        - [Third Party Hardware Drivers] → [Service] → [GLIB - OLED Graphics Library]
-        - [Third Party Hardware Drivers] → [Wireless Connectivity] → [ID-12LA - RFID Reader (Sparkfun) - I2C]
+   - [Services] → [Timers] → [Sleep Timer]
+   - [Bluetooth] → [Bluetooth Host (Stack)] → [Additional Features] → [NVM Support]
+   - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
+   - [Application] → [Utility] → [Log]
+   - [Platform] → [Driver] → [I2C] → [I2CSPM] → instance name: **qwiic**. Configure this instance to suit your hardware.
+   - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
+   - [Third Party Hardware Drivers] → [Service] → [GLIB - OLED Graphics Library]
+   - [Third Party Hardware Drivers] → [Wireless Connectivity] → [ID-12LA - RFID Reader (Sparkfun) - I2C]
 
 4. Import the GATT configuration:
 
@@ -141,9 +165,9 @@ To test this application, you can either create a project based on an example pr
 
 5. Build and flash this example to the board.
 
-**NOTE:**
-
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
 ## How it Works ##
 
@@ -178,7 +202,7 @@ The GATT changes were adding a new custom service (RFID Door Lock) which are 4 c
 
 ### Doorlock Implementation ###
 
-#### Application initialization ###
+#### Application Initialization ###
 
 ![Application init](image/app_init.png)  
 
@@ -200,7 +224,7 @@ The GATT changes were adding a new custom service (RFID Door Lock) which are 4 c
 
 8. Handle GATT event to help users configure the [Use Simplicity Connect Mobile Application](#use-simplicity-connect-mobile-application) and get the result from the algorithm calculation over the *EFR32 connect* mobile application
 
-#### Application logic ####
+#### Application Logic ####
 
 | ![Application logic](image/application_logic1.png) | ![Application logic](image/application_logic2.png)||
 | - | - | -|
@@ -213,7 +237,7 @@ The GATT changes were adding a new custom service (RFID Door Lock) which are 4 c
   
   ![configuration_mode1](image/configuration_mode1.png)
 
-#### NConfiguration Mode 2 - Show Registered Cards ####
+#### Configuration Mode 2 - Show Registered Cards ####
   
   ![configuration_mode2](image/configuration_mode2.png)
 
@@ -268,17 +292,27 @@ Follow the below steps to test the example with the Simplicity Connect applicati
 
 2. Find your device in the Bluetooth Browser, advertising as *RFID Door Lock*, and tap Connect. Then you need accept the pairing request when connected for the first time.
 
-**Note**: The pairing process on Android and iOS devices is different. For more information, refer to Bluetooth security.
-
-| ![EFR32 Connect App](image/efr32_connect_app1.png) | ![EFR32 Connect App](image/efr32_connect_app2.png)||
-| - | - | -|
+> [!NOTE]
+>
+> The pairing process on Android and iOS devices is different. For more information, refer to Bluetooth security.
+>
+> | ![EFR32 Connect App](image/efr32_connect_app1.png) | ![EFR32 Connect App](image/efr32_connect_app2.png)||
+> | - | - | -|
 
 #### Read/Write characteristics ####
 
 The parameters of this example application can be easily configured via BLE characteristics. Values for the characteristics are handled by the application as ASCII strings. Tap on the main service to see the available characteristics. Please refer [GATT Configurator](#gatt-configurator) to choose the correct characteristic.
-**Read**
 
-Push the read button to request the value of a characteristic. (See ASCII fields.)
-**Write**
+- **Read:** Push the read button to request the value of a characteristic. (See ASCII fields.)
 
-For setting a parameter select a characteristic and tap on its write button. Type a new value in the ASCII field and push the **Send** button.
+- **Write:** For setting a parameter select a characteristic and tap on its write button. Type a new value in the ASCII field and push the **Send** button.
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

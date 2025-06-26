@@ -3,12 +3,13 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/SparkFun-Micro%20OLED%20Breakout-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/SparkFun-MLX90640%20IR%20Array-green)](https://www.sparkfun.com/products/14844)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-36.29%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-308.61%20KB-blue)
+
 ## Overview ##
 
 This application uses TensorFlow Lite for Microcontrollers to run image classification machine learning models to detect the hand gestures from image data recorded from a Far Infrared Sensor. The detection is visualized using the OLED and the classification results are written to the VCOM serial port.
@@ -20,16 +21,52 @@ The hand gestures:
 - Thumbs Up
 - Thumbs Down
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [Hand signal model](#hand-signal-model)
+  - [Model overview](#model-overview)
+  - [Dataset Model](#dataset-model)
+  - [Model Input](#model-input)
+  - [Model Input Normalization](#model-input-normalization)
+  - [Model Output](#model-output)
+  - [Model Evaluation](#model-evaluation)
+- [How It Works](#how-it-works)
+  - [Video](#video)
+  - [System Overview Diagram](#system-overview-diagram)
+  - [Application Workflows](#application-workflows)
+    - [Startup and initialization](#startup-and-initialization)
+    - [Application event loop](#application-event-loop)
+    - [User Configuration](#user-configuration)
+    - [Display](#display)
+    - [BLE](#ble)
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
 - [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
 - [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 - [AI/ML - Alpha - 2.0.0](https://github.com/SiliconLabsSoftware/aiml-extension)
 
+---
+
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
 
 ## Hardware Required ##
 
@@ -37,6 +74,8 @@ The hand gestures:
 - 1x [SparkFun Micro OLED Breakout (Qwiic) board](https://www.sparkfun.com/products/14532)
 - 1x [Sparkfun MLX90640 IR Array (MLX90640 FIR sensor)](https://www.sparkfun.com/products/14844)
 - 1x smartphone running the 'Simplicity Connect' mobile app
+
+---
 
 ## Connections Required ##
 
@@ -48,41 +87,43 @@ Listed below are the port and pin mappings for working with this example.
 
 - Board: **BRD2704A - Sparkfun Thing Plus Matter - MGM240P**
 
-    | Qwiic Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | SCL | PB03 | I2C Clock |
-    | SDA | PB04 | I2C Data |
+  | Qwiic Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | SCL | PB03 | I2C Clock |
+  | SDA | PB04 | I2C Data |
 
 - Board: **BRD2703A - EFR32xG24 Explorer Kit - XG24**
 
-    | Qwiic Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | SCL | PC04 | I2C Clock |
-    | SDA | PC05 | I2C Data |
+  | Qwiic Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | SCL | PC04 | I2C Clock |
+  | SDA | PC05 | I2C Data |
 
 - Board: **BRD2601B - EFR32xG24 Dev Kit - xG24**
 
-    | Qwiic Pin | Connection | Pin function |
-    |:---:|:-------------:|:---------------|
-    | SCL | PC04 | I2C Clock |
-    | SDA | PC05 | I2C Data |
+  | Qwiic Pin | Connection | Pin function |
+  |:---:|:-------------:|:---------------|
+  | SCL | PC04 | I2C Clock |
+  | SDA | PC05 | I2C Data |
+
+---
 
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) and [AI/ML Extension](https://github.com/SiliconLabsSoftware/aiml-extension) are installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project ###
+### Based on an example project ###
 
 1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "hand signal".
 
 2. Click **Create** button on the **Bluetooth - AI/ML Hand Signal Recognition (MLX90640)** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![board](image/create_project.png)
+   ![board](image/create_project.png)
 
 3. Build and flash this example to the board.
 
@@ -94,7 +135,7 @@ To test this application, you can either create a project based on an example pr
 
 3. Load the model file into the project:
 
-    Create a **tflite** directory inside the config directory of the project and then copy the **config/tflite/thumbs_up_and_down.tflite** model file into it. The project configurator provides a tool that will automatically convert .tflite files into sl_tflite_micro_model source and header files.
+   Create a **tflite** directory inside the config directory of the project and then copy the **config/tflite/thumbs_up_and_down.tflite** model file into it. The project configurator provides a tool that will automatically convert .tflite files into sl_tflite_micro_model source and header files.
 
 4. Import the GATT configuration:
 
@@ -106,37 +147,31 @@ To test this application, you can either create a project based on an example pr
 
    - Save the GATT configuration (ctrl-s).
 
-5. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
+5. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
 
-    - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom
-    - [Application] → [Utility] → [Log]
-    - [Third Party] → [Tiny Printf]
-    - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: **led0**.
-    - [Platform] → [Driver] → [I2C] → [I2CSPM] → instance name: **qwiic**. Configure this instance to suit your hardware.
-
-    - [Services] → [Memory Manager] → [Memory Manager region] → Set this component to use 10240 Stack size.
-
-        ![mem_config](image/mem_config.png)
-
-    - [AI/ML] → [Machine Learning] → [TensorFlow] → [Debug] → [Debug Logging using IO Stream]
-    - [AI/ML] → [Machine Learning] → [TensorFlow] → [Kernels] → [Reference Kernels]
-    - [AI/ML] → [Machine Learning] → [TensorFlow] → [Kernels] → [TensorFlow Lite Micro] → Configure this component to use 9000 Tensor Arena Size.
-
-        ![tflite_configure](image/tflite_configure.png)
-
-    - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C] → use default configuration
-
-        ![ssd1306_config](image/ssd1306_config.png)
-
-    - [Third Party Hardware Drivers] → [Service] → [GLIB - OLED Graphics Library]
-
-    - [Third Party Hardware Drivers] → [Sensors] → [MLX90640 - IR Array Breakout (Sparkfun)]
+   - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom
+   - [Application] → [Utility] → [Log]
+   - [Third Party] → [Tiny Printf]
+   - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: **led0**.
+   - [Platform] → [Driver] → [I2C] → [I2CSPM] → instance name: **qwiic**. Configure this instance to suit your hardware.
+   - [Services] → [Memory Manager] → [Memory Manager region] → Set this component to use 10240 Stack size.
+     ![mem_config](image/mem_config.png)
+   - [AI/ML] → [Machine Learning] → [TensorFlow] → [Debug] → [Debug Logging using IO Stream]
+   - [AI/ML] → [Machine Learning] → [TensorFlow] → [Kernels] → [Reference Kernels]
+   - [AI/ML] → [Machine Learning] → [TensorFlow] → [Kernels] → [TensorFlow Lite Micro] → Configure this component to use 9000 Tensor Arena Size.
+     ![tflite_configure](image/tflite_configure.png)
+   - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C] → use default configuration
+     ![ssd1306_config](image/ssd1306_config.png)
+   - [Third Party Hardware Drivers] → [Service] → [GLIB - OLED Graphics Library]
+   - [Third Party Hardware Drivers] → [Sensors] → [MLX90640 - IR Array Breakout (Sparkfun)]
 
 6. Build and flash the project to your device.
 
-**NOTE:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## Hand Signal Model ##
 
@@ -240,6 +275,8 @@ Class ROC AUC:
 ![Model Evaluation](image/thumbs_up_and_down-fpr.png)
 ![Model Evaluation](image/thumbs_up_and_down-tfp_fpr.png)
 
+---
+
 ## How It Works ##
 
 ### Video ###
@@ -292,7 +329,9 @@ typedef struct AppSettings
 
 ![display](image/display.png)
 
-**Note:** score is the probability score of the detected gesture as a uint8 (i.e. 255 = highest confidence that the correct gesture was detected)
+> [!NOTE]
+>
+> The score is the probability of the detected gesture as a uint8 (i.e. 255 = highest confidence that the correct gesture was detected)
 
 #### BLE ####
 
@@ -327,8 +366,18 @@ Follow the below steps to test the example with the Simplicity Connect applicati
 
 4. Try to read, subscribe to the characteristic, and check the value.
 
-    ![efr app](image/efr_app.png)
+   ![efr app](image/efr_app.png)
 
-5. You can launch the Console that is integrated into Simplicity Studio or can use a third-party terminal tool like TeraTerm to receive the data from the virtual COM port. Use the following UART settings: baud rate 115200, 8N1, no flow control. You should expect a similar output to the one below.
+5. You can launch the Console that is integrated into Simplicity Studio or can use a third-party terminal tool like Tera Term to receive the data from the virtual COM port. Use the following UART settings: baud rate 115200, 8N1, no flow control. You should expect a similar output to the one below.
 
-    ![logs](image/logs.png)
+   ![logs](image/logs.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

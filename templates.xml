@@ -74,8 +74,8 @@
     <properties key="filters" value="Device\ Type|SoC MCU|32-bit\ MCU Project\ Difficulty|Beginner Wireless\ Technology|Bluetooth"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   </descriptors>
-   <descriptors name="bt_dosimeter_sensor" label="Bluetooth - Dosimeter (Sparkfun Type 5) - Sensor"
-                description="This application uses the dosimeter (Sparkfun Type 5) to measure the radiation level of the ambient space and the report this information to another device that place outside of the radioactive zone.">
+  <descriptors name="bt_dosimeter_sensor" label="Bluetooth - Dosimeter (Sparkfun Type 5) - Sensor"
+               description="This application uses the dosimeter (Sparkfun Type 5) to measure the radiation level of the ambient space and the report this information to another device that place outside of the radioactive zone.">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="bluetooth_dosimeter/bluetooth_dosimeter_sensor/SimplicityStudio/bluetooth_dosimeter_sensor.slcp"/>
@@ -500,7 +500,7 @@
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="bluetooth_secure_attestation/bt_secure_attestation_client/SimplicityStudio/bt_secure_attestation_client.slcp"/>
     <properties key="readmeFiles" value="bluetooth_secure_attestation/README.md"/>
-        <properties key="boardCompatibility" value="brd2601a brd2601b brd2703a brd2704a brd4181c brd4186b brd4186c brd4187b brd4187c brd4188a brd4188b brd4195a brd4196a brd4198a brd4308c brd4308d brd4316a brd4317a brd4318a brd4319a brd4335a brd4400a brd4400b brd4401a brd4401b com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2703a brd2704a brd4181c brd4186b brd4186c brd4187b brd4187c brd4188a brd4188b brd4195a brd4196a brd4198a brd4308c brd4308d brd4316a brd4317a brd4318a brd4319a brd4335a brd4400a brd4400b brd4401a brd4401b com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32[bm]g12p.* .*efr32[bm]g13p.* .*efr32[bm]g21.* .*efr32[bm]g22.* .*efr32[bm]g24.* .*efr32[bm]g27.* .*[bm]gm1.* .*[bm]gm13.* .*[bm]gm21.* .*[bm]gm22.* .*[bm]gm24.* .*[bm]gm27.* .*efr32[fz]g28.* .*efr32bg1b.* .*efr32mg14p.* .*mgm12.*"/>
     <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
     <properties key="toolchainCompatibility" value="gcc iar"/>
@@ -689,8 +689,8 @@
     <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   </descriptors>  
- <descriptors name="bt_explorer_kit_bio_sensor_oled" label="Bluetooth - HRM/Sp02 Measurement (MAXM86161)"
-              description="This example implements the Heart Rate service and Pulse Oximeter service service. It enables a peer device to connect and receive Heart Rate and Pulse Oximeter values via Bluetooth. The HRM/SpO2 values are measured by using a bio-sensor located on the Heart Rate 2 Click board and displayed on the OLED screen located on the SparkFun Micro OLED Breakout (Qwiic) board.">
+  <descriptors name="bt_explorer_kit_bio_sensor_oled" label="Bluetooth - HRM/Sp02 Measurement (MAXM86161)"
+               description="This example implements the Heart Rate service and Pulse Oximeter service service. It enables a peer device to connect and receive Heart Rate and Pulse Oximeter values via Bluetooth. The HRM/SpO2 values are measured by using a bio-sensor located on the Heart Rate 2 Click board and displayed on the OLED screen located on the SparkFun Micro OLED Breakout (Qwiic) board.">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="bluetooth_explorer_kit_bio_sensor_oled/SimplicityStudio/bt_explorer_kit_bio_sensor_oled.slcp"/>
@@ -719,8 +719,8 @@
     <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   </descriptors>
-    <descriptors name="bt_door_lock" label="Bluetooth - Door Lock"
-                 description="This project aims to implement a door lock application using Silicon Labs development kits and external sensors integrated with the BLE wireless stack.">
+  <descriptors name="bt_door_lock" label="Bluetooth - Door Lock"
+               description="This project aims to implement a door lock application using Silicon Labs development kits and external sensors integrated with the BLE wireless stack.">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="bluetooth_door_lock/SimplicityStudio/bluetooth_door_lock.slcp"/>
@@ -764,8 +764,8 @@
     <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   </descriptors>
-   <descriptors name="bt_air_quality_monitor" label="Bluetooth - Air Quality Monitor" 
-                description="This project demonstrates a Bluetooth Air Quality Monitor application using Silicon Laboratories development kits, SparkFun Micro OLED Breakout (Qwiic) board, BUZZ 2 click Mikroe board and Environmental Sensor Combo Breakout.">
+  <descriptors name="bt_air_quality_monitor" label="Bluetooth - Air Quality Monitor" 
+               description="This project demonstrates a Bluetooth Air Quality Monitor application using Silicon Laboratories development kits, SparkFun Micro OLED Breakout (Qwiic) board, BUZZ 2 click Mikroe board and Environmental Sensor Combo Breakout.">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="bluetooth_air_quality_monitor/SimplicityStudio/bt_air_quality_monitor.slcp"/>
@@ -824,8 +824,8 @@
     <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   </descriptors>
-    <descriptors name="bt_fir_sensor_mlx90632" label="Bluetooth - Ir Thermometer 3 Click (MLX90632)"
-                 description="This example implements the Ambient temperature and the Object temperature service. It enables a device to connect and receive in every second the Object temperature values via Bluetooth.">
+  <descriptors name="bt_fir_sensor_mlx90632" label="Bluetooth - Ir Thermometer 3 Click (MLX90632)"
+               description="This example implements the Ambient temperature and the Object temperature service. It enables a device to connect and receive in every second the Object temperature values via Bluetooth.">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="bluetooth_fir_sensor_mlx90632/SimplicityStudio/bt_fir_sensor_mlx90632.slcp"/>
@@ -1034,6 +1034,21 @@
     <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   </descriptors>
+  <descriptors name="bt_hid_gamepad" label="Bluetooth - HID Gamepad" 
+               description="This is an example for Bluetooth LE HID device development, which can connect wirelessly to HID hosts including Windows, Mac, Android and iOS systems. This project enumerates WSTK as a gamepad, while using the onboard joystick and button.">  
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="bluetooth_hid_gamepad/SimplicityStudio/bluetooth_hid_gamepad.slcp"/>
+    <properties key="readmeFiles" value="bluetooth_hid_gamepad/README.md"/>
+    <properties key="boardCompatibility" value="brd4181a brd4181b com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mg21.*"/>
+    <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc iar"/>
+    <properties key="category" value="Bluetooth Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
   <descriptors name="bt_esl_tag_mikroe_eink154_e_paper_display" label="Bluetooth - ESL Tag with E-Paper display 1,54inch 200x200 dots from Mikroe" 
                description="This example is an evaluation showcase for a Bluetooth Electronic Shelf Label (ESL) Tag application. This demo includes image and display capabilities of an ESL Tag, utilizing an E-Paper display 1,54inch 200x200 dots from Mikroe. Images are stored in the NVM by defalt.">
     <properties key="namespace" value="template.uc"/>
@@ -1124,4 +1139,64 @@
     <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   </descriptors>
+  <descriptors name="bt_esl_tag_mikroe_eink154_e_paper_display_sdcard_freertos" label="Bluetooth - ESL Tag with SD card and E-Paper display 1,54inch 200x200 dots from Mikroe (FreeRTOS)" 
+               description="This example is an evaluation showcase for a Bluetooth Electronic Shelf Label (ESL) Tag application. This demo includes image and display capabilities of an ESL Tag, utilizing an E-Paper display 1,54inch 200x200 dots from Mikroe. Images are stored in the SD card by default.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="bluetooth_esl_tag_mikroe_eink154_e_paper_display_sdcard_freertos/SimplicityStudio/bt_esl_tag_mikroe_eink154_e_paper_display_sdcard_freertos.slcp"/>
+    <properties key="readmeFiles" value="bluetooth_esl_tag_mikroe_eink154_e_paper_display_sdcard_freertos/README.md"/>
+    <properties key="boardCompatibility" value="brd2703a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32mg24.*"/>
+    <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc iar"/>
+    <properties key="category" value="Bluetooth Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+  </descriptors>
+  <descriptors name="bluetooth_siwx917_paxcounter" label="Bluetooth - SiWx917 - Paxcounter"
+               description="This project demonstrates a Bluetooth Low Energy (BLE)-based people-counting solution (PAX Counter) that estimates room occupancy by scanning for active BLE MAC addresses from surrounding devices. The project is intended for use in smart building, energy optimization, and space utilization applications.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="solutionReferenceId" value="bluetooth_siwx917_paxcounter.SimplicityStudio.bluetooth_siwx917_paxcounter.slcp"/>
+    <properties key="projectFilePaths" value="bluetooth_siwx917_paxcounter/SimplicityStudio/bluetooth_siwx917_paxcounter.slcp"/>
+    <properties key="readmeFiles" value="bluetooth_siwx917_paxcounter/README.md"/>
+    <properties key="boardCompatibility" value="brd4338a brd2605a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*siwg917m111.*"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="ideCompatibility" value="iar-embedded-workbench makefile-ide segger-embedded-studio simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc iar segger"/>
+    <properties key="category" value="Bluetooth Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Capability|SoC MCU|32-bit\ MCU Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="bluetooth_cs_display" label="Bluetooth - Channel Sounding Display" 
+               description="Channel Sounding (CS) Initiator for Bluetooth LE. This example connects to a CS Reflector device and starts the distance measurement. Results are printed on the display of the main board if available and can be read via the serial port VCOM.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="bluetooth_channel_sounding_display/SimplicityStudio/bt_channel_sounding_display.slcp"/>
+    <properties key="readmeFiles" value="bluetooth_channel_sounding_display/README.md"/>
+    <properties key="boardCompatibility" value="brd4198a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32mg24.*"/>
+    <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc iar"/>
+    <properties key="category" value="Bluetooth Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="bt_pond_water_ph2_monitor" label="Bluetooth - Pond Water Quality Monitor (pH2 Click)"
+               description="This project aims to implement pond water quality monitor application using Silicon Labs development kits and external sensors integrated with the BLE wireless stack.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="bluetooth_pond_water_quality_monitor/SimplicityStudio/bt_pond_water_quality_monitor.slcp"/>
+    <properties key="readmeFiles" value="bluetooth_pond_water_quality_monitor/README.md"/>
+    <properties key="boardCompatibility" value="brd2703a brd4108a brd4314a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*bgm22.*  .*bg22.* .*efr32mg24.*"/>
+    <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc iar"/>
+    <properties key="category" value="Bluetooth Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
 </model:MDescriptors>  

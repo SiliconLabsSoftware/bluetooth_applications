@@ -85,6 +85,12 @@ other_file:
     directory: image
   - path: ../image/external_repos.png
     directory: image
+  - path: ../image/server_device_console.png
+    directory: image
+  - path: ../image/web_app.png
+    directory: image
+  - path: ../image/web_app_vertical.png
+    directory: image
 
 tag: hardware:rf:band:2400
 

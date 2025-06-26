@@ -1,8 +1,9 @@
 # Bluetooth - People Counting (VL53L1X) #
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-Distance%20Sensor%20Breakout-green)](https://www.sparkfun.com/products/14722)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)%20board-green)](https://www.sparkfun.com/products/14532)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
@@ -15,15 +16,38 @@ This project aims to implement a people-counting application using Silicon Labs 
 
 This example can be as the first step in developing other upgrade applications based on it. It will be upgraded as a part of the people tracking system in the building or the factory and so on soon. Integrated with BLE wireless technology, therefore the user can control and monitor this system so easily.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [GATT Database](#gatt-database)
+  - [People Counting Implementation](#people-counting-implementation)
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
 
 ## Hardware Required ##
 
@@ -31,6 +55,8 @@ This example can be as the first step in developing other upgrade applications b
 - 1x [SparkFun Micro OLED Breakout (Qwiic) board](https://www.sparkfun.com/products/14532)
 - 1x [SparkFun Distance Sensor Breakout - VL53L1X](https://www.sparkfun.com/products/14722)
 - 1x smartphone running the 'Simplicity Connect' mobile app
+
+---
 
 ## Connections Required ##
 
@@ -40,30 +66,31 @@ The hardware connection is shown in the image below:
 
 ![hardware connection](image/hardware_connection.png)
 
-**Note:**
+> [!NOTE]
+>
+> Some boards do not have an integrated button. In this case, the user has to connect an external button to the board and config this button in accordance with project specifics. To make the driver more stable, use a ceramic capacitor (ex: Ceramic Capacitor 104) to avoid the anti-vibration button used in the project as below:
+>
+> ![external_button](image/external_button.png)
 
-- If you use **SparkFun Thing Plus Matter - MGM240P** to run this application, you have to set up an external button, because it has no integrated button. Please, connect this button to **PB0** pin on the SparkFun Thing Plus Matter board.
-
-- To connect the external button to the board and make the project more stable, you should use a ceramic capacitor (ex: Ceramic Capacitor 104) and a resistor to avoid the anti-vibration button used in the project as below.
-  
-![external_button](image/external_button.png)
+---
 
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
 ### Create a project based on an example project ###
 
 1. From the Launcher Home, add your hardware to **My Products**, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by **"people counting"**.
 
 2. Click **Create** button on the **Bluetooth - People Counting (VL53L1X)** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![create_project](image/create_project.png)
+
+   ![create_project](image/create_project.png)
 
 3. Build and flash this example to the board.
 
@@ -75,37 +102,32 @@ To test this application, you can either create a project based on an example pr
 
 3. Import the GATT configuration:
 
-    - Open the .slcp file in the project.
+   - Open the .slcp file in the project.
 
-    - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
 
-    - Find the Import button and import the configuration `bluetooth_people_counting/config/btconfig/gatt_configuration.btconf` file.
+   - Find the Import button and import the configuration `bluetooth_people_counting/config/btconfig/gatt_configuration.btconf` file.
 
-    - Save the GATT configuration (ctrl-s).
+   - Save the GATT configuration (ctrl-s).
 
 4. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
-
-    - [Application] → [Utility] → [Log]
-
-    - [Platform] → [Driver] → [I2CSPM] → default instance name: qwiic
-
-    - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: btn0
-  
-    - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: led0
-
-    - [Third Party Hardware Drives] → [Sensors] → [VL53L1X - Distance Sensor Breakout (Sparkfun)]
-  
-    - [Third Party Hardware Drives] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun - I2C)]
-
-    - [Third Party Hardware Drives] → [Services] → [GLIB - OLED Graphics Library]
+   - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
+   - [Application] → [Utility] → [Log]
+   - [Platform] → [Driver] → [I2CSPM] → default instance name: qwiic
+   - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: btn0
+   - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: led0
+   - [Third Party Hardware Drives] → [Sensors] → [VL53L1X - Distance Sensor Breakout (Sparkfun)]
+   - [Third Party Hardware Drives] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun - I2C)]
+   - [Third Party Hardware Drives] → [Services] → [GLIB - OLED Graphics Library]
   
 5. Build and flash the project to your device.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works ##
 
@@ -165,11 +187,11 @@ Advertisement Packet Device name: **People Counting**
 
 3. Wait for the VL53L1X sensor to be booted and initialize the VL53L1X sensor with the configurations from NVM3:
 
-    - Distance mode: LONG
+   - Distance mode: LONG
 
-    - Timing budget: 33 ms
+   - Timing budget: 33 ms
 
-    - Region of interest SPADs: 8x16
+   - Region of interest SPADs: 8x16
 
 4. Start ranging for the VL53L1X sensor.
 
@@ -177,13 +199,13 @@ Advertisement Packet Device name: **People Counting**
 
 6. Start a periodical timer every second. The timer callback will raise an external event to the BLE stack and the event handler will do:
 
-    - Check if the ranging data is ready.
+   - Check if the ranging data is ready.
 
-    - Get a new distance sample.
+   - Get a new distance sample.
 
-    - Calculate people counting algorithm with new distance sample.
+   - Calculate people counting algorithm with new distance sample.
 
-    - Switch the Region of Interest (ROI) center to other zones (front or back)
+   - Switch the Region of Interest (ROI) center to other zones (front or back)
 
 7. Start a periodical timer with 1000 milliseconds for each periodic period, The timer callback will raise an external event to the BLE stack and the event handler will display people counting data which was calculated by the people counting algorithm calculation.
 
@@ -245,6 +267,16 @@ Follow the below steps to test the example with the Simplicity Connect applicati
   | ![device_namae](image/device_name.png) | ![device_pairing](image/device_pairing.png)|![device_characteristics](image/device_characteristics.png)|
   | - | - | -|
 
-- You can launch Console that's integrated into Simplicity Studio or use a third-party terminal tool like TeraTerm to receive the data from the USB. A screenshot of the console output is shown in the figure below.
+- You can launch Console that's integrated into Simplicity Studio or use a third-party terminal tool like Tera Term to receive the data from the USB. A screenshot of the console output is shown in the figure below.
 
   ![console_log](image/console_log.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

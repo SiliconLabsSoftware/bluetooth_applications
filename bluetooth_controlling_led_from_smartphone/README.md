@@ -1,28 +1,118 @@
-
 # Bluetooth - Controlling LED from Smartphone #
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-201.86%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.57%20KB-blue)
 
-## Description ##
+## Overview ##
 
 This example is an effective way to become familiar with the Silicon Labs Bluetooth stack and a Wireless Development Kit. The example shows how to develop a simple software to control the Wireless Development Kit's LEDs with a mobile phone application.
 
-There are 3 main tasks, as follows:
+---
 
-- [Editing the GATT Database](#editing-the-gatt-database).
-- [Controlling the LED](#controlling-the-led) on the board using **Simple LED** driver.
-- [Reacting on Bluetooth events](#reacting-to-bluetooth-events), when a remote device reads/writes the GATT database.
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Editing the GATT Database](#editing-the-gatt-database).
+  - [Controlling the LED](#controlling-the-led).
+  - [Reacting on Bluetooth events](#reacting-to-bluetooth-events).
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
+## SDK version ##
+
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
+
+## Software Required ##
+
+- [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
+- [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
+
+## Hardware Required ##
+
+- 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For simplicity, Silicon Labs recommends the [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
+- 1x smartphone running the 'Simplicity Connect' mobile app
+
+---
+
+## Connections Required ##
+
+- Connect the Bluetooth Development Kits to the PC through a compatible-cable. For example, a micro USB cable for the BGM220 Bluetooth Module Explorer Kit.
+
+---
+
+## Setup ##
+
+To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
+
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+
+### Based on an example project ###
+
+1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "controlling led".
+
+2. Click **Create** button on the **Bluetooth - Controlling LED from Smartphone** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
+![create_project](image/create_project.png)
+
+3. Build and flash this example to the board.
+
+### Start with a "Bluetooth - SoC Empty" project ###
+
+1. Create a new **Bluetooth - SoC Empty** project.
+
+2. Copy all attached files in *inc* and *src* folders into the project root folder (overwriting existing).
+
+3. Import the GATT configuration:
+
+   - Open the .slcp file in the project.
+
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
+
+   - Find the Import button and import the attached config/btconf/gatt_configuration.btconf file.
+
+   - Save the GATT configuration (ctrl-s).
+
+4. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
+
+   - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom
+   - [Platform] → [Board] → [Board Control] → enable *Virtual COM UART*
+   - [Application] → [Utility] → [Log]
+   - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: led0
+
+5. Build and flash the project to your device.
+
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+
+---
+
+## How It Works ##
 
 ### Editing the GATT Database ###
 
 Editing the GATT database of the Bluetooth device is made easy with **Silicon Labs Bluetooth SDK** using the GATT Configurator as an easy-to-use graphical tool. This example shows how to add a standard characteristic, adopted by the Bluetooth SIG, to the database, the so-called **Digital characteristic**.
 
-  To see the format and requirements of adopted characteristics, see the list [here](https://www.bluetooth.com/specifications/gatt/characteristics/).
+To see the format and requirements of adopted characteristics, see [the list here](https://www.bluetooth.com/specifications/gatt/characteristics/).
 
 The **Digital characteristic** is designed to control and poll the state of digital I/Os. See the [Setup](#setup) section to learn how to add this characteristic to your database.
 
@@ -103,71 +193,7 @@ case sl_bt_evt_gatt_server_user_read_request_id:
 
 All of the above is implemented in the attached app.c file. After setting up the GATT database as described in the previous section, replace the default app.c with the attached one for a quicker example setup.
 
-## SDK version ##
-
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-
-## Software Required ##
-
-- [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
-- [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
-
-## Hardware Required ##
-
-- 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For simplicity, Silicon Labs recommends the [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
-- 1x smartphone running the 'Simplicity Connect' mobile app
-
-## Connections Required ##
-
-- Connect the Bluetooth Development Kits to the PC through a compatible-cable. For example, a micro USB cable for the BGM220 Bluetooth Module Explorer Kit.
-
-## Setup ##
-
-To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
-
-**NOTE**:
-
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-### Create a project based on an example project ###
-
-1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "controlling led".
-
-2. Click **Create** button on the **Bluetooth - Controlling LED from Smartphone** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![create_project](image/create_project.png)
-
-3. Build and flash this example to the board.
-
-### Start with a "Bluetooth - SoC Empty" project ###
-
-1. Create a new **Bluetooth - SoC Empty** project.
-
-2. Copy all attached files in *inc* and *src* folders into the project root folder (overwriting existing).
-
-3. Import the GATT configuration:
-
-   - Open the .slcp file in the project.
-
-   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
-
-   - Find the Import button and import the attached config/btconf/gatt_configuration.btconf file.
-
-   - Save the GATT configuration (ctrl-s).
-
-4. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
-
-   - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom
-   - [Platform] → [Board] → [Board Control] → enable *Virtual COM UART*
-   - [Application] → [Utility] → [Log]
-   - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: led0
-
-5. Build and flash the project to your device.
-
-**Note:**
-
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
-
-## How It Works ##
+### Testing ###
 
 Follow the below steps to test the example with the Simplicity Connect application:
 
@@ -179,3 +205,13 @@ Follow the below steps to test the example with the Simplicity Connect applicati
 
 4. Press the `Write` button of the characteristic then change the state to Active or Inactive. You should see the LED turning on or off.  
 ![Write Digital Characteristic](image/smart_phone.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

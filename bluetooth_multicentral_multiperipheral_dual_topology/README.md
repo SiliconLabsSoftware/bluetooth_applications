@@ -3,48 +3,79 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-201.38%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.8%20KB-blue)
+
 ## Overview ##
 
 This code example demonstrates how to handle multiple (simultaneous) connections, when the device has to act as central on some of the connections, and peripheral on the rest of the connections.
 
 ![Multi-Slave Multi-Master Dual Topology](image/image1.png)
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Connecting to Peripherals (Device as a Central)](#connecting-to-peripherals-device-as-a-central)
+  - [Connecting to Central (Device as a Peripheral)](#connecting-to-central-device-as-a-peripheral)
+  - [Disconnections](#disconnections)
+  - [Data Gathering](#data-gathering)
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
 
+---
+
 ## Hardware Required ##
 
 - 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For simplicity, Silicon Labs recommends the [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
 - 1x smartphone running the 'Simplicity Connect' mobile app
 
+---
+
 ## Connections Required ##
 
 - Connect the Bluetooth Development Kits to the PC through a compatible-cable. For example, a micro USB cable for the BGM220 Bluetooth Module Explorer Kit.
+
+---
 
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
 ### Create a project based on an example project ###
 
-1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "multi-central".
+1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "multi-central".
 
 2. Click **Create** button on the **Bluetooth - Multi-Central Multi-Peripheral Dual Topology** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![board](image/create_project.png)
+
+   ![board](image/create_project.png)
 
 3. Build and flash this example to the board.
 
@@ -66,13 +97,15 @@ To test this application, you can either create a project based on an example pr
 
       ![The Gathered Temperature Data is Exposed in One GATT Service](image/image3.png)
 
-4. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
+4. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
 
    - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Connection] → Set "Max number of connections reserved for user" to 8
 
    - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom
 
    - [Application] → [Utility] → [Log]
+
+---
 
 ## How It Works ##
 
@@ -214,3 +247,13 @@ To see the gathered temperature values, perform the following steps:
 5. Do the same for the second Temperature Measurement characteristic.
 
    ![Aggregated Temperature Values](image/image4.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

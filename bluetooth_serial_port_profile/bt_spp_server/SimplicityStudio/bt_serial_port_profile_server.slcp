@@ -75,6 +75,10 @@ other_file:
     directory: image
   - path: ../../image/v3_wstk_config.png
     directory: image
+  - path: ../../image/console_server.png
+    directory: image
+  - path: ../../image/web_app.png
+    directory: image
 
 ui_hints:
   highlight:

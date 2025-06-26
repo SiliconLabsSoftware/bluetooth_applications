@@ -85,7 +85,7 @@ include:
   - path: ../patch/dmadrv/inc
     file_list:
       - path: dmadrv.h
-    directory: "simplicity_sdk_2024.12.0/platform/emdrv/dmadrv/inc"
+    directory: "simplicity_sdk_2024.12.2/platform/emdrv/dmadrv/inc"
 
 source:
   - path: ../src/main.c
@@ -104,7 +104,7 @@ source:
   - path: ../lin/sl_lin.c
     directory: "lin"
   - path: ../patch/dmadrv/src/dmadrv.c
-    directory: "simplicity_sdk_2024.12.0/platform/emdrv/dmadrv/src"
+    directory: "simplicity_sdk_2024.12.2/platform/emdrv/dmadrv/src"
 
 config_file:
   - override:

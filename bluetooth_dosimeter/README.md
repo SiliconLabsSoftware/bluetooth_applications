@@ -3,12 +3,13 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Mikroe-Buzzer%202%20Click%20Board-green)](https://www.mikroe.com/buzz-2-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)-green)](https://www.sparkfun.com/products/14532)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-165.91%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-9.49%20KB-blue)
+
 ## Overview ##
 
 This project aims to implement a dosimeter application using Silicon Labs development kits and external sensors integrated with the BLE wireless stack.
@@ -29,17 +30,48 @@ The counter (timestamp) value provides a trigger for the client to notify the us
 
 The client device scans periodically the BLE network. Once the sensor device is found, the client device tries to connect to it and read the radiation characteristic and show the radiation level on the connected OLED display. Optionally it can produce a "click" noise by activating the buzzer, to notify the user about the radiation event. The client device subscribes to the radiation characteristic to get notifications about changes in the measured radiation level.
 
-Note: Any other BLE capable device can be a client device, (e.g.: a simple mobile phone).
+> [!NOTE]
+>
+> Any other BLE capable device can be a client device, (e.g.: a simple mobile phone).
+
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Sensor](#sensor)
+    - [Sensor overview](#sensor-overview)
+    - [Sensor GATT Database](#sensor-gatt-database)
+    - [Sensor Implementation](#sensor-implementation)
+  - [Client](#client)
+    - [Client overview](#client-overview)
+    - [Client GATT Database](#client-gatt-database)
+    - [Client Implementation](#client-implementation)
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
 
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
 
 ## Hardware Required ##
 
@@ -59,6 +91,8 @@ Note: Any other BLE capable device can be a client device, (e.g.: a simple mobil
 
 - 1x [Buzzer 2 Click Board](https://www.mikroe.com/buzz-2-click)
 
+---
+
 ## Connections Required ##
 
 The hardware connection is shown in the image below:
@@ -69,7 +103,7 @@ The hardware connection is shown in the image below:
 
 The Sparkfun OLED Display board can be easily connected to these boards above by using a Qwiic cable while the Buzzer 2 Click connects to them using SPI protocol via a Mikroe connection.
 
-**NOTE:** Please configure the sensor pin assignment as follows.
+To connect to the *Buzzer 2 Click* and *Pocket Geiger Radiation Sensor - Type 5* boards consider using the Wire Jumpers. The table below gives an overview of the pin connections.
 
 | Sparkfun Thing Plus Matter  | xG24 Explorer Kit  |BGM220P/BG22  Explorer Kit    |  Pocket Geiger Radiation Sensor markings |
 |------------------------------|----------|---------------------------|----------------------------------------|
@@ -78,23 +112,25 @@ The Sparkfun OLED Display board can be easily connected to these boards above by
 |PB01                    |PB01 - INT|   PB03 - INT              |        SIG                               |
 |PB00                     |PD05 - RX |   PB02 - RX               |        SN                                |
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+### Based on an example project ###
 
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project ###
-
-1. From the Launcher Home, add your hardware to MyProducts, click on it, and click on the EXAMPLE PROJECTS & DEMOS tab. Find the example project filtering by "dosimeter".
+1. From the Launcher Home, add your hardware to My Products, click on it, and click on the EXAMPLE PROJECTS & DEMOS tab. Find the example project filtering by "dosimeter".
 
 2. Click **Create** button on both **Bluetooth - Dosimeter (Sparkfun Type 5) - Sensor** and **Bluetooth - Dosimeter (Sparkfun Type 5) - Client** examples. Example project creation dialog pops up -> click Create and Finish and the projects will be generated.
 
-    ![create example](image/create_example.png)
+   ![create example](image/create_example.png)
 
 3. Build and flash the examples to the board.
 
@@ -104,50 +140,52 @@ To test this application, you can either create a project based on an example pr
 
 2. Copy all attached files in *inc* and *src* folders into the project root folder (overwriting existing).
 
-    - With **sensor** device: [bluetooth sensor device](https://github.com/SiliconLabs/bluetooth_applications/tree/master/bluetooth_dosimeter/bluetooth_dosimeter_sensor)
-    - With **client** device: [bluetooth client device](https://github.com/SiliconLabs/bluetooth_applications/tree/master/bluetooth_dosimeter/bluetooth_dosimeter_client)
+   - **Sensor** device: [bluetooth sensor device](https://github.com/SiliconLabs/bluetooth_applications/tree/master/bluetooth_dosimeter/bluetooth_dosimeter_sensor)
+   - **Client** device: [bluetooth client device](https://github.com/SiliconLabs/bluetooth_applications/tree/master/bluetooth_dosimeter/bluetooth_dosimeter_client)
 
 3. Import the GATT configuration:
 
-    - Open the .slcp file in the project.
+   - Open the .slcp file in the project.
 
-    - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**.
 
-    - Find the Import button and import the attached gatt_configuration.btconf file.
+   - Find the Import button and import the attached `gatt_configuration.btconf` file.
 
-        - With **sensor** device: [sensor gatt_configuration.btconf](https://github.com/SiliconLabs/bluetooth_applications/tree/master/bluetooth_dosimeter/bluetooth_dosimeter_sensor/config/btconf/gatt_configuration.btconf)
-        - With **client** device: [client gatt_configuration.btconf](https://github.com/SiliconLabs/bluetooth_applications/tree/master/bluetooth_dosimeter/bluetooth_dosimeter_client/config/btconf/gatt_configuration.btconf)
+     - **Sensor** device: [sensor gatt_configuration.btconf](https://github.com/SiliconLabs/bluetooth_applications/tree/master/bluetooth_dosimeter/bluetooth_dosimeter_sensor/config/btconf/gatt_configuration.btconf)
+     - **Client** device: [client gatt_configuration.btconf](https://github.com/SiliconLabs/bluetooth_applications/tree/master/bluetooth_dosimeter/bluetooth_dosimeter_client/config/btconf/gatt_configuration.btconf)
 
-    - Save the GATT configuration (ctrl-s).
+   - Save the GATT configuration (ctrl-s).
 
 4. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-    - For **sensor** device:
-        - [Services] → [Timers] → [Sleep Timer]
-        - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
-        - [Application] → [Utility] → [Log]
-        - [Application] → [Utility] → [Assert]
-        - [Third Party] → [Tiny printf]
-        - [Third Party Hardware Drivers] → [Sensors] → [Type 5 - Poket Geiger Radiation (Sparkfun)]
+   - **Sensor** device:
+     - [Services] → [Timers] → [Sleep Timer]
+     - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
+     - [Application] → [Utility] → [Log]
+     - [Application] → [Utility] → [Assert]
+     - [Third Party] → [Tiny printf]
+     - [Third Party Hardware Drivers] → [Sensors] → [Type 5 - Poket Geiger Radiation (Sparkfun)]
 
-    - For **client** device:
-        - [Services] → [Timers] → [Sleep Timer]
-        - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
-        - [Application] → [Utility] → [Log]
-        - [Application] → [Utility] → [Assert]
-        - [Third Party] → [Tiny printf]
-        - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0**
-        - [Platform] → [Driver] → [I2C] → [I2CSPM] → default instance name: **qwiic**
-        - [Platform] → [Driver] → [PWM] → [PWM] → default instance name: **mikroe**
-        - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
-        - [Third Party Hardware Drivers] → [Audio & Voice] → [CMT_8540S_SMT - Buzz 2 Click (Mikroe)]
-        - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
+   - **Client** device:
+     - [Services] → [Timers] → [Sleep Timer]
+     - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
+     - [Application] → [Utility] → [Log]
+     - [Application] → [Utility] → [Assert]
+     - [Third Party] → [Tiny printf]
+     - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: **btn0**
+     - [Platform] → [Driver] → [I2C] → [I2CSPM] → default instance name: **qwiic**
+     - [Platform] → [Driver] → [PWM] → [PWM] → default instance name: **mikroe**
+     - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
+     - [Third Party Hardware Drivers] → [Audio & Voice] → [CMT_8540S_SMT - Buzz 2 Click (Mikroe)]
+     - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
 
 5. Build and flash the project to your device.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How it Works ##
 
@@ -290,6 +328,18 @@ Follow the below steps to test the Sensor with the Simplicity Connect applicatio
 
     ![client log](image/log_client.png)
 
-- **Note:** Button PB0 should be pressed during startup (power-on or reset) to run the client in Configuration Mode. The terminal will display information as below and the Oled will also display "**CONFIG MODE**".
+> [!NOTE]
+>
+> Button PB0 should be pressed during startup (power-on or reset) to run the client in Configuration Mode. The terminal will display information as below and the Oled will also display "**CONFIG MODE**".
+>
+> ![client configuration](image/client_configuration.png)
 
-    ![client configuration](image/client_configuration.png)
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

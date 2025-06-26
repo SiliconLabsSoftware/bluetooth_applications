@@ -1,15 +1,16 @@
-# Bluetooth - Container Level Detection (VL53L1X)
+# Bluetooth - Container Level Detection (VL53L1X) #
 
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Adafruit-IS31FL3741-green)](https://www.adafruit.com/product/5201)
 [![Required board](https://img.shields.io/badge/Sparkfun-Distance%20Sensor%20Breakout-green)](https://www.sparkfun.com/sparkfun-distance-sensor-breakout-4-meter-vl53l1x-qwiic.html)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-195.96%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.43%20KB-blue)
-## Overview
+
+## Overview ##
 
 This project proposes the development of an application that uses the Silicon Labs development kits, Sparkfun Distance sensor breakout and Adafruit IS31FL3741 components to monitor the levels of two containers and display the information graphically. The application uses BLE for wireless communication between the devices.
 
@@ -29,17 +30,44 @@ The client device can display levels of up to 4 container level sensors. The low
 
 Once measurement data is not updated for a slot within a period, the client device shows NO DATA on the display for that.
 
-## SDK version
+---
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+## Table Of Contents ##
 
-## Software Required
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Sensor Overview](#sensor-overview)
+    - [Sensor Implementation](#sensor-implementation)
+  - [Client](#client)
+    - [Client Overview](#client-overview)
+    - [Client GATT Database](#client-gatt-database)
+    - [Client Implementation](#client-implementation)
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
+## SDK version ##
+
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
+
+## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
 
-## Hardware Required
+---
+
+## Hardware Required ##
 
 **Sensor:**
 
@@ -52,7 +80,9 @@ Once measurement data is not updated for a slot within a period, the client devi
 - 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For example, [XG24-EK2703A](https://www.silabs.com/development-tools/wireless/efr32xg24-explorer-kit?tab=overview) EFR32xG24 Explorer Kit
 - 1x [IS31FL3741 - 13x9 PWM RGB LED Matrix (Adafruit)](https://www.adafruit.com/product/5201)
 
-## Connections Required
+---
+
+## Connections Required ##
 
 The hardware connection is shown in the images below:
 
@@ -68,81 +98,79 @@ The Distance Sparkfun sensor can be easily connected to the EFR32 xG24 Explorer 
 The Adafruit RGB LED Matrix board can be easily connected to the EFR32 xG24 Explorer Kit by using a Qwiic cable.
 ![con hardware](image/con_hardware2.png)
 
-## Setup
+---
+
+## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project
+### Based on an example project ###
 
 1. From the Launcher Home, add your product name to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "container".
 
 2. Click **Create** button on both **Bluetooth - Container Level Dectection Sensor** and **Bluetooth - Container Level Dectection Client** examples. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
 
-    ![board](image/create_project.png)
+   ![board](image/create_project.png)
 
 3. Build and flash these examples to the boards.
 
-### Start with a "Bluetooth - SoC Empty" project
+### Start with a "Bluetooth - SoC Empty" project ###
 
 1. Create a **Bluetooth - SoC Empty** project for your hardware using Simplicity Studio 5.
 
 2. copy all the .h and .c files to the following directory of the project root folder (overwriting the existing files).
 
-    - With **sensor** device:
-      - [Header files](inc/sensor/)
-      - [Source files](src/sensor/)
-    - With **client** device:
-      - [Header files](inc/client/)
-      - [Source files](src/client/)
+   - **Sensor** device:
+     - [Header files](inc/sensor/)
+     - [Source files](src/sensor/)
+   - **Client** device:
+     - [Header files](inc/client/)
+     - [Source files](src/client/)
 
-3. Install the software components:
+3. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
 
-    - Open the .slcp file in the project.
+   - **Sensor** device:
+     - [Services] → [Timers] → [Sleep Timer]
+     - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
+     - [Application] → [Utility] → [Log]
+     - [Third Party Hardware Drivers] → [Sensors] → [VL53L1X - Distance Sensor Breakout (Sparkfun)]
+     - [Bluetooth] → [OTA] → [In-Place OTA DFU] → uninstall
+     - [Platform] → [Bootloader Application Interface] → uninstall.
 
-    - Select the SOFTWARE COMPONENTS tab.
-
-    - Install the following components for **sensor** device:
-
-        - [Services] → [Timers] → [Sleep Timer]
-        - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
-        - [Application] → [Utility] → [Log]
-        - [Third Party Hardware Drivers] → [Sensors] → [VL53L1X - Distance Sensor Breakout (Sparkfun)]
-        - [Bluetooth] → [OTA] → [In-Place OTA DFU] → uninstall
-        - [Platform] → [Bootloader Application Interface] → uninstall.
-
-    - Install the following components for **client** device:
-
-        - [Services] → [Timers] → [Sleep Timer]
-        - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
-        - [Application] → [Utility] → [Log]
-        - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: btn0
-        - [Platform] → [Driver]→ [I2C] → [I2CSPM] → default instance name: qwiic
-        - [Third Party Hardware Drivers] → [Display & LED] → [IS31FL3741 - 13x9 PWM RGB LED Matrix (Adafruit) - I2C]
-        - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
-        - [Bluetooth] → [OTA] → [In-Place OTA DFU] → uninstall
-        - [Platform] → [Bootloader Application Interface] → uninstall.
+   - **Client** device:
+     - [Services] → [Timers] → [Sleep Timer]
+     - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
+     - [Application] → [Utility] → [Log]
+     - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: btn0
+     - [Platform] → [Driver]→ [I2C] → [I2CSPM] → default instance name: qwiic
+     - [Third Party Hardware Drivers] → [Display & LED] → [IS31FL3741 - 13x9 PWM RGB LED Matrix (Adafruit) - I2C]
+     - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
+     - [Bluetooth] → [OTA] → [In-Place OTA DFU] → uninstall
+     - [Platform] → [Bootloader Application Interface] → uninstall.
 
 4. Import the GATT configuration:
 
-    - Open the .slcp file in the project again.
-    - Select the CONFIGURATION TOOLS tab and open the "Bluetooth GATT Configurator".
-    - Find the Import button and import the  gatt_configuration.btconf file.
-        - Client: `config/btconf/client/gatt_configuration.btconf`
-    - Save the GATT configuration (ctrl-s).
+   - Open the .slcp file in the project again.
+   - Select the CONFIGURATION TOOLS tab and open the "Bluetooth GATT Configurator".
+   - Find the Import button and import the  gatt_configuration.btconf file.
+     - Client: `config/btconf/client/gatt_configuration.btconf`
+   - Save the GATT configuration (ctrl-s).
 
 5. Build and flash these projects to the boards.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
-## How It Works
+## How It Works ##
 
 This application has 2 roles: **Client** and **Sensor**.
 
@@ -152,11 +180,11 @@ Normally, Sensor devices send the advertisement packets frequently in the BLE ne
 
 - Normal mode: When the BTN0 is released during the initialization phase, This device starts scanning the advertisement packet of the sensor devices which have the name started with 'CON_LEV_S_'. It analyzes this packet and gets the information of the container. After that, it will calculate to corresponding value and update the led matrix which shows the status of containers.
 
-### Sensor Overview
+### Sensor Overview ###
 
 ![Application Overview](image/con_sensor_overview.png)
 
-#### Sensor Implementation
+#### Sensor Implementation ####
 
 **Application initialization:**
 
@@ -180,13 +208,13 @@ The AdvData field in the advertisement packet is as the table below:
 - Distance: Calculate the level of the container
 - The device is not connectable. It sends [manufacturer-specific advertisement](https://github.com/SiliconLabs/bluetooth_stack_features/tree/master/advertising/advertising_manufacturer_specific_data) packets.
 
-### Client
+### Client ###
 
-#### Client Overview
+#### Client Overview ####
 
 ![Application Overview](image/con_client_overview.png)
 
-#### Client GATT Database
+#### Client GATT Database ####
 
 **GATT Database:**
 
@@ -204,7 +232,7 @@ The AdvData field in the advertisement packet is as the table below:
     - [R] Get the highest level value for the selected container
     - [W] Set the highest level value for the selected container (40-4000 is the valid range)
 
-#### Client Implementation
+#### Client Implementation ####
 
 **Application initialization:**
 
@@ -239,7 +267,7 @@ If the Client is in the normal mode, the LED matrix will show the level of the c
 
 ![Display](image/con_display.png)
 
-### Testing
+### Testing ###
 
 **Sensor:**
 
@@ -251,11 +279,11 @@ Follow the below steps to test the Sensor with the Simplicity Connect applicatio
 
 - Click on the instance of CON_LEV_S_<>. Now, you should see the counter and the container level value on the Manufacturer Specific Data row. Please have a look at the red highlighted area below in the result pictures.
 
-    ![Display](image/con_app_phone.png)
+  ![Display](image/con_app_phone.png)
 
 - After flashing code to the sensor board, an output from a serial terminal as shown below
 
-    ![Sensor Log](image/con_log_sensor.png)
+  ![Sensor Log](image/con_log_sensor.png)
 
 **Client:**
 
@@ -265,8 +293,20 @@ Follow the below steps to test the Sensor with the Simplicity Connect applicatio
 
 - Open your terminal emulator and connect to your client device over its serial port. Set baudrate to 115200. In the console log, the information of the sensor device will be shown.
 
-    ![Client log](image/con_log_client.png)
+  ![Client log](image/con_log_client.png)
 
-- **Note:** Button PB0 should be pressed during startup (power-on or reset) to run the client in Configuration Mode. The terminal will display the information like below
+> [!NOTE]
+>
+> Button PB0 should be pressed during startup (power-on or reset) to run the client in Configuration Mode. The terminal will display the information like below
+>
+> ![user configuration](image/con_log_configuration.png)
 
-    ![user configuration](image/con_log_configuration.png)
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

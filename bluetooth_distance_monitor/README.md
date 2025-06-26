@@ -1,8 +1,9 @@
 # Bluetooth - Distance Monitor (VL53L1X) #
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Mikroe-BUZZ%202%20Click%20board-green)](https://www.mikroe.com/buzz-2-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)%20board-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/Sparkfun-Distance%20Sensor%20Breakout-green)](https://www.sparkfun.com/products/14722)
@@ -22,15 +23,45 @@ In normal operation, the sensor device uses the BGM220 Explorer Kit board to get
 
 This device can be connected to Simplicity connect app that allows users configuration the threshold mode, range mode, threshold value, buzzer volume, and notification status.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Application Overview](#application-overview).
+  - [Initialization](#initialization).
+  - [BLE User Request Events](#ble-user-request-events)
+  - [External Runtime Events](#external-runtime-events)
+  - [Application Main Function](#application-main-function)
+  - [Screen Update](#screen-update)
+  - [Button Pressed](#button-pressed)
+  - [Application main source files](#application-main-source-files)
+  - [Testing](#testing)
+    - [Configuration with the Simplicity Connect Mobile Application](#configuration-with-the-simplicity-connect-mobile-application)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
 
 ## Hardware Required ##
 
@@ -40,23 +71,27 @@ This device can be connected to Simplicity connect app that allows users configu
 - 1x [Mikroe BUZZ 2 Click board](https://www.mikroe.com/buzz-2-click)
 - 1x smartphone running the 'Simplicity Connect' mobile app
 
+---
+
 ## Connections Required ##
 
 Sensor boards can be easily connected via qwiic and microbus connectors to the BGM220P explorer kit.
 
 ![connection](image/connection.png)
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project ###
+### Based on an example project ###
 
 1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "distance monitor".
 
@@ -72,36 +107,33 @@ To test this application, you can either create a project based on an example pr
 
 2. Copy all the [source](src/) and [header](inc/) files to the following directory of the project root folder (overwriting existing files).
 
-3. Install the software components:
+3. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-   - Open the .slcp file in the project.
-
-   - Select the SOFTWARE COMPONENTS tab.
-
-   - Install the following components:
-      - [Services] → [Timers] → [Sleep Timer]
-      - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
-      - [Bluetooth] → [Bluetooth Host (Stack)] → [Additional Features] → [NVM Support]
-      - [Application] → [Utility] → [Log]
-      - [Platform] → [Driver]→ [I2C] → [I2CSPM] → default instance name: **qwiic**
-      - [Platform] → [Driver]→ [Button] → [Simple Button] -> default instance name: **btn0**
-      - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
-      - [Third Party Hardware Drivers] → [Audio & Voice] → [CMT_8540S_SMT - Buzz 2 Click (Mikroe)]
-      - [Third Party Hardware Drivers] → [Sensors] → [VL53L1X - Distance Sensor Breakout (Sparkfun)]
-      - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
+   - [Services] → [Timers] → [Sleep Timer]
+   - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: **vcom**
+   - [Bluetooth] → [Bluetooth Host (Stack)] → [Additional Features] → [NVM Support]
+   - [Application] → [Utility] → [Log]
+   - [Platform] → [Driver]→ [I2C] → [I2CSPM] → default instance name: **qwiic**
+   - [Platform] → [Driver]→ [Button] → [Simple Button] -> default instance name: **btn0**
+   - [Third Party Hardware Drivers] → [Display & LED] → [SSD1306 - Micro OLED Breakout (Sparkfun) - I2C]
+   - [Third Party Hardware Drivers] → [Audio & Voice] → [CMT_8540S_SMT - Buzz 2 Click (Mikroe)]
+   - [Third Party Hardware Drivers] → [Sensors] → [VL53L1X - Distance Sensor Breakout (Sparkfun)]
+   - [Third Party Hardware Drivers] → [Services] → [GLIB - OLED Graphics Library]
 
 4. Import the GATT configuration:
 
-    - Open the .slcp file in the project again.
-    - Select the CONFIGURATION TOOLS tab and open the "Bluetooth GATT Configurator".
-    - Find the Import button and import the [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) file.
-    - Save the GATT configuration (ctrl-s).
+   - Open the .slcp file in the project again.
+   - Select the CONFIGURATION TOOLS tab and open the "Bluetooth GATT Configurator".
+   - Find the Import button and import the [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) file.
+   - Save the GATT configuration (ctrl-s).
 
 5. Build and flash the project to the board.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works ##
 
@@ -171,31 +203,33 @@ The screen update function is invoked periodically. It updates the information d
 
 ### Application main source files ###
 
-- [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf): BLE GATT Database
+- `gatt_configuration.btconf`: BLE GATT Database
 
-- [app_config.h](inc/app_config.h): Application configuration parameters (e.g.: BLE Passkey) and BLE GATT Characteristic <-> Application feature binding.
+- `app_config.h`: Application configuration parameters (e.g.: BLE Passkey) and BLE GATT Characteristic <-> Application feature binding.
 
-- [app_logic.c](src/app_logic.c): Implements the applications's main logical blocks.
+- `app_logic.c`: Implements the applications's main logical blocks.
 
-- [app_callbacks.c](src/app_callbacks.c): Implements callback functions for platform drivers. (Timers, Buttons)
+- `app_callbacks.c`: Implements callback functions for platform drivers. (Timers, Buttons)
 
-- [app_ble_events.c](src/app_ble_events.c): Configures BLE stack and handles BLE events.
+- `app_ble_events.c`: Configures BLE stack and handles BLE events.
 
-- [app_events.c](src/app_events.c): Application specific event handlers. (BLE User requests, timer events, and button events come from the BLE stack.)
+- `app_events.c`: Application specific event handlers. (BLE User requests, timer events, and button events come from the BLE stack.)
 
-## Testing ##
+### Testing ###
 
 Upon reset, the application will display the Silicon Labs logo on the OLED screen for a few seconds. \
 After the distance sensor is booted up and its configuration is done, the application starts the periodic distance measurement and gathers the configured samples. \
 While the samples are gathered the display shows the **SENSOR INIT.** text. Once the application is gathered enough measurement data to calculate the average distance then the application will update the screen with the latest available average distance.
 
 ![application console log](image/app_console_log.png)
+
 ![display design](image/iddle.png)
+
 ![display show distance in range](image/range.png)
 
 ![application testing](image/testing.png)
 
-### Configuration with the Simplicity Connect Mobile Application ###
+#### Configuration with the Simplicity Connect Mobile Application ####
 
 **Connect to the device:**
 
@@ -203,9 +237,11 @@ Follow the below steps to test the example with the Simplicity Connect applicati
 
 - Open the Simplicity Connect app on your smartphone and allow the permission requested the first time it is opened.
 
-- Find your device in the Bluetooth Browser, advertising as *Distance*, and tap Connect. Then you need accept the pairing request when connected for the first time. For iOS devices, enter the passkey (passkey default as **123456** (app_config.h: DISTANCE_MONITOR_PASSKEY)) to confirm authentication for the pairing process for the first time. For Android devices, the user must accept a pairing request first and do as above. After that, wait for the connection to be established and the GATT database to be loaded.
+- Find your device in the Bluetooth Browser, advertising as _Distance_, and tap Connect. Then you need accept the pairing request when connected for the first time. For iOS devices, enter the passkey (passkey default as **123456** (app_config.h: DISTANCE_MONITOR_PASSKEY)) to confirm authentication for the pairing process for the first time. For Android devices, the user must accept a pairing request first and do as above. After that, wait for the connection to be established and the GATT database to be loaded.
 
-_Note_: The pairing process on Android and iOS devices is different. For more information, refer to [bluetooth security](https://github.com/SiliconLabs/bluetooth_stack_features/tree/master/security).
+> [!NOTE]
+>
+> The pairing process on Android and iOS devices is different. For more information, refer to [bluetooth security](https://github.com/SiliconLabs/bluetooth_stack_features/tree/master/security).
 
 **Read/Write characteristics:**
 
@@ -213,17 +249,23 @@ The parameters of this example application can be easily configured via BLE char
 Values for the characteristics are handled by the application as ASCII strings.
 Tap on the main service to see the available characteristics.
 
-***Read***
+- **Read:** Push the read button to request the value of a characteristic. (See ASCII fields.)
 
-Push the read button to request the value of a characteristic. (See ASCII fields.)
+- **Write:** For setting a parameter select a characteristic and tap on its write button. Type a new value in the ASCII field and push the Send button.
 
-***Write***
-
-For setting a parameter select a characteristic and tap on its write button. Type a new value in the ASCII field and push the Send button.
-
-![Simplicity connect application](image/efr_app.png)
+  ![Simplicity connect application](image/efr_app.png)
 
 By default, the application is configured to notify the user if the measured distance is below the configured lower threshold (default: 250 mm). The notification is muted by default, it can be enabled via either pushing the BTN0 button on the development kit or through a write request to the corresponding BLE characteristic.
 Buzzer volume, threshold modes (below the lower threshold, above the upper threshold, inside, outside of the threshold limits), and threshold limits [50-4000 mm] can be configured too. If the measured average value is outside of the sensor's valid range [40-1300/4000 mm] the notification system is inactive and the "OUT OF RANGE" label is displayed on the screen.
 
 This application only aims to demonstrate the basic capabilities of this distance sensor with the Silicon Labs BLE wireless stack. This means that the notification status in the application logic is not debounce filtered and the configured threshold parameters are not checked against the sensor's range mode configuration (upper distance limit: short range mode = 1300 mm, long range mode = 4000 mm).
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

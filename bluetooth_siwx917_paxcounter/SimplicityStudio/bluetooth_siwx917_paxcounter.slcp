@@ -1,0 +1,101 @@
+project_name: bluetooth_siwx917_paxcounter
+package: Bluetooth
+label: Bluetooth - SiWx917 - Paxcounter
+
+description: >
+  This project demonstrates a Bluetooth Low Energy (BLE)-based people-counting solution (PAX Counter) that estimates room occupancy by scanning for active BLE MAC addresses from surrounding devices. The project is intended for use in smart building, energy optimization, and space utilization applications.
+
+category: Bluetooth Examples
+
+quality: experimental
+
+filter:
+- name: Device Type
+  value: [SoC]
+- name: "Project Difficulty"
+  value: [Beginner]
+- name: Wireless Technology
+  value: [Bluetooth]
+
+readme:
+- path: ../README.md
+
+source:
+- path: ../src/app.c
+- path: ../src/main.c
+- path: ../src/pax_nvm.c
+  directory: "src"
+
+include:
+  - path: ../inc
+    file_list:
+      - path: app.h
+      - path: ble_config.h
+  - path: ../inc
+    file_list:
+      - path: pax_nvm.h
+    directory: "inc"  
+
+component:
+- id: basic_network_config_manager
+  from: wiseconnect3_sdk
+- id: ble
+  from: wiseconnect3_sdk
+- id: network_manager
+  from: wiseconnect3_sdk
+- id: si91x_memory_default_config
+  from: wiseconnect3_sdk
+- id: sl_power_manager
+  from: wiseconnect3_sdk
+- id: sl_si91x_basic_buffers
+  from: wiseconnect3_sdk
+- id: sl_si91x_internal_stack
+  from: wiseconnect3_sdk
+- id: sl_si91x_nvm3
+  from: wiseconnect3_sdk
+- id: syscalls
+  from: wiseconnect3_sdk
+- id: wifi
+  from: wiseconnect3_sdk
+- id: wifi_resources
+  from: wiseconnect3_sdk
+- id: wireless_wakeup_ulp_component
+  from: wiseconnect3_sdk
+- id: wiseconnect3_common
+- id: freertos
+- id: freertos_heap_4
+- id: sl_system
+
+
+other_file:
+- path: ../image/pax_counter_architecture.png
+  directory: image
+- path: ../image/nvm3_install.png
+  directory: image
+- path: ../image/console_output.png
+  directory: image
+- path: ../image/create_project.png
+  directory: image
+
+
+define:
+- name: SL_SI91X_PRINT_DBG_LOG
+
+requires:
+- name: device_needs_ram_execution
+
+configuration:
+- name: SL_BOARD_ENABLE_VCOM
+  value: '1'
+
+ui_hints:
+  highlight:
+  - path: README.md
+    focus: true
+
+sdk_extension:
+- id: wiseconnect3_sdk
+  version: 3.4.2
+
+post_build:
+  path: bluetooth_siwx917_paxcounter.slpb

@@ -3,7 +3,7 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Mikroe-Active%20GPS%20Antenna-green)](https://www.mikroe.com/active-gps)
 [![Required board](https://img.shields.io/badge/Mikroe-GSM/GPRS%20Antenna-green)](https://www.mikroe.com/gsm-gprs-right-angle-rubber)
 [![Required board](https://img.shields.io/badge/Mikroe-LTE%20ToT%202%20Click-green)](https://www.mikroe.com/lte-iot-2-click)
@@ -21,15 +21,40 @@ The block diagram of this application is shown in the image below:
 
 ![overview](image/overview.png)
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Gateway Implementation](#gateway-implementation)
+    - [Application initialization](#application-initialization)
+    - [Data collection](#data-collection)
+    - [Sending a Message from the Gateway to the Hologram Dashboard](#sending-a-message-from-the-gateway-to-the-hologram-dashboard)
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Hologram.io kit](https://www.hologram.io/)
+
+---
 
 ## Hardware Required ##
 
@@ -40,27 +65,31 @@ The block diagram of this application is shown in the image below:
 - 1x [GSM/GPRS Antenna](https://www.mikroe.com/gsm-gprs-right-angle-rubber)
 - 1x [Active GPS Antenna](https://www.mikroe.com/active-gps)
 
+---
+
 ## Connections Required ##
 
 - The **LTE ToT 2 Click** can be plugged into the **BGM220 Bluetooth Module Explorer Kit** via the mikroBus socket
 
-   ![hardware connection](image/hardware_connection.png)
+  ![hardware connection](image/hardware_connection.png)
 
 - Insert the SIM into the LTE IoT 2 Click. Ensure that the SIM is inserted properly.
 
 - You need to attach the GSM and GPS antenna to the proper connectors (CN1 is the GSM one, and CN2 is the GPS antenna). Place the GNSS antenna to be able detect GPS satellites. GSM service is also required in the area.
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project ###
+### Based on an example project ###
 
 1. From the Launcher Home, add your device to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "cellular gateway".
 
@@ -77,14 +106,14 @@ To test this application, you can either create a project based on an example pr
 
    ![Path](image/path.png)
 
-3. Open the .slcp file. Select the SOFTWARE COMPONENTS tab and install the software components:
+3. Open the .slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software components:
+
    - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom
    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: mikroe. Set the "Receive buffer size" to 256
    - [Application] → [Utility] → [Log]
    - [Application] → [Utility] → [Timer]
    - [Platform] → [Utilities] → [Circular Queue] → Set "Max Queue Length" to 20
-   - [Third Party Hardware Drivers] → [Services] → [mikroSDK 2.0 SDK - Peripheral Drivers] → [Digital I/O]
-   - [Third Party Hardware Drivers] → [Services] → [mikroSDK 2.0 SDK - Peripheral Drivers] → [UART]
+   - [Third-Party Hardware Drivers] → [Sensors] → [BG96 - LTE IoT 2 Click (Mikroe)]
 
 4. Open the `app.c` file. Replace the DEVICE_KEY with your Hologram token found here: <https://support.hologram.io/hc/en-us/articles/360035212714>
 
@@ -96,9 +125,11 @@ To test this application, you can either create a project based on an example pr
 
    ![Thunderboard](image/thunderboard_example.png)
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works ##
 
@@ -126,17 +157,19 @@ Once the data-set is available or timeout occurs while at least sensor or locati
 
 - To test this application, you need one BGM220P board running the **Bluetooth - Cellular Gateway** example, and at least one Thunderboard BG22 board running the **Bluetooth - SoC Thunderboard EFR32BG22 (BRD4184A)** example. The topological setup for testing this example is shown in the [overview](#overview) section.
 
-- Make sure that the Hologram SIM is activated on the Dashboard. Here is a [link](https://hologram.io/docs/guide/connect/connect-device/#sim-activation) that walks you through that process.
+- Make sure that the Hologram SIM is activated on the Dashboard. [This link](https://hologram.io/docs/guide/connect/connect-device/#sim-activation) will walk you through that process.
 
 - Power the Thunderboard board. Connect the BMG220 with a micro usb cable to your computer, and open the Console that is integrated into Simplicity Studio to receive the data from the virtual COM port. You should expect a similar output to the one below.
 
-   ![screen at runtime](image/log.png)
+  ![screen at runtime](image/log.png)
 
 - Values: "t" is temperature, 27.3°C is represented as 2730, "h" is humidity, 66.13% RHT is represented as 6613. Latitude and Longitude values are also present (southern hemisphere S, northern hemisphere N, eastern longitude E, western longitude: W) after the valid GPS position was received.
 
 - Navigate to the Hologram Dashboard and click All Activity at the bottom of the screen to expand the log. The message should appear, and that's it!
 
-   ![cloud](image/hologram_cloud.png)
+  ![cloud](image/hologram_cloud.png)
+
+---
 
 ## Resources ##
 
@@ -145,3 +178,13 @@ Once the data-set is available or timeout occurs while at least sensor or locati
 - [BG96 GNSS AT Commands Manual](https://github.com/wwxxyx/Quectel_BG96/blob/master/BG96/Software/Quectel_BG96_GNSS_AT_Commands_Manual_V1.1.pdf)
 
 - [BG96 TCP/IP AT Commands Manual](https://github.com/wwxxyx/Quectel_BG96/blob/master/BG96/Software/Quectel_BG96_TCP(IP)_AT_Commands_Manual_V1.0.pdf)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

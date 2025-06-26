@@ -3,10 +3,11 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-187.65%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.5%20KB-blue)
+
 ## Overview ##
 
 The example showcases the implementation of BTHome support for Silicon Labs development kits.
@@ -19,15 +20,39 @@ The BTHOME v2 sensor device is a BGM220 Explorer Kit that reads the internal tem
 
 Raspberry Pi 4 runs a Home Assistant OS that scans for and detects BTHome v2 sensor device. Users use the Home Assistant application on the smartphone to communicate with Raspberry Pi 4 to get the advertisement packet of the BTHome v2 sensor device, parse and display it on a smartphone.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC iBeacon" project](#start-with-a-bluetooth---soc-ibeacon-project)
+- [How It Works](#how-it-works)
+  - [Application Initialization](#application-initialization)
+  - [BLE System Boot Event](#ble-system-boot-event)
+  - [Periodic Timer Callback](#periodic-timer-callback)
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Home Assistant OS](https://www.home-assistant.io/)
+
+---
 
 ## Hardware Required ##
 
@@ -35,23 +60,27 @@ Raspberry Pi 4 runs a Home Assistant OS that scans for and detects BTHome v2 sen
 - 1x Raspberry Pi 4 running Home Assistant OS
 - 1x smartphone running Home Assistant application
 
+---
+
 ## Connections Required ##
 
 The following picture shows the connection for this application:
 
 ![connection](image/connection.png)
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC iBeacon" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
 
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
-
-### Create a project based on an example project ###
+### Based on an example project ###
 
 1. From the Launcher Home, add your product name to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "bthome v2".
 
@@ -71,7 +100,7 @@ To test this application, you can either create a project based on an example pr
 
     - Open the .slcp file in the project
 
-    - Select the SOFTWARE COMPONENTS tab
+    - Select the **SOFTWARE COMPONENTS tab**
 
     - Install the following components:
       - [Services] → [IO Stream] → [Driver] → [IO Stream: USART] → default instance name: vcom
@@ -80,6 +109,8 @@ To test this application, you can either create a project based on an example pr
       - [Third-Party Hardware Drivers] → [Services] → [BTHome v2]
 
 4. Build and flash the project to your board.
+
+---
 
 ## How It Works ##
 
@@ -95,28 +126,44 @@ To test this application, you can either create a project based on an example pr
 
 ![Timer callback handle](image/timer_handle.png)
 
-## Testing ##
+### Testing ###
 
-*Note*: To utilize the BTHOME sensor device, you have two options. You can use Silicon Labs development kits and run either the "BTHome v2 - Internal Temperature Monitor" example or create your own project by following the instructions provided in the "Setup" section above.
+> [!NOTE]
+>
+> To utilize the BTHOME sensor device, you have two options. You can use Silicon Labs development kits and run either the "BTHome v2 - Internal Temperature Monitor" example or create your own project by following the instructions provided in the "Setup" section above.
 
 1. Power on Raspberry Pi 4 and BTHOME sensor device. After powering on, the BTHOME sensor device sends the advertisement packet every 10 seconds that contains the temperature value.
 
-    ![Sensor initialization](image/sensor_initialize_log.png)
+   ![Sensor initialization](image/sensor_initialize_log.png)
 
 2. Open the Home Assistant application on the smartphone, select [Settings] → [Devices and Services] → [Add Integration]
 
-    ![Setting on the home assistant application](image/app_setting.png)
+   ![Setting on the home assistant application](image/app_setting.png)
 
-3. Add Integration with the name 'BTHome'. You can see the list of device, which is advertising in BTHome format. Choose your device with the correct name (it is 'Temp 79B4' in this example) and submit the Bindkey, which is defined in the firmware of the BTHOME sensor device. *Note: To be able to find your sensor device with the home assistant application, you need to use the same network on both Raspberry Pi 4 and the smartphone.*
+3. Add Integration with the name 'BTHome'. You can see the list of device, which is advertising in BTHome format. Choose your device with the correct name (it is 'Temp 79B4' in this example) and submit the Bindkey, which is defined in the firmware of the BTHOME sensor device.
 
-    ![Add a device with Name and Bindkey](image/add_device.png)
+   ![Add a device with Name and Bindkey](image/add_device.png)
 
-    The name and Bindkey in the firmware of the sensor device.
+   The name and Bindkey in the firmware of the sensor device.
 
-    ![Check name and Bindkey in the firmware of sensor device](image/bindkey_sensor_device.png)
+   ![Check name and Bindkey in the firmware of sensor device](image/bindkey_sensor_device.png)
 
 4. After adding your sensor device successfully with the Bindkey, select a suitable area where your sensor device is located.
 
     ![Set area for sensor device and track temperature](image/track_sensor_value.png)
 
 5. Now you can see your sensor is already added to the Home Assistant system. You can track the temperature value from your sensor by selecting your device in BTHome.
+
+> [!NOTE]
+>
+> To be able to find your sensor device with the home assistant application, you need to use the same network on both Raspberry Pi 4 and the smartphone.
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

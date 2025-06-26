@@ -1,54 +1,84 @@
-# Bluetooth - Blood Glucose Meters
+# Bluetooth - Blood Glucose Meters #
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-201.75%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-11.38%20KB-blue)
 
-## Overview
+## Overview ##
 
 This project shows an example of **Blood Glucose Meters** using the **Thunderboard EFR32BG22**. Please refer to [Bluetooth SIG BGM introduction.md](./doc) for more information about BGM.
 
 The project implemented the Bluetooth glucose meter, which has the ability to wirelessly connect to your smart device to conveniently capture glucose data and provide added health monitoring features.
 
-## SDK version
+---
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
+## Table Of Contents ##
 
-## Software Required
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Based on an example project](#based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [OTA Service](#ota-service)
+  - [BGM service](#bgm-service)
+- [More information](#more-information)
+  - [PTS test](#pts-test)
+- [Reference](#reference)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
+## SDK version ##
+
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
+
+## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [LightBlue app](https://punchthrough.com/lightblue)
 
-## Hardware Required
+---
+
+## Hardware Required ##
 
 - 1x [Thunderboard EFR32BG22](https://www.silabs.com/development-tools/thunderboard/thunderboard-bg22-kit)
 - 1x smartphone running the 'LightBlue' app
 
-## Connections Required
+---
+
+## Connections Required ##
 
 - Connect the Thunderboard EFR32BG22 to the PC through a micro USB cable.
 
-## Setup
+---
+
+## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-### Create a project based on an example project
+### Based on an example project ###
 
 1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "glucose".
 
 2. Click **Create** button on **Bluetooth - Blood Glucose Meters** examples. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![create_project](image/create_project.png)
+   ![create_project](image/create_project.png)
 
 3. Build and flash this example to the board.
 
-### Start with a "Bluetooth - SoC Empty" project
+### Start with a "Bluetooth - SoC Empty" project ###
 
 1. Create a **Bluetooth - SoC Empty** project for your hardware using Simplicity Studio 5.
 
@@ -67,19 +97,21 @@ To test this application, you can either create a project based on an example pr
 
 5. Build and flash this example to the board.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
-## How It Works
+## How It Works ##
 
 There are two major services: Glucose and the OTA service.
 
-### OTA service
+### OTA service ###
 
 Used for OTA upgrade, please refer to [AN1086: Using the Gecko Bootloader with the Silicon Labs Bluetooth Applications](https://www.silabs.com/documents/public/application-notes/an1086-gecko-bootloader-bluetooth.pdf) for more information.
 
-### BGM service
+### BGM service ###
 
 There are 4 characteristics:
 
@@ -120,18 +152,32 @@ There are 4 characteristics:
 
    ![racp](image/racp.jpg)
 
-## More information
+---
 
-### PTS test
+## More information ##
+
+### PTS test ###
 
 You can download BGM spec and test case in <https://www.bluetooth.com/specifications/specs/>, or in doc folder in this repository.
 
 Please refer Bluetooth SIG BGM introduction.md in doc folder for more information about how to test.
 
-## Reference
+---
+
+## Reference ##
 
 All of the specifications of BGM can be found at the Bluetooth SIG website <https://www.bluetooth.com/specifications/specs/>, search BGM
 
 ![specification](image/spec.jpg)
 
 Click GLP and GLS to download the specification, click TS to download the test case specification.
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabsSoftware/bluetooth_applications) repo.
+
+---

@@ -3,28 +3,57 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-297.57%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-79.3%20KB-blue)
+
 ## Summary ##
 
 The project implements a rough RSSI-based position estimation for a Passive Entry Passive Start (PEPS) system. It consists of a central device and 4 or 8 peripheral units hooked up on a (TTL-level) LIN bus. The central device accepts incoming BLE connections and forwards the connection parameters to the peripheral units. These parameters are used for connection tracking to let the devices infer the RSSI values of the communication link, enabling multi-point trilateration.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Implementation](#implementation)
+  - [Calibration](#calibration)
+  - [Command line](#command-line)
+  - [LIN bus addressing](#lin-bus-addressing)
+  - [Locations](#locations)
+- [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
 
+---
+
 ## Hardware Required ##
 
 - At least 5 pieces of EFR32BG24 devices, the project is implemented on [BRD4186C](https://www.silabs.com/development-tools/wireless/xg24-rb4186c-efr32xg24-wireless-gecko-radio-board?tab=overview). One device is programmed as the leader device, and the remaining devices are programmed as follower units.
 
 - 1x smartphone running the 'Simplicity Connect' mobile app
+
+---
 
 ## Connections Required ##
 
@@ -51,13 +80,15 @@ The RX and TX pins of the LIN bus could be moved to other locations in case the 
 - The EXTI line of the RX pin can also be routed to a HW interrupt without conflicting with other pins
 - The RX pin is an EM4 wakeup source (EM4WUx)
 
+---
+
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
 ### Create a project based on an example project ###
 
@@ -76,52 +107,52 @@ To test this application, you can either create a project based on an example pr
 
 3. Import the GATT configuration:
 
-    - Open the .slcp file in the project
+   - Open the .slcp file in the project
 
-    - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**
+   - Select the **CONFIGURATION TOOLS** tab and open the **Bluetooth GATT Configurator**
 
-    - Find the Import button and import the attached `config/btconf/gatt_configuration.btconf` file
+   - Find the Import button and import the attached `config/btconf/gatt_configuration.btconf` file
 
-    - Save the GATT configuration (ctrl-s)
+   - Save the GATT configuration (ctrl-s)
 
 4. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-    - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom → Set FLow control to None
-    ![iostream config](image/iostream_config.png)
+   - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom → Set FLow control to None
+   ![iostream config](image/iostream_config.png)
 
-    - [Services] → [Command Line Interface] → [CLI Instance(s)] → default instance name: inst
+   - [Services] → [Command Line Interface] → [CLI Instance(s)] → default instance name: inst
 
-    - [Services] → [Command Line Interface] → [Extensions] → [CLI: Storage in NVM3] → default instance name: inst
+   - [Services] → [Command Line Interface] → [Extensions] → [CLI: Storage in NVM3] → default instance name: inst
 
-    - [Application] → [Utility] → [Log]
+   - [Application] → [Utility] → [Log]
 
-    - [Platform] → [Driver] → [GPIOINT]
+   - [Platform] → [Driver] → [GPIOINT]
 
-    - [CMSIS] → [DSP] → [CMSIS-DSP]
+   - [CMSIS] → [DSP] → [CMSIS-DSP]
 
-    - [Third Party] → [Tiny printf]
+   - [Third Party] → [Tiny printf]
 
-    - [Third Party] → [Toolchain] → [GCC Toolchain]
+   - [Third Party] → [Toolchain] → [GCC Toolchain]
 
-    - [Platform] → [Toolchain] → [Memory configuration] → Set this component to use 65536 Stack size and 9200 Heap size.
+   - [Platform] → [Toolchain] → [Memory configuration] → Set this component to use 65536 Stack size and 9200 Heap size.
 
-    - [Platform] → [Board Drivers] → [Memory LCD] → [Peripheral Driver] → [Memory LCD with eusart SPI driver] → use default configuration
+   - [Platform] → [Board Drivers] → [Memory LCD] → [Peripheral Driver] → [Memory LCD with eusart SPI driver] → use default configuration
 
-    - [Platform] → [Board Drivers] → [GLIB Graphics Library]
+   - [Platform] → [Board Drivers] → [GLIB Graphics Library]
 
-    - [Platform] → [Board] → [Board Control] → Configure: Enable Virtual COM UART and Display; Active SPI Flash
-    ![board control](image/board_control.png)
+   - [Platform] → [Board] → [Board Control] → Configure: Enable Virtual COM UART and Display; Active SPI Flash
+   ![board control](image/board_control.png)
 
-    - For supporting Radio debug PRS signals, the [Flex – RAIL PRS] component should be installed: [Flex] → [RAIL] → [Utility] → [Flex - RAIL PRS Support] → Add Instances:
+   - For supporting Radio debug PRS signals, the [Flex – RAIL PRS] component should be installed: [Flex] → [RAIL] → [Utility] → [Flex - RAIL PRS Support] → Add Instances:
 
-      - Instance name: active
-      ![PRS_active](image/PRS_active.png)
-      - Instance name: dclk
-      ![PRS_dclk](image/PRS_dclk.png)
-      - Instance name: dout
-      ![PRS_dout](image/PRS_dout.png)
-      - Instance name: rxsync
-      ![PRS_rxsync](image/PRS_rxsync.png)
+     - Instance name: active
+     ![PRS_active](image/PRS_active.png)
+     - Instance name: dclk
+     ![PRS_dclk](image/PRS_dclk.png)
+     - Instance name: dout
+     ![PRS_dout](image/PRS_dout.png)
+     - Instance name: rxsync
+     ![PRS_rxsync](image/PRS_rxsync.png)
 
 5. Copy the `patch/dmadrv` folder into the appropriate folders (overwriting existing files). See the **Note** section below for more details.
 
@@ -129,16 +160,15 @@ To test this application, you can either create a project based on an example pr
 
 6. Build and flash the project to your device.
 
-**NOTE:**
+> [!NOTE]
+>
+> - A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+> - The DMADRV component had to be patched with a new callback registration function to allow changing DMA callbacks on the fly. So, after a new project has been created, the files that are located in the `patch/dmadrv` folder are copied into the new project into the appropriate folders:
+>   - `<Project’s SDK folder>/dmadrv/inc/dmadrv.h`
+>   - `<Project’s SDK folder>/dmadrv/src/dmadrv.c`
+> - The patched DMADRV component comes from the Simplicity SDK v2024.12.2 and should work directly with the newer SDK versions. In case of issues, the `DMADRV_SetCallback()` and the `DMADRV_SetCallbackParam()` functions and their declarations should be copied into the new SDK files.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
-
-- The DMADRV component had to be patched with a new callback registration function to allow changing DMA callbacks on the fly. So, after a new project has been created, the files that are located in the `patch/dmadrv` folder are copied into the new project into the appropriate folders:
-
-  - `<Project’s SDK folder>/dmadrv/inc/dmadrv.h`
-  - `<Project’s SDK folder>/dmadrv/src/dmadrv.c`
-
-  The patched DMADRV component comes from the SiSDK v2024.12.0 and should work directly with the newer SDK versions. In case of issues, the `DMADRV_SetCallback()` and the `DMADRV_SetCallbackParam()` functions and their declarations should be copied into the new SDK files.
+---
 
 ## How It Works ##
 
@@ -231,34 +261,36 @@ The 5-device setup supports the following locations: RIGHT_FRONT, RIGHT_REAR, LE
 
 ![PEPS locations](image/peps_location.png)
 
+---
+
 ## Testing ##
 
 After the devices have been flashed and the LIN bus is formed, the devices are configured via a CLI interface on the standard VCOM console. One device is configured as the leader device, and the remaining devices are configured as follower units. The roles can be set at the command line console:
 
-   ```cmd
-   env device set type PEPS_FOLLOWER
-   env device set address <10 | 20 | 30 | 40>
-   env device set name <DEV2TL | DEV3TR | DEV4BL | DEV5BR>
-   ```
+ ```cmd
+env device set type PEPS_FOLLOWER
+env device set address <10 | 20 | 30 | 40>
+env device set name <DEV2TL | DEV3TR | DEV4BL | DEV5BR>
+```
 
-   ```cmd
-   env device set type PEPS_LEADER
-   env device set address 0
-   env device set name DEV1C
-   peps follower add DEV2TL PEPS_FOLLOWER 10
-   peps follower add DEV3TR PEPS_FOLLOWER 20
-   peps follower add DEV4BL PEPS_FOLLOWER 30
-   peps follower add DEV5BR PEPS_FOLLOWER 40
-   peps follower location add name DEV2TL LEFT_FRONT
-   peps follower location add name DEV3TR RIGHT_FRONT
-   peps follower location add name DEV4BL LEFT_REAR
-   peps follower location add name DEV5BR RIGHT_REAR
-   peps follower location set pos LEFT_FRONT -21.9 +23.1
-   peps follower location set pos RIGHT_FRONT +21.6 +23.1
-   peps follower location set pos LEFT_REAR -21.9 -22.8
-   peps follower location set pos RIGHT_REAR +21.6 -22.8
-   reset
-   ```
+ ```cmd
+ env device set type PEPS_LEADER
+ env device set address 0
+ env device set name DEV1C
+ peps follower add DEV2TL PEPS_FOLLOWER 10
+ peps follower add DEV3TR PEPS_FOLLOWER 20
+ peps follower add DEV4BL PEPS_FOLLOWER 30
+ peps follower add DEV5BR PEPS_FOLLOWER 40
+ peps follower location add name DEV2TL LEFT_FRONT
+ peps follower location add name DEV3TR RIGHT_FRONT
+ peps follower location add name DEV4BL LEFT_REAR
+ peps follower location add name DEV5BR RIGHT_REAR
+ peps follower location set pos LEFT_FRONT -21.9 +23.1
+ peps follower location set pos RIGHT_FRONT +21.6 +23.1
+ peps follower location set pos LEFT_REAR -21.9 -22.8
+ peps follower location set pos RIGHT_REAR +21.6 -22.8
+ reset         
+ ```
 
 To start estimating the location, perform the following steps:
 
@@ -268,8 +300,12 @@ To start estimating the location, perform the following steps:
 
    ![logs](image/logs.png)
 
+---
+
 ## Report Bugs & Get Support ##
 
 To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
 
 Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

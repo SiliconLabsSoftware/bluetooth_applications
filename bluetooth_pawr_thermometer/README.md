@@ -3,10 +3,11 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-211.07%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-12.96%20KB-blue)
+
 ## Overview
 
 PAwR is a new Bluetooth Low Energy (LE) logical transport that provides a way to perform energy efficient, bi-directional, communication in a large-scale one-to-many topology. PAwR can broadcast organized data in small packets in sub-events. PAwR sub-events present established time slots that can be synchronized and responded to. Additionally, observers (end nodes) can choose to respond to singular or multiple sub-events on the application level. Scanning for sub-events enables a particularly power-friendly solution as end nodes only need to scan for minute periods of time.
@@ -23,13 +24,36 @@ The broadcaster supports multiple observers to sync with. This device is a WSTK 
 
 The observer device is one of the Silicon Labs Development Kits listed in the section **Required Hardware**, which has a built-in temperature sensor. This device periodically measures the temperature and sends it to the Broadcaster in a small packet with subevent and response slot decided by the Broadcaster. The package contains a processed temperature in Celsius and the LED0 status.
 
+---
+
+## Table Of Contents
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+  - [Observer GATT Database](#observer-gatt-database)
+  - [Synchronization Procedure](#synchronization-procedure)
+  - [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+
+---
 
 ## Software Required
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
+
+---
 
 ## Hardware Required
 
@@ -41,27 +65,31 @@ The observer device is one of the Silicon Labs Development Kits listed in the se
 
   - 1x [Bluetooth Low Energy Development Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For simplicity, Silicon Labs recommends the [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
 
+---
+
 ## Connections Required
 
 The hardware connection is shown in the image below:
 ![hardware overview](image/overview.png)
 
+---
+
 ## Setup
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-**NOTE**:
-
-- Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+> [!NOTE]
+>
+> Make sure that the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
 
 ### Create a project based on an example project
 
 1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "pawr".
 
 2. Click **Create** button on each **Bluetooth - PAwR Thermometer - Broadcaster** and **Bluetooth - PAwR Thermometer - Observer** examples. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-    ![create_project1](image/create_project1.png)
 
-    ![create_project2](image/create_project2.png)
+   ![create_project1](image/create_project1.png)
+   ![create_project2](image/create_project2.png)
 
 3. Build and flash this example to the board.
 
@@ -71,49 +99,46 @@ To test this application, you can either create a project based on an example pr
 
 2. Copy the following files into the project root folder (overwriting existing).
 
-    - With **Broadcaster** device: `bluetooth_pawr_thermometer_broadcaster/src/appc.`
+   - With **Broadcaster** device: `bluetooth_pawr_thermometer_broadcaster/src/appc.`
+   - With **Observer** device: `bluetooth_pawr_thermometer_observer/src/app.c`
 
-    - With **Observer** device: `bluetooth_pawr_thermometer_observer/src/app.c`
+3. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-3. Install the software components:
+   - **Observer device:**
+     - [Platform] → [Driver] → [TEMPDRV]
+     - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: led0
+     - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Synchronization to Periodic Advertising with Responses trains]
+     - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Synchronization to Periodic advertising trains by receiving PAST]
 
-    - Open the .slcp file in the project.
-
-    - Select the SOFTWARE COMPONENTS tab.
-
-    - Install the following components for **Observer** device:
-        - [Platform] → [Driver] → [TEMPDRV]
-        - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: led0
-        - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Synchronization to Periodic Advertising with Responses trains]
-        - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Synchronization to Periodic advertising trains by receiving PAST]
-
-    - Install the following components for **Broadcaster** device:
-        - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
-        - [Application] → [Utility] → [Log]
-        - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: btn0
-        - [Platform] → [Driver] → [GLIB Graphics Library]
-        - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Advertising Base Feature] → Set "Max number of advertising sets reserved for user" to 2
-        - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Extended Advertising]
-        - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Periodic Advertising Synchronization]
-        - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Periodic Advertising using PAwR trains] → Set "Max number of PAwR advertisers" to 4
-        ![pawr_config](image/pawr_config.png)
-        - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Transfer periodic synchronization information for a local advertising set]
-        - [Platform] → [Board] → [Board Control] → enable *Virtual COM UART* and *Enable Display*
+   - **Broadcaster device:**
+     - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: vcom
+     - [Application] → [Utility] → [Log]
+     - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: btn0
+     - [Platform] → [Driver] → [GLIB Graphics Library]
+     - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Advertising Base Feature] → Set "Max number of advertising sets reserved for user" to 2
+     - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Extended Advertising]
+     - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Periodic Advertising Synchronization]
+     - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Periodic Advertising using PAwR trains] → Set "Max number of PAwR advertisers" to 4
+     ![pawr_config](image/pawr_config.png)
+     - [Bluetooth] → [Bluetooth LE Controller (Link Layer)] → [Features with Commands and Events] → [Transfer periodic synchronization information for a local advertising set]
+     - [Platform] → [Board] → [Board Control] → enable *Virtual COM UART* and *Enable Display*
 
 4. Import the GATT configuration:
 
-    - Open the .slcp file in the project again.
-    - Select the CONFIGURATION TOOLS tab and open the "Bluetooth GATT Configurator".
-    - Find the Import button and import the  gatt_configuration.btconf file.
-        - With **Observer** device: `bluetooth_pawr_thermometer_observer/config/btconf/gatt_configuration.btconf`
-        - With **Broadcaster** device: `bluetooth_pawr_thermometer_broadcaster/config/btconf/gatt_configuration.btconf`
-    - Save the GATT configuration (ctrl-s).
+   - Open the .slcp file in the project again.
+   - Select the CONFIGURATION TOOLS tab and open the "Bluetooth GATT Configurator".
+   - Find the Import button and import the  gatt_configuration.btconf file.
+     - **Observer device:** `bluetooth_pawr_thermometer_observer/config/btconf/gatt_configuration.btconf`
+     - **Broadcaster device:** `bluetooth_pawr_thermometer_broadcaster/config/btconf/gatt_configuration.btconf`
+   - Save the GATT configuration (ctrl-s).
 
 5. Build and flash each example to the board.
 
-**Note:**
+> [!NOTE]
+>
+> A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
 
-- A bootloader needs to be flashed to your board if the project starts from the "Bluetooth - SoC Empty" project, see [Bootloader](https://github.com/SiliconLabs/bluetooth_applications/blob/master/README.md#bootloader) for more information.
+---
 
 ## How It Works
 
@@ -149,3 +174,13 @@ You can check the power consumption of *Observer Device*. It looks like the pict
 
 **Observer Device**
 ![observer_power](image/observer_power.png)
+
+---
+
+## Report Bugs & Get Support
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---

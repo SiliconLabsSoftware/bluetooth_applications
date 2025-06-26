@@ -1,8 +1,9 @@
 # Bluetooth - IrThermo 3 click (MLX90632) #
+
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
 [![Required board](https://img.shields.io/badge/Mikroe-IrThermo%203%20Click-green)](https://www.mikroe.com/ir-thermo-3-click)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-210.18%20KB-blue)
@@ -18,15 +19,36 @@ This example showcases the implementation of two services: Ambient temperature a
 
 If the Indication feature is enabled, the client will be notified about any updated values. Specifically, the client will receive Object temperature values via Bluetooth every second. This feature enhances convenience and efficiency by automatically delivering relevant data at regular intervals.
 
+---
+
+## Table Of Contents ##
+
+- [SDK version](#sdk-version)
+- [Software Required](#software-required)
+- [Hardware Required](#hardware-required)
+- [Connections Required](#connections-required)
+- [Setup](#setup)
+  - [Create a project based on an example project](#create-a-project-based-on-an-example-project)
+  - [Start with a "Bluetooth - SoC Empty" project](#start-with-a-bluetooth---soc-empty-project)
+- [How It Works](#how-it-works)
+- [Testing](#testing)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+---
+
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+
+---
 
 ## Software Required ##
 
 - [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
 - [Simplicity Connect Mobile App](https://www.silabs.com/developer-tools/simplicity-connect-mobile-app)
+
+---
 
 ## Hardware Required ##
 
@@ -34,22 +56,27 @@ If the Indication feature is enabled, the client will be notified about any upda
 - 1x [IrThermo 3 Click - MLX90632 FIR sensor](https://www.mikroe.com/ir-thermo-3-click)
 - 1x smartphone running the 'Simplicity Connect' mobile app
 
+---
+
 ## Connections Required ##
 
-The IrThermo 3 Click board supports MikroBus; therefore, it can connect easily to the MikroBus header of the BGM220 Explorer Kit. Be sure that the 45-degree corner of the IrThermo board matches the 45-degree white line of the Silicon Labs Explorer Kit.
+The IrThermo 3 Click board supports MikroBus; therefore, it can connect easily to the MikroBus header of the BGM220 Explorer Kit. Be sure that the 45-degree corner of the IrThermo board matches the 45-degree white line of the Silicon Labs Explorer Kit.  
 The Power LED on IrThermo 3 Click board will light when the kit is powered.
 
 ![hardware connection](image/hardware_connect.png)
+
+---
 
 ## Setup ##
 
 To test this application, you can either create a project based on an example project or start with a "Bluetooth - SoC Empty" project based on your hardware.
 
-*NOTE**:
-
-- Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
-
-- SDK Extension must be enabled for the project to install the required components.
+> [!NOTE]
+>
+> - Make sure that the [Third Party Hardware Drivers extension](https://github.com/SiliconLabs/third_party_hw_drivers_extension) is installed as part of the SiSDK and the [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repository is added to [Preferences > Simplicity Studio > External Repos](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-about-the-launcher/welcome-and-device-tabs).
+>
+> - SDK Extension must be enabled for the project to install the required components.
+nabled for the project to install the required components.
 
 ### Create a project based on an example project ###
 
@@ -57,7 +84,7 @@ To test this application, you can either create a project based on an example pr
 
 2. Click **Create** button on **Bluetooth - IR Thermometer 3 Click (MLX90632)** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
 
-    ![create an example project](image/create_example_project.png)
+   ![create an example project](image/create_example_project.png)
 
 3. Build and flash this example to the board.
 
@@ -65,32 +92,28 @@ To test this application, you can either create a project based on an example pr
 
 1. Create a **Bluetooth - SoC Empty** project for your hardware using Simplicity Studio 5.
 
-2. Copy the [app.c](src/app.c) file to the following directory of the project root folder (overwriting the existing file).
+2. Copy the `src/app.c` file to the following directory of the project root folder (overwriting the existing file).
 
-3. Install the software components:
+3. Open the .slcp file again. Install and configure the following components:
 
-    - Open the .slcp file in the project.
-
-    - Select the SOFTWARE COMPONENTS tab.
-
-    - Install the following components:
-
-        - [Services] → [Timers] → [Sleep Timer]
-        - [Services] → [IO Stream] → [IO Stream: USART] → vcom
-        - [Application] → [Utility] → [Log]
-        - [Platform] → [Driver] → [I2C] → [I2CSPM] → mikroe
-        - [Third Party Hardware Drivers] → [Sensors] → [MLX90632 - IrThermo 3 Click (Mikroe)]
-        - [Bluetooth] → [OTA] → [In-Place OTA DFU] → uninstall
-        - [Platform] → [Bootloader Application Interface] → uninstall.
+   - [Services] → [Timers] → [Sleep Timer]
+   - [Services] → [IO Stream] → [IO Stream: USART] → vcom
+   - [Application] → [Utility] → [Log]
+   - [Platform] → [Driver] → [I2C] → [I2CSPM] → mikroe
+   - [Third Party Hardware Drivers] → [Sensors] → [MLX90632 - IrThermo 3 Click (Mikroe)]
+   - [Bluetooth] → [OTA] → [In-Place OTA DFU] → uninstall
+   - [Platform] → [Bootloader Application Interface] → uninstall.
 
 4. Import the GATT configuration:
 
-    - Open the .slcp file in the project again.
-    - Select the CONFIGURATION TOOLS tab and open the "Bluetooth GATT Configurator".
-    - Find the Import button and import the [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) file.
-    - Save the GATT configuration (ctrl-s).
+   - Open the .slcp file in the project again.
+   - Select the CONFIGURATION TOOLS tab and open the "Bluetooth GATT Configurator".
+   - Find the Import button and import the [gatt_configuration.btconf](config/btconf/gatt_configuration.btconf) file.
+   - Save the GATT configuration (ctrl-s).
 
 5. Build and flash this project to the board.
+
+---
 
 ## How It Works ##
 
@@ -99,6 +122,8 @@ The application is based on the Bluetooth - SoC Empty example. Since the example
 The GATT changes were adding a standard service **Health Thermometer** with UUID ```0x1809``` that has a Temperature characteristic with UUID ```0x2A1C``` with Read and Indicate properties. The Temperature characteristic shows the temperature value, which is measured by IR Thermometer 3 click.
 
 After resetting, the application will periodically read the IR thermometer sensor. If the Indication is enabled, the client is indicated about the updated values.
+
+---
 
 ## Testing ##
 
@@ -114,6 +139,16 @@ Follow the below steps to test the example with the Simplicity Connect applicati
 
    ![IR thermometer device on Simplicity connect app](image/IR_thermoter_device.png)
 
-5. You can launch the Console that is integrated in Simplicity Studio or can use a third-party terminal tool like TeraTerm to receive the logs from the virtual COM port.
+5. You can launch the Console that is integrated in Simplicity Studio or can use a third-party terminal tool like Tera Term to receive the logs from the virtual COM port.
 
    ![server console log](image/sensor_device_log.png)
+
+---
+
+## Report Bugs & Get Support ##
+
+To report bugs in the Application Examples projects, please create a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo. Please reference the board, project, and source files associated with the bug, and reference line numbers. If you are proposing a fix, also include information on the proposed fix. Since these examples are provided as-is, there is no guarantee that these examples will be updated to fix these issues.
+
+Questions and comments related to these examples should be made by creating a new "Issue" in the "Issues" section of [bluetooth_applications](https://github.com/SiliconLabs/bluetooth_applications) repo.
+
+---
