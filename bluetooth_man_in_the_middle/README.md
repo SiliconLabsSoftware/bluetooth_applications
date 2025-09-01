@@ -3,10 +3,10 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-216.54%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-12.68%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-221.26%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-12.98%20KB-blue)
 
 ## Overview ##
 
@@ -38,7 +38,7 @@ The following picture shows the system view of how it works.
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ---
 

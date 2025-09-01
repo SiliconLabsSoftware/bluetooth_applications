@@ -20,6 +20,7 @@ component:
   - id: bluetooth_stack
   - id: bluetooth_feature_gap
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_central
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_legacy_scanner
   - id: bluetooth_feature_system
@@ -27,7 +28,7 @@ component:
   - id: rail_util_pti
   - id: app_assert
   - id: mpu
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: device_init
   - id: sl_common
@@ -58,7 +59,6 @@ include:
     directory: "app_ui"
 
 source:
-  - path: ../src/main.c
   - path: ../src/app.c
   - path: ../app_ui/ui.c
     directory: "app_ui"
@@ -180,7 +180,7 @@ other_file:
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 4.3.0
+    version: 4.4.0
 
 tag:
   - hardware:rf:band:2400

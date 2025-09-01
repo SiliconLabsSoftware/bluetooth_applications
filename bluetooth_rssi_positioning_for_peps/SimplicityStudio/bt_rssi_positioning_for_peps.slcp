@@ -17,17 +17,19 @@ filter:
 component:
   - id: bluetooth_stack
   - id: gatt_configuration
-  - id: gatt_service_device_information
+  - id: gatt_service_device_information_override
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
+  - id: bluetooth_feature_connection_role_central
+  - id: bluetooth_feature_connection_analyzer
+  - id: bluetooth_feature_connection_phy_update
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gatt_server
   - id: bluetooth_feature_legacy_scanner
   - id: bluetooth_feature_sm
   - id: bluetooth_feature_system
   - id: bluetooth_feature_builtin_bonding_database
-  - id: bluetooth_feature_connection_analyzer
-  - id: bluetooth_feature_connection_phy_update
   - id: bluetooth_feature_extended_advertiser
   - id: bluetooth_feature_extended_scanner
   - id: bluetooth_feature_l2cap
@@ -36,7 +38,7 @@ component:
   - id: rail_util_pti
   - id: app_assert
   - id: mpu
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: device_init
   - id: sl_common
@@ -85,10 +87,9 @@ include:
   - path: ../patch/dmadrv/inc
     file_list:
       - path: dmadrv.h
-    directory: "simplicity_sdk_2024.12.2/platform/emdrv/dmadrv/inc"
+    directory: "simplicity_sdk_2025.6.0/platform/emdrv/dmadrv/inc"
 
 source:
-  - path: ../src/main.c
   - path: ../src/app.c
   - path: ../src/env.c
   - path: ../src/lcd.c
@@ -104,7 +105,7 @@ source:
   - path: ../lin/sl_lin.c
     directory: "lin"
   - path: ../patch/dmadrv/src/dmadrv.c
-    directory: "simplicity_sdk_2024.12.2/platform/emdrv/dmadrv/src"
+    directory: "simplicity_sdk_2025.6.0/platform/emdrv/dmadrv/src"
 
 config_file:
   - override:
@@ -127,7 +128,7 @@ configuration:
     condition:
       - psa_crypto
   - name: SL_IOSTREAM_EUSART_VCOM_FLOW_CONTROL_TYPE
-    value: "eusartHwFlowControlNone"
+    value: "SL_IOSTREAM_EUSART_UART_FLOW_CTRL_NONE"
   - name: RADIOPRS_ACTIVE_SOURCESEL
     value: "PRS_RACL_RX"
   - name: RADIOPRS_ACTIVE_CHANNEL

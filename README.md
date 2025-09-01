@@ -13,9 +13,9 @@
 
 # Silicon Labs Bluetooth Applications #
 
-[![Version Badge](https://img.shields.io/badge/-v3.1.1-green)](https://github.com/SiliconLabs/bluetooth_applications/releases)
-[![SDK Badge](https://img.shields.io/badge/SiSDK-v2024.12.2-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
-[![TPHD Version Badge](https://img.shields.io/badge/TPHD-v4.3.0-green)](https://github.com/SiliconLabs/third_party_hw_drivers_extension/releases)
+[![Version Badge](https://img.shields.io/badge/-v3.2.0-green)](https://github.com/SiliconLabs/bluetooth_applications/releases)
+[![SDK Badge](https://img.shields.io/badge/SiSDK-v2025.6.0-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
+[![TPHD Version Badge](https://img.shields.io/badge/TPHD-v4.4.0-green)](https://github.com/SiliconLabs/third_party_hw_drivers_extension/releases)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
 
 The Silicon Labs Bluetooth stack allows for a wide variety applications to be built on its foundation. This repo showcases some example applications using the Silicon Labs Bluetooth stack.
@@ -92,6 +92,9 @@ This repository provides both SLCP projects (as External Repositories) and SLS p
 | 64 | Bluetooth - Channel Sounding Display  | [Click Here](./bluetooth_channel_sounding_display/) |
 | 65 | Bluetooth - Pond Water Quality Monitor  | [Click Here](./bluetooth_pond_water_quality_monitor/) |
 | 66 | Bluetooth - ESL Tag with SD card and E-Paper display 1,54inch 200x200 dots from Mikroe (FreeRTOS)| [Click Here](./bluetooth_esl_tag_mikroe_eink154_e_paper_display_sdcard_freertos/) |
+| 67 | Bluetooth - Channel Sounding Based PC Locking  | [Click Here](./bluetooth_channel_sounding_based_pc_locking/) |
+| 68 | Bluetooth - Channel Sounding Based Presence Detection  | [Click Here](./bluetooth_channel_sounding_presence_detection/) |
+| 69 | Bluetooth - SoC Voltage Monitor  | [Click Here](./bluetooth_soc_voltage_monitor/) |
 
 
 ## Requirements ##

@@ -3,12 +3,12 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 [![Required board](https://img.shields.io/badge/Mikroe-ACCEL%205%20CLICK-green)](https://www.mikroe.com/accel-5-click)
 [![Required board](https://img.shields.io/badge/Adafruit-IS31FL3741%2013x9%20PWM%20RGB%20LED%20Matrix%20Driver-green)](https://www.adafruit.com/product/5201)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-218.54%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-11.24%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-200.81%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-10.97%20KB-blue)
 
 ## Overview ##
 
@@ -49,8 +49,8 @@ If the BTN0 is released during the initialization phase, the application starts 
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 

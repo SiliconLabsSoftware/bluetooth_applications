@@ -49,8 +49,7 @@ void thermostat_app_init(void);
 
 /***************************************************************************//**
  * @brief
- *    Handle bluetooth gatt user read request event,
- *    that is used by people counting module.
+ *    Handle bluetooth gatt user read request event.
  *
  * @param[in] data
  *    User read request data.
@@ -68,8 +67,7 @@ void thermostat_reset_bt_connection_handle(void);
 
 /***************************************************************************//**
  * @brief
- *    Handle bluetooth gatt user write request event,
- *    that is used by people counting module.
+ *    Handle bluetooth gatt user write request event.
  *
  * @param[in] data
  *    User write request data.
@@ -80,8 +78,7 @@ void thermostat_process_evt_gatt_server_user_write_request(
 
 /***************************************************************************//**
  * @brief
- *    Handle bluetooth gatt user read request event,
- *    that is used by people counting module.
+ *    Handle bluetooth gatt user read request event.
  *
  * @param[in] data
  *    User read request data.
@@ -92,8 +89,7 @@ void thermostat_process_evt_gatt_server_user_read_request(
 
 /***************************************************************************//**
  * @brief
- *    Handle bluetooth event external signal,
- *    that trigger by people counting module.
+ *    Handle bluetooth event external signal.
  *
  * @param[in] extsignals
  *    Event flags.

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- * @file rtl_log.c
+ * @file
  * @brief RTL log.
  *******************************************************************************
  * # License
@@ -26,12 +26,6 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  *
- *******************************************************************************
- * # Experimental Quality
- * This code has not been formally tested and is provided as-is. It is not
- * suitable for production environments. In addition, this code will not be
- * maintained and there may be no bug maintenance planned for these resources.
- * Silicon Labs may update projects from time to time.
  ******************************************************************************/
 
 #include "rtl_log.h"
@@ -59,11 +53,10 @@ void rtl_log_init(void)
 
   ret = snprintf(config_params.sdk_version,
                  SL_RTL_LOG_SDK_VERSION_CHAR_ARRAY_MAX_SIZE,
-                 "%u.%u.%u.%u-%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+                 "%u.%u.%u-%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
                  SL_BT_VERSION_MAJOR,
                  SL_BT_VERSION_MINOR,
                  SL_BT_VERSION_PATCH,
-                 SL_BT_VERSION_BUILD,
                  hash[0],
                  hash[1],
                  hash[2],

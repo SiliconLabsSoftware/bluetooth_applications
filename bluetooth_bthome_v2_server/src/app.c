@@ -83,7 +83,7 @@ MIPI_DBI_SPI_INTERFACE_DEFINE(hx8357d_config,
                               ADAFRUIT_HXD8357D_DC_PIN);
 
 typedef struct scanned_device {
-  uint8_t device_mac[6];
+  bthome_v2_server_addr_t device_mac;
   uint8_t device_mac_str[18];
   bool is_added;
 } scanned_device_t;
@@ -91,7 +91,7 @@ typedef struct scanned_device {
 typedef struct device {
   scanned_device_t device;
   uint8_t device_name[15];
-  uint8_t device_key[16];
+  bthome_v2_server_key_t device_key;
   uint32_t update_delay_ms;
 } device_t;
 
@@ -168,7 +168,7 @@ static sl_sleeptimer_timer_handle_t app_timer;
 static sl_sleeptimer_timer_handle_t update_screen_timer;
 
 static void app_get_client_information_handler(void);
-static void app_convert_str_to_hex(uint8_t *in, uint8_t *str);
+static void app_convert_str_to_hex(uint8_t *in, uint8_t *str); // @suppress("Type cannot be resolved")
 static void app_update_screen_handler(void);
 static void app_registe_new_device(void);
 static void app_remove_added_device(void);
@@ -220,7 +220,7 @@ void app_init(void)
 /**************************************************************************//**
  * Device found handle.
  *****************************************************************************/
-void bthome_v2_server_found_device_callback(uint8_t *mac,
+void bthome_v2_server_found_device_callback(bthome_v2_server_addr_t *mac,
                                             uint8_t *payload,
                                             uint8_t payload_length)
 {
@@ -245,13 +245,13 @@ void bthome_v2_server_found_device_callback(uint8_t *mac,
   for (uint8_t i = 0; i < APP_MAC_SIZE; i++) {
     if (i == 5) {
       snprintf(temp_mac_str + 3 * i, 3, "%.2X",
-               (uint8_t)mac[i]);
+               (uint8_t)mac->data[i]);
       break;
     }
     snprintf(temp_mac_str + 3 * i,
              4,
              "%.2X:",
-             (uint8_t)mac[i]);
+             (uint8_t)mac->data[i]);
   }
   app_log("MAC: %s\n", temp_mac_str);
   bthome_v2_server_check_device(mac, &encrypted, &key_available);
@@ -270,7 +270,7 @@ void bthome_v2_server_found_device_callback(uint8_t *mac,
     added_device[added_device_count].device.is_added = true;
     nvm3_device_index =
       bthome_v2_server_nvm3_find_index(
-        added_device[added_device_count].device.device_mac);
+        &added_device[added_device_count].device.device_mac);
     if (nvm3_device_index == -1) {
       app_log("[WRN]: Cannot found the device name from NVM3.\n");
     } else {
@@ -282,7 +282,7 @@ void bthome_v2_server_found_device_callback(uint8_t *mac,
     }
     added_device_count++;
   } else if (scanned_device_count < APP_MAX_CLIENT_DEVICES) {
-    memcpy(scanned_device[scanned_device_count].device_mac, mac,
+    memcpy(scanned_device[scanned_device_count].device_mac.data, mac,
            sizeof(scanned_device[scanned_device_count].device_mac));
     scanned_device[scanned_device_count].is_added = false;
 
@@ -366,7 +366,7 @@ static void app_get_client_information_handler(void)
   if (remove_completed) {
     for (int i = 0; i < added_device_count; i++) {
       object_count = 0;
-      sc = bthome_v2_server_sensor_data_read(added_device[i].device.device_mac,
+      sc = bthome_v2_server_sensor_data_read(&added_device[i].device.device_mac,
                                              object, 2,
                                              &object_count,
                                              &update_time);
@@ -524,16 +524,16 @@ static void app_registe_new_device(void)
         memcpy(added_device[added_device_count].device_name, data,
                sizeof(added_device[added_device_count].device_name));
         data = lv_textarea_get_text(ui_setenckeytxtarea);
-        app_convert_str_to_hex(added_device[added_device_count].device_key,
+        app_convert_str_to_hex(added_device[added_device_count].device_key.data,
                                (uint8_t *)data);
 
         sc = bthome_v2_server_key_register(
-          added_device[added_device_count].device.device_mac,
-          added_device[added_device_count].device_key);
+          &added_device[added_device_count].device.device_mac,
+          &added_device[added_device_count].device_key);
         app_assert_status(sc);
         nvm3_device_index =
           bthome_v2_server_nvm3_find_index(
-            added_device[added_device_count].device.device_mac);
+            &added_device[added_device_count].device.device_mac);
 
         sc = bthome_v2_server_nvm3_write(
           nvm3_device_index + APP_NVM3_DEVICE_NAME_OFF_SET,
@@ -582,7 +582,7 @@ static void app_remove_added_device(void)
     scanned_device_count++;
   }
   sc = bthome_v2_server_key_remove(
-    added_device[remove_slot].device.device_mac);
+    &added_device[remove_slot].device.device_mac);
   added_device_count--;
   for (int k = remove_slot; k < added_device_count; k++) {
     memcpy(&added_device[k], &added_device[k + 1], sizeof(device_t));

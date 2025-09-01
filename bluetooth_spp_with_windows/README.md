@@ -31,7 +31,7 @@ This project uses Windows BLE API to communicate with the [Bluetooth - Serial Po
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ---
 

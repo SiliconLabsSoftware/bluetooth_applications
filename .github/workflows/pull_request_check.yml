@@ -1,0 +1,474 @@
+name: CI-Check
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+env:
+  SL_SLC_PATH: ${{ github.workspace }}/tools/slc_cli/slc
+  CI_REPO_DIR: ${{ github.workspace }}/application_examples_ci
+  SL_STUDIO_BUILD_PATH: ${{ github.workspace }}/tools/SimplicityStudio
+  STUDIO_ADAPTER_PACK_PATH: ${{ github.workspace }}/tools/SimplicityStudio/developer/adapter_packs
+  POST_BUILD_EXE: ${{ github.workspace }}/tools/SimplicityStudio/developer/adapter_packs/commander/commander
+  WORKSPACE: ${{ github.workspace }}
+
+jobs:
+  readme_structure:
+    runs-on: ubuntu-latest
+    outputs:
+      result_readme: ${{ steps.check_readme.outputs.result_readme }}
+    steps:
+    - name: Create GitHub App Token
+      id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.GH_APP_ID }}
+        private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+
+    - name: Checkout code repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository  }}
+        token: ${{ steps.app-token.outputs.token }}
+        path: 'projects'
+
+    - name: Checkout tools repository
+      uses: actions/checkout@v4
+      with:
+        repository: SiliconLabsSoftware/aep_ci_tools
+        ref: 'pr_checking'
+        token: ${{ steps.app-token.outputs.token }}
+        path: 'aep_ci_tools'
+
+    - name: Check the changes
+      id: pr_check
+      run: |
+        cd projects
+        bash ${{ github.workspace }}/aep_ci_tools/scripts/check_pr_changes.sh \
+        ${{ github.base_ref }} ${{ github.event.pull_request.number }} \
+        ${{ github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha  }}
+
+        echo "...........Changes files:..........."
+        cat git_diff.txt
+
+        if [ ! -s changed_projects_folder.txt ]; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No project changes detected...........Skipped"
+          exit 0
+        fi
+        echo "has_changes=true" >> $GITHUB_OUTPUT
+        echo "...........Changed projects:..........."
+        cat changed_projects_folder.txt
+
+    - name: Run test
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      id: check_readme
+      run : |
+        echo "result_readme=failure" >> $GITHUB_OUTPUT
+
+        cd projects
+        bash ${{ github.workspace }}/aep_ci_tools/scripts/check_readme_file.sh \
+        changed_projects_folder.txt > readme_file_report.log
+
+        GREP_COLORS='mt=32' grep --color=always 'PASS\|$' readme_file_report.log | GREP_COLORS='mt=31' grep --color=always 'FAILURE\|$'
+        if grep -qe "FAILURE" readme_file_report.log; then
+          echo ""
+          echo "Summary: The README.md file does not follow the standard structure. Please revise it to comply with the expected format."
+          exit 1
+        else
+          echo ""
+          echo "Summary: The README.md file follows the standard structure."
+          echo "result_readme=success" >> $GITHUB_OUTPUT
+        fi
+
+  coding_convention:
+    runs-on: ubuntu-latest
+    outputs:
+      result_coding: ${{ steps.check_coding.outputs.result_coding }}
+    steps:
+    - name: Create GitHub App Token
+      id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.GH_APP_ID }}
+        private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+
+    - name: Checkout code repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository  }}
+        token: ${{ steps.app-token.outputs.token }}
+        path: 'projects'
+
+    - name: Checkout tools repository
+      uses: actions/checkout@v4
+      with:
+        repository: SiliconLabsSoftware/aep_ci_tools
+        ref: 'pr_checking'
+        token: ${{ steps.app-token.outputs.token }}
+        path: 'aep_ci_tools'
+
+    - name: Check the changes
+      id: pr_check
+      run: |
+        cd projects
+        bash ${{ github.workspace }}/aep_ci_tools/scripts/check_pr_changes.sh \
+        ${{ github.base_ref }} ${{ github.event.pull_request.number }} \
+        ${{ github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha  }}
+
+        echo "...........Changes files:..........."
+        cat git_diff.txt
+
+        if [ ! -s changed_projects_folder.txt ]; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No project changes detected...........Skipped"
+          exit 0
+        fi
+        echo "has_changes=true" >> $GITHUB_OUTPUT
+        echo "...........Changed projects:..........."
+        cat changed_projects_folder.txt
+
+    - name: Run test
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      run : |
+        cd projects
+        xargs -I{} -a changed_projects_folder.txt find {} -type f -name "*.[ch]" > source_list.txt
+        bash ${{ github.workspace }}/aep_ci_tools/scripts/check_coding_style.sh source_list.txt > coding_style_report.html
+
+    - name: Upload Result
+      id: html_report
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: coding_style_report
+        path: projects/coding_style_report.html
+        retention-days: 90
+
+    - name: Browse the formatted files by Uncrustify
+      id: solution_report
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: uncrustify_formatted_files
+        path: projects/uncrustify_formatted_files.zip
+        if-no-files-found: ignore
+
+    - name: Check log file to set status of the job
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      id: check_coding
+      run: |
+        echo "result_coding=failure" >> $GITHUB_OUTPUT
+
+        cd projects
+        echo "Check report here: ${{ steps.html_report.outputs.artifact-url }}"
+        if grep -qe "failed" coding_style_report.html; then
+          echo "Result: Failure"
+          echo "Check Solution here: ${{ steps.solution_report.outputs.artifact-url }}"
+          exit 1
+        else
+          echo "Result: Success"
+          echo "result_coding=success" >> $GITHUB_OUTPUT
+        fi
+
+  build_firmware:
+    runs-on: ubuntu-latest
+    outputs:
+      result_build: ${{ steps.check_build.outputs.result_build }}
+    steps:
+    - name: Get repository name
+      run: |
+        REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d "/" -f 2)
+        echo "repo=$REPO_NAME" >> $GITHUB_ENV
+
+    - name: Create GitHub App Token
+      id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.GH_APP_ID }}
+        private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+
+    - name: Checkout code repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository  }}
+        token: ${{ steps.app-token.outputs.token }}
+        path: 'projects'
+
+    - name: Checkout tools repository
+      uses: actions/checkout@v4
+      with:
+        repository: SiliconLabsSoftware/aep_ci_tools
+        ref: 'pr_checking'
+        token: ${{ steps.app-token.outputs.token }}
+        path: 'aep_ci_tools'
+
+    - name: Check the changes
+      id: pr_check
+      run: |
+        cd projects
+        bash ${{ github.workspace }}/aep_ci_tools/scripts/check_pr_changes.sh \
+        ${{ github.base_ref }} ${{ github.event.pull_request.number }} \
+        ${{ github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha  }}
+
+        echo "...........Changes files:..........."
+        cat git_diff.txt
+
+        if [ ! -s changed_projects_folder.txt ]; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No project changes detected...........Skipped"
+          exit 0
+        fi
+        echo "has_changes=true" >> $GITHUB_OUTPUT
+        echo "...........Changed projects:..........."
+        cat changed_projects_folder.txt
+
+    - name: Setup Java
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'oracle'
+        java-version: '21'
+
+    - name: Install Dependencies
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      run: bash ${{ github.workspace }}/aep_ci_tools/scripts/install_tools.sh
+
+    - name: Run build the projects
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      id: check_build
+      run : |
+        echo "result_build=failure" >> $GITHUB_OUTPUT
+
+        mkdir changed_projects
+        while read line; do cp -r ./projects/$line --parents ./changed_projects; \
+        done < ${{ github.workspace}}/projects/changed_projects_folder.txt
+        python3 -u ${{ github.workspace}}/aep_ci_tools/scripts/checkproject.py --junit \
+        --html --release --slcpgcc ${{ github.workspace}}/changed_projects
+
+        GREP_COLORS='mt=32' grep --color=always 'Pass\|$' build_test_project.log | GREP_COLORS='mt=31' grep --color=always 'Fail\|$'
+        if grep -qe "Fail" build_test_project.log; then
+          exit 1
+        else
+          echo "result_build=success" >> $GITHUB_OUTPUT
+        fi
+
+  sonarqube_scan:
+    if: github.repository_visibility != 'public'
+    runs-on: silabs-internal
+    outputs:
+      result_sonar: ${{ steps.check_sonar.outputs.result_sonar }}
+    steps:
+    - name: Get repository name
+      run: |
+        REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d "/" -f 2)
+        echo "repo=$REPO_NAME" >> $GITHUB_ENV
+
+    - name: Create GitHub App Token
+      id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.GH_APP_ID }}
+        private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+
+    - name: Checkout code repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository  }}
+        token: ${{ steps.app-token.outputs.token }}
+        path: 'projects'
+
+    - name: Checkout tools repository
+      uses: actions/checkout@v4
+      with:
+        repository: SiliconLabsSoftware/aep_ci_tools
+        ref: 'pr_checking'
+        token: ${{ steps.app-token.outputs.token }}
+        path: 'aep_ci_tools'
+
+    - name: Check the changes
+      id: pr_check
+      run: |
+        cd projects
+        bash ${{ github.workspace }}/aep_ci_tools/scripts/check_pr_changes.sh \
+        ${{ github.base_ref }} ${{ github.event.pull_request.number }} \
+        ${{ github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha  }}
+
+        echo "...........Changes files:..........."
+        cat git_diff.txt
+
+        if [ ! -s changed_projects_folder.txt ]; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No project changes detected...........Skipped"
+          exit 0
+        fi
+        echo "has_changes=true" >> $GITHUB_OUTPUT
+        echo "...........Changed projects:..........."
+        cat changed_projects_folder.txt
+
+    - name: Setup Java
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'oracle'
+        java-version: '21'
+
+    - name: Install Dependencies
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      run: bash ${{ github.workspace }}/aep_ci_tools/scripts/install_tools.sh
+
+    - name: Download and install SonarQube scanner and Wrapper
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      run: bash ${{ github.workspace }}/aep_ci_tools/scripts/install_sonar_dependencies.sh
+
+    - name: Run build-wrapper
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      run: |
+        mkdir changed_projects
+        while read line; do cp -r ./projects/$line --parents ./changed_projects; \
+        done < ${{ github.workspace}}/projects/changed_projects_folder.txt
+        export CHECK_SONARQUBE=1
+        ${{ github.workspace}}/aep_ci_tools/build-wrapper-linux-x86/build-wrapper-linux-x86-64 \
+        --out-dir wrapper_out python3 -u ${{ github.workspace}}/aep_ci_tools/scripts/checkproject.py \
+        --release --slcpgcc ${{ github.workspace}}/changed_projects
+
+    - name: Prepare included sources
+      id: included_src
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      run: |
+        included_sources=$(find changed_projects -name "*.[ch]" -print0 | \
+                          xargs -0 -n 1 basename | \
+                          sed 's/^/**\//' | \
+                          paste -sd ',' -)
+        echo "sonar.inclusions:" $included_sources
+        echo "sonar_inclusions=$included_sources" >> $GITHUB_OUTPUT
+
+    - name: Run SonarQube scanner
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      run: |
+        ${{ github.workspace}}/aep_ci_tools/sonar-scanner-cli-linux-x64/bin/sonar-scanner \
+        -D"sonar.verbose=true" \
+        -D"sonar.qualitygate.wait=True" \
+        -D"sonar.cfamily.compile-commands=wrapper_out/compile_commands.json" \
+        -D"sonar.branch.name=${{ github.event.pull_request.head.ref }}" \
+        -D"sonar.scm.disabled=True" \
+        -D"sonar.projectName=${{ env.repo }}" \
+        -D"sonar.projectKey=${{ env.repo }}" \
+        -D"sonar.projectBaseDir=ws" \
+        -D"sonar.sources=." \
+        -D"sonar.inclusions=${{ steps.included_src.outputs.sonar_inclusions }}" \
+        -D"sonar.host.url=${{ secrets.SONAR_HOST_URL }}" \
+        -D"sonar.token=${{ secrets.SONAR_TOKEN }}" \
+        -D"sonar.language=c" \
+        -D"sonar.cfamily.cache.enabled=false" > sonar_log.txt
+      continue-on-error: true
+
+    - name: Check log file to set status of the job
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      id: check_sonar
+      run: |
+        echo "result_sonar=failure" >> $GITHUB_OUTPUT
+
+        if grep -qe "EXECUTION SUCCESS" sonar_log.txt; then
+          echo "Result: Success"
+          echo "Check report here: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=${{ env.repo }}&branch=${{ github.event.pull_request.head.ref }}"
+          echo "result_sonar=success" >> $GITHUB_OUTPUT
+        else
+          echo "Result: Failure"
+          cat sonar_log.txt
+          echo ""
+          echo "......................"
+          echo "Check report here: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=${{ env.repo }}&branch=${{ github.event.pull_request.head.ref }}"
+          exit 1
+        fi
+
+    - name: Update Shield
+      if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
+      run: |
+        cp ${{ github.workspace}}/projects/changed_projects_folder.txt ${{ github.workspace}}/changed_projects_folder.txt
+        cd projects
+        git clean -xdf
+        cd ${{ github.workspace}}
+        export SCRIPT_PATH="${{ github.workspace}}/aep_ci_tools/scripts/github_shield.py"
+        python3 -u $SCRIPT_PATH --check_change ${{ github.workspace}}/changed_projects_folder.txt
+
+        if [ ${{ steps.check_sonar.outputs.result_sonar }} == success ]; then
+          cd ${{ github.workspace}}/projects
+          if [ -n "$(git status --porcelain)" ]; then
+          {
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "Automatically update Shield for README.md"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          }
+          else
+            echo "No changes README.md";
+          fi
+        fi
+
+  bot_approve_internal:
+    needs: [readme_structure, coding_convention, build_firmware, sonarqube_scan]
+    if: always() && github.repository_visibility != 'public'
+    runs-on: silabs-internal
+    steps:
+      - name: Create GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Generate a review from check statuses
+        run: |
+          export CHECK_README=${{ needs.readme_structure.outputs.result_readme }}
+          export CHECK_CODING=${{ needs.coding_convention.outputs.result_coding }}
+          export CHECK_BUILD_FW=${{ needs.build_firmware.outputs.result_build }}
+          export CHECK_SONARQUBE=${{ needs.sonarqube_scan.outputs.result_sonar }}
+
+          REQUIRED_CHECKS="$CHECK_README $CHECK_CODING $CHECK_BUILD_FW $CHECK_SONARQUBE"
+          echo $REQUIRED_CHECKS
+          if [[ $REQUIRED_CHECKS == *"success"* && $REQUIRED_CHECKS != *"failure"* ]]; then
+            curl -X POST -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
+              -d '{"event":"APPROVE"}' \
+              https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/${{ github.event.pull_request.number }}/reviews
+          else
+            curl -X POST -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/${{ github.event.pull_request.number }}/reviews \
+            -d '{"commit_id":"${{ github.sha }}", "body":"Some checks were not successful!", "event":"REQUEST_CHANGES"}'
+          fi
+
+  bot_approve_public:
+    needs: [readme_structure, coding_convention, build_firmware]
+    if: always() && github.repository_visibility == 'public'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Generate a review from check statuses
+        run: |
+          export CHECK_README=${{ needs.readme_structure.outputs.result_readme }}
+          export CHECK_CODING=${{ needs.coding_convention.outputs.result_coding }}
+          export CHECK_BUILD_FW=${{ needs.build_firmware.outputs.result_build }}
+
+          REQUIRED_CHECKS="$CHECK_README $CHECK_CODING $CHECK_BUILD_FW"
+          echo $REQUIRED_CHECKS
+          if [[ $REQUIRED_CHECKS == *"success"* && $REQUIRED_CHECKS != *"failure"* ]]; then
+            curl -X POST -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
+              -d '{"event":"APPROVE"}' \
+              https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/${{ github.event.pull_request.number }}/reviews
+          else
+            curl -X POST -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/${{ github.event.pull_request.number }}/reviews \
+            -d '{"commit_id":"${{ github.sha }}", "body":"Some checks were not successful!", "event":"REQUEST_CHANGES"}'
+          fi

@@ -3,12 +3,12 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 [![Required board](https://img.shields.io/badge/Mikroe-E-green)](https://www.mikroe.com/e-paper-display-154-200x200-dots)
 [![Required board](https://img.shields.io/badge/Mikroe-EINK%20CLICK-green)](https://www.mikroe.com/eink-click-without-display)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-229.65%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-17.44%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-231.47%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-17.7%20KB-blue)
 
 ## Overview ##
 
@@ -40,8 +40,8 @@ E-Paper display is based on Active Matrix Electrophoretic Display (AMEPD) techno
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 

@@ -17,12 +17,11 @@ filter:
     value: ["Advanced"]
 
 component:
-  - id: bluetooth_stack
+  - id: sl_memory
+  - id: sl_main
   - id: device_init
-  - id: gatt_service_device_information
   - id: component_catalog
   - id: mpu
-  - id: sl_memory
   - id: simple_led
     instance:
       - led0
@@ -49,13 +48,16 @@ component:
   - id: ead_core
   - id: esl_tag_ots_erver
   - id: silabs_core_circular_queue
+  - id: bluetooth_stack
   - id: bluetooth_feature_gatt_server
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_past_receiver
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
   - id: bluetooth_feature_pawr_sync
   - id: bluetooth_feature_system
   - id: bluetooth_feature_sm
+  - id: gatt_service_device_information_override
   - id: freertos
   - id: app_log
   - id: debug_swo
@@ -109,7 +111,6 @@ include:
 
 
 source:
-  - path: ../src/main.c
   - path: ../src/app.c
   - path: ../esl_tag_core/src/esl_tag_user_display_driver.c
     directory: esl_tag_core/src
@@ -333,7 +334,7 @@ other_file:
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 4.1.1
+    version: 4.4.0
 
 tag:
   - hardware:device:flash:512

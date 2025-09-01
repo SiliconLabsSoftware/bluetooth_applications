@@ -8,7 +8,7 @@
 
     <!--Device Name-->
     <characteristic const="false" id="device_name" name="Device Name" sourceId="org.bluetooth.characteristic.gap.device_name" uuid="2A00">
-      <value length="13" type="utf-8" variable_length="false">silabs origin</value>
+      <value length="16" type="utf-8" variable_length="false">silabs version 1</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
         <write authenticated="false" bonded="false" encrypted="false"/>
@@ -41,7 +41,7 @@
     <!--Model Number String-->
     <characteristic const="false" id="model_number_string" name="Model Number String" sourceId="org.bluetooth.characteristic.model_number_string" uuid="2A24">
       <informativeText>Abstract: The value of this characteristic is a UTF-8 string representing the model number assigned by the device vendor.</informativeText>
-      <value length="8" type="utf-8" variable_length="false">00000000</value>
+      <value length="10" type="utf-8" variable_length="false">00000000</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -50,7 +50,7 @@
     <!--Hardware Revision String-->
     <characteristic const="false" id="hardware_revision_string" name="Hardware Revision String" sourceId="org.bluetooth.characteristic.hardware_revision_string" uuid="2A27">
       <informativeText>Summary: The value of this characteristic is a UTF-8 string representing the hardware revision for the hardware within the device.</informativeText>
-      <value length="3" type="utf-8" variable_length="false">000</value>
+      <value length="5" type="utf-8" variable_length="false">000</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>
@@ -59,7 +59,7 @@
     <!--Firmware Revision String-->
     <characteristic const="false" id="firmware_revision_string" name="Firmware Revision String" sourceId="org.bluetooth.characteristic.firmware_revision_string" uuid="2A26">
       <informativeText>Summary: The value of this characteristic is a UTF-8 string representing the firmware revision for the firmware within the device.</informativeText>
-      <value length="5" type="utf-8" variable_length="false">0.0.0</value>
+      <value length="8" type="utf-8" variable_length="false">0.0.0</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>

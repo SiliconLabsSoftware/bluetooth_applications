@@ -3,10 +3,10 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-297.57%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-79.3%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-302.58%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-79.7%20KB-blue)
 
 ## Summary ##
 
@@ -36,7 +36,7 @@ The project implements a rough RSSI-based position estimation for a Passive Entr
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ---
 
@@ -95,7 +95,8 @@ To test this application, you can either create a project based on an example pr
 1. From the Launcher Home, add your hardware to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "peps".
 
 2. Click *Create* button on the **Bluetooth - RSSI-based position estimation for PEPS** example. Example project creation dialog pops up -> click Create and Finish and Project should be generated.
-![create_project](image/create_project.png)
+
+   ![create_project](image/create_project.png)
 
 3. Build and flash this project to the board.
 
@@ -118,7 +119,7 @@ To test this application, you can either create a project based on an example pr
 4. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
    - [Services] → [IO Stream] → [IO Stream: EUSART] → default instance name: vcom → Set FLow control to None
-   ![iostream config](image/iostream_config.png)
+     ![iostream config](image/iostream_config.png)
 
    - [Services] → [Command Line Interface] → [CLI Instance(s)] → default instance name: inst
 
@@ -141,18 +142,18 @@ To test this application, you can either create a project based on an example pr
    - [Platform] → [Board Drivers] → [GLIB Graphics Library]
 
    - [Platform] → [Board] → [Board Control] → Configure: Enable Virtual COM UART and Display; Active SPI Flash
-   ![board control](image/board_control.png)
+     ![board control](image/board_control.png)
 
    - For supporting Radio debug PRS signals, the [Flex – RAIL PRS] component should be installed: [Flex] → [RAIL] → [Utility] → [Flex - RAIL PRS Support] → Add Instances:
 
      - Instance name: active
-     ![PRS_active](image/PRS_active.png)
+       ![PRS_active](image/PRS_active.png)
      - Instance name: dclk
-     ![PRS_dclk](image/PRS_dclk.png)
+       ![PRS_dclk](image/PRS_dclk.png)
      - Instance name: dout
-     ![PRS_dout](image/PRS_dout.png)
+       ![PRS_dout](image/PRS_dout.png)
      - Instance name: rxsync
-     ![PRS_rxsync](image/PRS_rxsync.png)
+       ![PRS_rxsync](image/PRS_rxsync.png)
 
 5. Copy the `patch/dmadrv` folder into the appropriate folders (overwriting existing files). See the **Note** section below for more details.
 
@@ -166,7 +167,7 @@ To test this application, you can either create a project based on an example pr
 > - The DMADRV component had to be patched with a new callback registration function to allow changing DMA callbacks on the fly. So, after a new project has been created, the files that are located in the `patch/dmadrv` folder are copied into the new project into the appropriate folders:
 >   - `<Project’s SDK folder>/dmadrv/inc/dmadrv.h`
 >   - `<Project’s SDK folder>/dmadrv/src/dmadrv.c`
-> - The patched DMADRV component comes from the Simplicity SDK v2024.12.2 and should work directly with the newer SDK versions. In case of issues, the `DMADRV_SetCallback()` and the `DMADRV_SetCallbackParam()` functions and their declarations should be copied into the new SDK files.
+> - The patched DMADRV component comes from the Simplicity SDK v2025.6.0 and should work directly with the newer SDK versions. In case of issues, the `DMADRV_SetCallback()` and the `DMADRV_SetCallbackParam()` functions and their declarations should be copied into the new SDK files.
 
 ---
 
@@ -271,26 +272,28 @@ After the devices have been flashed and the LIN bus is formed, the devices are c
 env device set type PEPS_FOLLOWER
 env device set address <10 | 20 | 30 | 40>
 env device set name <DEV2TL | DEV3TR | DEV4BL | DEV5BR>
+reset
 ```
 
- ```cmd
- env device set type PEPS_LEADER
- env device set address 0
- env device set name DEV1C
- peps follower add DEV2TL PEPS_FOLLOWER 10
- peps follower add DEV3TR PEPS_FOLLOWER 20
- peps follower add DEV4BL PEPS_FOLLOWER 30
- peps follower add DEV5BR PEPS_FOLLOWER 40
- peps follower location add name DEV2TL LEFT_FRONT
- peps follower location add name DEV3TR RIGHT_FRONT
- peps follower location add name DEV4BL LEFT_REAR
- peps follower location add name DEV5BR RIGHT_REAR
- peps follower location set pos LEFT_FRONT -21.9 +23.1
- peps follower location set pos RIGHT_FRONT +21.6 +23.1
- peps follower location set pos LEFT_REAR -21.9 -22.8
- peps follower location set pos RIGHT_REAR +21.6 -22.8
- reset         
- ```
+```cmd
+env device set type PEPS_LEADER
+env device set address 0
+env device set name DEV1C
+reset
+peps follower add DEV2TL PEPS_FOLLOWER 10
+peps follower add DEV3TR PEPS_FOLLOWER 20
+peps follower add DEV4BL PEPS_FOLLOWER 30
+peps follower add DEV5BR PEPS_FOLLOWER 40
+peps follower location add name DEV2TL LEFT_FRONT
+peps follower location add name DEV3TR RIGHT_FRONT
+peps follower location add name DEV4BL LEFT_REAR
+peps follower location add name DEV5BR RIGHT_REAR
+peps follower location set pos LEFT_FRONT -21.9 +23.1
+peps follower location set pos RIGHT_FRONT +21.6 +23.1
+peps follower location set pos LEFT_REAR -21.9 -22.8
+peps follower location set pos RIGHT_REAR +21.6 -22.8
+reset         
+```
 
 To start estimating the location, perform the following steps:
 

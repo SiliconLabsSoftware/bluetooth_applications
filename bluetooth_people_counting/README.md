@@ -3,12 +3,12 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-Distance%20Sensor%20Breakout-green)](https://www.sparkfun.com/products/14722)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)%20board-green)](https://www.sparkfun.com/products/14532)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-219.04%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-11.17%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-218.48%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-11.52%20KB-blue)
 
 ## Overview ##
 
@@ -37,8 +37,8 @@ This example can be as the first step in developing other upgrade applications b
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 

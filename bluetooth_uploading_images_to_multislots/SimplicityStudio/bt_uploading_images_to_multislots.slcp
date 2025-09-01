@@ -17,17 +17,18 @@ filter:
 
 component:
   - id: mpu
-  - id: sl_system
+  - id: sl_main
+  - id: clock_manager
   - id: device_init
   - id: bluetooth_stack
   - id: gatt_configuration
-  - id: gatt_service_device_information
+  - id: gatt_service_device_information_override
   - id: component_catalog
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gatt_server
-  - id: bluetooth_feature_scanner
   - id: bluetooth_feature_system
   - id: bluetooth_feature_sm
   - id: bt_post_build
@@ -40,7 +41,6 @@ component:
 
 source:
   - path: ../src/app.c
-  - path: ../src/main.c
 
 include:
   - path: ../inc
@@ -80,8 +80,6 @@ other_file:
   - path: ../image/gatt_origin.png
     directory: image
   - path: ../image/gbl_file.png
-    directory: image
-  - path: ../image/hardware_connect.png
     directory: image
   - path: ../image/overview.png
     directory: image

@@ -3,7 +3,7 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 [![Required board](https://img.shields.io/badge/SparkFun-Micro%20OLED%20Breakout-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/SparkFun-MLX90640%20IR%20Array-green)](https://www.sparkfun.com/products/14844)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
@@ -55,9 +55,9 @@ The hand gestures:
 
 ## SDK version ##
 
-- [SiSDK v2024.12.0](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.1.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
-- [AI/ML - Alpha - 2.0.0](https://github.com/SiliconLabsSoftware/aiml-extension)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [AI/ML - Alpha - 2.1.0](https://github.com/SiliconLabsSoftware/aiml-extension)
 
 ---
 

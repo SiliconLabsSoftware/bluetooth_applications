@@ -107,7 +107,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
     case sl_bt_evt_system_external_signal_id:
       if (evt->data.evt_system_external_signal.extsignals
           == SIGNAL_READ_DATA) {
-        uint8_t mac[6];
+        bthome_v2_server_addr_t mac;
         uint8_t device_count;
         bthome_v2_server_sensor_data_t object;
         uint8_t object_count;
@@ -117,16 +117,16 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
         device_count = get_registered_device_count();
 
         for (uint8_t i = 0; i < device_count; i++) {
-          get_registered_device_mac(i, mac);
+          get_registered_device_mac(i, mac.data);
 
-          bthome_v2_server_check_device(mac, &encrypted, &key_available);
+          bthome_v2_server_check_device(&mac, &encrypted, &key_available);
           if ((encrypted == true) && (key_available == false)) {
             break;
           }
 
           object_count = 0;
           // read only 1 button object
-          bthome_v2_server_sensor_data_read(mac,
+          bthome_v2_server_sensor_data_read(&mac,
                                             &object, 1,
                                             &object_count,
                                             NULL);
@@ -174,7 +174,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
   }
 }
 
-void bthome_v2_server_found_device_callback(uint8_t *mac,
+void bthome_v2_server_found_device_callback(bthome_v2_server_addr_t *mac,
                                             uint8_t *payload,
                                             uint8_t payload_length)
 {
@@ -183,7 +183,7 @@ void bthome_v2_server_found_device_callback(uint8_t *mac,
 
   app_log("\r\n->MAC: ");
   for (uint8_t i = 0; i < 6; i++) {
-    app_log("%.2x", mac[i]);
+    app_log("%.2x", mac->data[i]);
   }
   app_log("\r\n");
 

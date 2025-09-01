@@ -110,6 +110,8 @@ typedef bool (*DMADRV_Callback_t)(unsigned int channel,
 
 Ecode_t DMADRV_AllocateChannel(unsigned int *channelId,
                                void         *capabilities);
+Ecode_t DMADRV_AllocateChannelById(unsigned int channelId,
+                                   void         *capabilities);
 Ecode_t DMADRV_DeInit(void);
 Ecode_t DMADRV_FreeChannel(unsigned int channelId);
 Ecode_t DMADRV_Init(void);
@@ -133,7 +135,8 @@ Ecode_t DMADRV_PeripheralMemory(unsigned int              channelId,
                                 DMADRV_Callback_t         callback,
                                 void                      *cbUserParam);
 Ecode_t DMADRV_MemoryPeripheralPingPong(unsigned int              channelId,
-                                        DMADRV_PeripheralSignal_t peripheralSignal,
+                                        DMADRV_PeripheralSignal_t
+                                        peripheralSignal,
                                         void                      *dst,
                                         void                      *src0,
                                         void                      *src1,
@@ -143,7 +146,8 @@ Ecode_t DMADRV_MemoryPeripheralPingPong(unsigned int              channelId,
                                         DMADRV_Callback_t         callback,
                                         void                      *cbUserParam);
 Ecode_t DMADRV_PeripheralMemoryPingPong(unsigned int              channelId,
-                                        DMADRV_PeripheralSignal_t peripheralSignal,
+                                        DMADRV_PeripheralSignal_t
+                                        peripheralSignal,
                                         void                      *dst0,
                                         void                      *dst1,
                                         void                      *src,

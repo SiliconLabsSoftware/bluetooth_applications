@@ -3,13 +3,13 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-OLED%20Display-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/Mikroe-Buzzer%202%20Click%20Board-green)](https://www.mikroe.com/buzz-2-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Humidity%20Sensor-green)](https://www.sparkfun.com/products/16467)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-222.71%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-11.27%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-221.55%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-11.58%20KB-blue)
 
 ## Summary
 
@@ -56,8 +56,8 @@ This code example referred to the following code examples. More detailed informa
 
 ## SDK version
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 
@@ -216,7 +216,7 @@ The GATT changes were adding a new custom service (Thermostat ) which are 8 char
 
 4. Initialize the OLED display.
 
-5. Start a periodic timer with a period of 1000ms, The timer callback will fire an external event to BLE stack and the event handler will display people counting data from the result of the counting algorithm calculation.
+5. Start a periodic timer with a period of 5000ms, The timer callback will fire an external event to BLE stack and the event handler will display temperature and humidity data.
 
 6. After the *sl_bt_evt_system_boot_id* event arrives, App sets up the security manager and starts advertising.
 
@@ -228,7 +228,12 @@ The GATT changes were adding a new custom service (Thermostat ) which are 8 char
 
 ### OLED Display
 
-- Display the current people count and the value of the entered people so far
+The following parameters are displayed on the OLED display:
+
+- Current temperature
+- Current humidity
+- Set point
+- Hysteresis
   
   ![OLED display](image/oled_display.png)
 

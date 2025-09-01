@@ -21,7 +21,8 @@ component:
   - id: app_log
   - id: bluetooth_stack
   - id: bluetooth_feature_gap
-  - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
+  - id: gatt_service_device_information_override
   - id: bluetooth_feature_sm
   - id: bluetooth_feature_system
   - id: bluetooth_feature_extended_scanner
@@ -30,17 +31,19 @@ component:
   - id: ble_peer_manager_common
   - id: ble_peer_manager_central
   - id: ble_peer_manager_filter
+  - id: gatt_configuration
+  - id: sl_common
+  - id: sl_main
   - id: clock_manager
+  - id: device_init
   - id: component_catalog
   - id: cs_initiator
   - id: cs_antenna
-  - id: device_init
   - id: dmd_memlcd
   - id: glib
   - id: rtllib
   - id: iostream_recommended_stream
   - id: iostream_bgapi_trace
-  - id: in_place_ota_dfu
   - id: ls013b7dh03
     condition:
       - hardware_board_supports_wstk_lcd
@@ -53,9 +56,6 @@ component:
     instance:
       - led0
   - id: toolchain_gcc
-  - id: sl_system
-  - id: sl_common
-
 
 include:
   - path: ../inc
@@ -67,7 +67,6 @@ include:
 
 source:
   - path: ../src/app.c
-  - path: ../src/main.c
   - path: ../src/rtl_log.c
   - path: ../src/trace.c
   - path: ../src/cs_initiator_display.c
@@ -108,6 +107,8 @@ other_file:
     directory: image
 
 configuration:
+  - name: CS_INITIATOR_MAX_CONNECTIONS
+    value: 1
   - name: SL_CLOCK_MANAGER_HFRCO_DPLL_EN
     value: 1
   - name: SL_CLOCK_MANAGER_DPLL_FREQ

@@ -18,11 +18,12 @@ component:
   - id: bluetooth_stack
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
   - id: bluetooth_feature_sm
   - id: bluetooth_feature_system
   - id: app_assert
   - id: mpu
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: device_init
   - id: sl_common
@@ -39,7 +40,6 @@ include:
       - path: switch_device/switch_nvm.h
 
 source:
-  - path: ../src/switch_device/main.c
   - path: ../src/switch_device/app.c
   - path: ../src/switch_device/switch_nvm.c
 

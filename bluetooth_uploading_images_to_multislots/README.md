@@ -3,10 +3,10 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v4.4.5-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-175.19%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-9.28%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-190.35%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-12.2%20KB-blue)
 
 ## Description ##
 
@@ -36,7 +36,7 @@ The following picture shows the system view of how it works.
 
 ## SDK version ##
 
-- [Gecko SDK v4.4.5](https://github.com/SiliconLabs/gecko_sdk)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ---
 
@@ -49,17 +49,14 @@ The following picture shows the system view of how it works.
 
 ## Hardware Required ##
 
-- 1x [SLWRB4161A] EFR32MG12 2.4 GHz +19 dBm 1 MB Flash Radio Board
-- 1x [SI-MB4002A](https://www.silabs.com/development-tools/wireless/wireless-pro-kit-mainboard) Wireless Pro Kit Mainboard
+- 1x [Bluetooth Low Energy Explorer Kit](https://www.silabs.com/development-tools/wireless/bluetooth). For example, [BGM220-EK4314A](https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit)
 - 1x smartphone running the 'Simplicity Connect' mobile app
 
 ---
 
 ## Connections Required ##
 
-The following picture shows the hardware for the device (with EFR32MG12).
-
-![hardware_connect](image/hardware_connect.png)
+- Connect the Bluetooth Development Kits to the PC through a compatible-cable. For example, a micro USB cable for the BGM220 Bluetooth Module Explorer Kit.
 
 ---
 
@@ -79,7 +76,7 @@ To implement the Bluetooth - Uploading Images to Multiple Slots application, we 
 
 1. From the Launcher Home, add your product name to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "bootloader".
 
-2. Create a **Bootloader - SoC Internal Storage (multiple images on 1MB device)** project in Simplicity Studio.
+2. Create a **Bootloader - SoC Internal Storage (single image on 512kB device)** project in Simplicity Studio.
 
    ![create_bootloader](image/create_bootloader.png)
 
@@ -120,7 +117,7 @@ To implement the Bluetooth - Uploading Images to Multiple Slots application, we 
 
 1. From the Launcher Home, add your product name to My Products, click on it, and click on the **EXAMPLE PROJECTS & DEMOS** tab. Find the example project filtering by "bootloader".
 
-2. Create a **Bootloader - SoC Internal Storage (multiple images on 1MB device)** project in Simplicity Studio.
+2. Create a **Bootloader - SoC Internal Storage (single image on 512kB device)** project in Simplicity Studio.
 
    ![create_bootloader](image/create_bootloader.png)
 

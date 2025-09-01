@@ -19,7 +19,6 @@ filter:
 component:
   - id: bluetooth_stack
   - id: bluetooth_feature_legacy_advertiser
-  - id: bluetooth_feature_connection
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gap
   - id: bluetooth_feature_legacy_scanner
@@ -28,7 +27,7 @@ component:
   - id: rail_util_pti
   - id: app_assert
   - id: mpu
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: device_init
   - id: sl_common
@@ -55,7 +54,6 @@ include:
 source:
   - path: ../src/app.c
   - path: ../src/cli.c
-  - path: ../src/main.c
 
 configuration:
   - name: SL_STACK_SIZE
@@ -99,7 +97,7 @@ other_file:
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 4.3.0
+    version: 4.4.0
 
 tag: hardware:rf:band:2400
 

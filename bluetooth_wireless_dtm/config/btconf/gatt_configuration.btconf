@@ -53,7 +53,7 @@
 Summary: 
             The value of this characteristic is a UTF-8 string representing the firmware revision for the firmware within the device.
 		</informativeText>
-      <value length="5" type="utf-8" variable_length="false">0.0.0</value>
+      <value length="6" type="utf-8" variable_length="false">00.0.0</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>
       </properties>

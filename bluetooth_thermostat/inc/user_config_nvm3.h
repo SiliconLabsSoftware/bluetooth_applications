@@ -39,7 +39,7 @@
 
 /***************************************************************************//**
  * @brief
- *    Initialize the nvm3 module for the people counting configuration.
+ *    Initialize the nvm3 for user configuration.
  *
  ******************************************************************************/
 void user_config_nvm3_init(void);

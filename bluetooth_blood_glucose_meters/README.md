@@ -3,10 +3,10 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-201.75%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-11.38%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-200.56%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-11.69%20KB-blue)
 
 ## Overview ##
 
@@ -37,7 +37,7 @@ The project implemented the Bluetooth glucose meter, which has the ability to wi
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ---
 

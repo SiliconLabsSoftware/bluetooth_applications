@@ -17,15 +17,16 @@ filter:
 component:
   - id: bluetooth_stack
   - id: gatt_configuration
-  - id: gatt_service_device_information
+  - id: gatt_service_device_information_override
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gatt_server
   - id: bluetooth_feature_sm
   - id: bluetooth_feature_system
   - id: app_assert
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: device_init
   - id: simple_button
@@ -37,7 +38,6 @@ include:
       - path: app.h
 
 source:
-  - path: ../src/main.c
   - path: ../src/app.c
 
 config_file:

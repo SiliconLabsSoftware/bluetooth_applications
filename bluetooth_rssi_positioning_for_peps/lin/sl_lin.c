@@ -442,15 +442,20 @@ void sl_lin_slave_init(void)
   tx_desc.xfer.doneIfs = 0;
 
   // 360 - 380 usecs (re-enables and waits for clocks)
-  NVIC_SetPriority(GPIO_EVEN_IRQn, CORE_INTERRUPT_DEFAULT_PRIORITY + 1);
+  NVIC_SetPriority(GPIO_EVEN_IRQn,
+                   sl_interrupt_manager_get_default_priority() + 1);
   // 3.5 usecs
-  NVIC_SetPriority(USART0_TX_IRQn, CORE_INTERRUPT_DEFAULT_PRIORITY + 1);
+  NVIC_SetPriority(USART0_TX_IRQn,
+                   sl_interrupt_manager_get_default_priority() + 1);
   // 5.5 - 6.5 usecs
-  NVIC_SetPriority(USART0_RX_IRQn, CORE_INTERRUPT_DEFAULT_PRIORITY + 1);
+  NVIC_SetPriority(USART0_RX_IRQn,
+                   sl_interrupt_manager_get_default_priority() + 1);
   // 3.5 usecs
-  NVIC_SetPriority(LDMA_IRQn, CORE_INTERRUPT_DEFAULT_PRIORITY + 2);
+  NVIC_SetPriority(LDMA_IRQn,
+                   sl_interrupt_manager_get_default_priority() + 2);
   // 17 - 38 usecs
-  NVIC_SetPriority(LETIMER0_IRQn, CORE_INTERRUPT_DEFAULT_PRIORITY + 2);
+  NVIC_SetPriority(LETIMER0_IRQn,
+                   sl_interrupt_manager_get_default_priority() + 2);
 
   CMU_ClockEnable(cmuClock_ICACHE, true);
   BUS_RegBitWrite(&ICACHE0->CTRL, _ICACHE_CTRL_CACHEDIS_SHIFT, 0);

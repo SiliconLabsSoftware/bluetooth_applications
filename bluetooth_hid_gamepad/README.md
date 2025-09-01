@@ -5,10 +5,10 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-185.8%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-10.73%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-183.62%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-11.07%20KB-blue)
 
 ## Description
 
@@ -37,7 +37,7 @@ This example implements a joystick interface with a single button. It is compati
 
 ## SDK Version
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ---
 

@@ -1,0 +1,94 @@
+project_name: bt_soc_voltage_monitor
+package: Bluetooth
+label: Bluetooth - SoC Voltage Monitor
+description: >
+  This example shows how to create an application to monitor the supply voltage and send a notification to a client device using the BLE stack on Silicon Laboratories pro kits.
+category: Bluetooth Examples
+quality: experimental
+
+filter:
+  - name: "Wireless Technology"
+    value: ["Bluetooth"]
+  - name: "Device Type"
+    value: ["SoC"]
+  - name: "MCU"
+    value: ["32-bit MCU"]
+  - name: "Project Difficulty"
+    value: ["Beginner"]
+
+include:
+  - path: ../inc
+    file_list:
+      - path: app.h
+      - path: le_voltage_monitor.h
+
+source:
+  - path: ../src/app.c
+  - path: ../src/app_bm.c
+  - path: ../src/le_voltage_monitor.c
+
+component:
+  - id: app_assert
+  - id: app_os_helper
+  - id: gatt_configuration
+  - id: gatt_service_device_information_override
+  - id: bluetooth_feature_connection_role_central
+  - id: bluetooth_feature_connection_role_peripheral
+  - id: bluetooth_feature_gatt
+  - id: bluetooth_feature_gatt_server
+  - id: bluetooth_feature_legacy_advertiser
+  - id: bluetooth_feature_sm
+  - id: bluetooth_feature_legacy_scanner
+  - id: bluetooth_feature_system
+  - id: bluetooth_stack
+  - id: clock_manager
+  - id: device_init
+  - id: emlib_iadc
+  - id: emlib_letimer
+  - id: in_place_ota_dfu
+  - id: mpu
+  - id: rail_util_pti
+  - id: sl_main
+  - id: bt_post_build
+  - instance: [btn0]
+    id: simple_button
+
+configuration:
+  - name: SL_PSA_KEY_USER_SLOT_COUNT
+    value: "0"
+    condition:
+      - psa_crypto
+
+define:
+  - name: DEBUG_EFM
+
+config_file:
+  - override:
+      component: gatt_configuration
+      file_id: gatt_configuration_file_id
+    path: "../config/btconf/gatt_configuration.btconf"
+    directory: "btconf"
+
+post_build:
+  - profile: bt_common
+
+readme:
+  - path: ../README.md
+
+other_file:
+  - path: ../image/create_project.png
+    directory: image
+  - path: ../image/hardware_connection.png
+    directory: image
+  - path: ../image/result_with_prs_feature.png
+    directory: image
+  - path: ../image/result_without_prs_feature.png
+    directory: image
+  - path: ../image/sim_connect_app.png
+    directory: image
+
+ui_hints:
+  highlight:
+    - path: config/btconf/gatt_configuration.btconf
+    - path: README.md
+      focus: true

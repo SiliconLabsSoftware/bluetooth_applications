@@ -3,11 +3,11 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 [![Required board](https://img.shields.io/badge/Mikroe-Pressure%203%20Click-green)](https://www.mikroe.com/pressure-3-click)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-208.9%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-11.25%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-207.71%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-11.59%20KB-blue)
 
 ## Overview ##
 
@@ -35,8 +35,8 @@ This example is intended to make a pressure and temperature measurement every se
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 

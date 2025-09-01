@@ -3,10 +3,10 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-97.85%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-107.4%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-98.82%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-109.03%20KB-blue)
 
 ## Purpose and Scope
 
@@ -56,7 +56,7 @@ The BLE PAX Counter operates by passively scanning for BLE beacons from nearby d
 
 ## SDK version
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 
 ## Hardware Requirements
 
@@ -80,12 +80,12 @@ The BLE PAX Counter operates by passively scanning for BLE beacons from nearby d
 - Simplicity Studio
   - Download the [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
   - Follow the [Simplicity Studio User Guide](https://docs.silabs.com/simplicity-studio-5-users-guide/1.1.0/ss-5-users-guide-getting-started/install-ss-5-and-software#install-ssv5) to install Simplicity Studio IDE
-- [Simplicity SDK Version 2024.12.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2024.12.2)
+- [Simplicity SDK Version 2024.12.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
 - [WiSeConnect 3 SDK extension version 3.4.2](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.4.2)
 
 > NOTE:
 >
-> The project has been only built and tested with [Simplicity SDK Version 2024.12.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2024.12.2) and [WiSeConnect 3 SDK extension version 3.4.2](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.4.2).
+> The project has been only built and tested with [Simplicity SDK Version 2024.12.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0) and [WiSeConnect 3 SDK extension version 3.4.2](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.4.2).
 
 ---
 

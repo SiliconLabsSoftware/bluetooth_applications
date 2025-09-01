@@ -19,9 +19,10 @@ filter:
 component:
   - id: bluetooth_stack
   - id: gatt_configuration
-  - id: gatt_service_device_information
+  - id: gatt_service_device_information_override
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gatt_server
   - id: bluetooth_feature_legacy_scanner
@@ -31,7 +32,7 @@ component:
   - id: rail_util_pti
   - id: app_assert
   - id: mpu
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: device_init
   - id: sl_common
@@ -63,7 +64,6 @@ include:
       - path: app.h
 
 source:
-  - path: ../src/main.c
   - path: ../src/app.c
 
 config_file:
@@ -104,7 +104,7 @@ other_file:
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 4.3.0
+    version: 4.4.0
 
 tag:
   - hardware:rf:band:2400

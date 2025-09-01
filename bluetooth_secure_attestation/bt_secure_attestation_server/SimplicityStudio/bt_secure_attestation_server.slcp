@@ -9,9 +9,11 @@ quality: experimental
 component:
   - id: bluetooth_stack
   - id: gatt_configuration
-  - id: gatt_service_device_information
+  - id: gatt_service_device_information_override
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
+  - id: bluetooth_feature_connection_role_central
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gatt_server
   - id: bluetooth_feature_legacy_scanner
@@ -20,7 +22,7 @@ component:
   - id: rail_util_pti
   - id: app_assert
   - id: mpu
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: device_init
   - id: sl_common
@@ -49,7 +51,6 @@ include:
       - path: app_ecdh.h
       - path: ecdh_util.h
 source:
-  - path: ../src/main.c
   - path: ../src/app.c
   - path: ../src/certificates.c
   - path: ../src/ecdh_util3.c

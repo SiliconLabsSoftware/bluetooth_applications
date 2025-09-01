@@ -44,14 +44,8 @@
 
 #if !defined(EMDRV_DMADRV_DMA_CH_COUNT) \
   || (EMDRV_DMADRV_DMA_CH_COUNT > DMA_CHAN_COUNT)
-
-#if defined(_SILICON_LABS_32B_SERIES_3)
-#define EMDRV_DMADRV_DMA_CH_COUNT DMA_CHAN_COUNT(0)
-#else
 #define EMDRV_DMADRV_DMA_CH_COUNT DMA_CHAN_COUNT
 #endif
-#endif
-
 typedef enum {
   dmaDirectionMemToPeripheral,
   dmaDirectionPeripheralToMem
@@ -94,16 +88,16 @@ typedef struct {
 #else
 const sl_hal_ldma_transfer_config_t xferCfgPeripheral =
   SL_HAL_LDMA_TRANSFER_CFG_PERIPHERAL(0);
-const sl_hal_ldma_descriptor_t m2p = SL_HAL_LDMA_DESCRIPTOR_SINGLE_M2P(
-  SL_HAL_LDMA_CTRL_SIZE_BYTE,
-  NULL,
-  NULL,
-  1UL);
-const sl_hal_ldma_descriptor_t p2m = SL_HAL_LDMA_DESCRIPTOR_SINGLE_P2M(
-  SL_HAL_LDMA_CTRL_SIZE_BYTE,
-  NULL,
-  NULL,
-  1UL);
+const sl_hal_ldma_descriptor_t m2p =
+  SL_HAL_LDMA_DESCRIPTOR_SINGLE_M2P(SL_HAL_LDMA_CTRL_SIZE_BYTE,
+                                    NULL,
+                                    NULL,
+                                    1UL);
+const sl_hal_ldma_descriptor_t p2m =
+  SL_HAL_LDMA_DESCRIPTOR_SINGLE_P2M(SL_HAL_LDMA_CTRL_SIZE_BYTE,
+                                    NULL,
+                                    NULL,
+                                    1UL);
 
 typedef struct {
   sl_hal_ldma_descriptor_t desc[2];
@@ -177,6 +171,44 @@ Ecode_t DMADRV_AllocateChannel(unsigned int *channelId, void *capabilities)
 
 /***************************************************************************//**
  * @brief
+ *  Allocate (reserve) the given DMA channel if it is free.
+ *
+ * @param[in] channelId
+ *  The channel ID to be assigned by DMADRV.
+ *
+ * @param[in] capabilities
+ *  Not used.
+ *
+ * @return
+ *  @ref ECODE_EMDRV_DMADRV_OK on success. On failure, an appropriate
+ *  DMADRV @ref Ecode_t is returned.
+ ******************************************************************************/
+Ecode_t DMADRV_AllocateChannelById(unsigned int channelId, void *capabilities)
+{
+  (void)capabilities;
+  CORE_DECLARE_IRQ_STATE;
+
+  if (!initialized) {
+    return ECODE_EMDRV_DMADRV_NOT_INITIALIZED;
+  }
+
+  if (channelId >= EMDRV_DMADRV_DMA_CH_COUNT) {
+    return ECODE_EMDRV_DMADRV_PARAM_ERROR;
+  }
+
+  CORE_ENTER_ATOMIC();
+  if (!chTable[channelId].allocated) {
+    chTable[channelId].allocated = true;
+    chTable[channelId].callback = NULL;
+    CORE_EXIT_ATOMIC();
+    return ECODE_EMDRV_DMADRV_OK;
+  }
+  CORE_EXIT_ATOMIC();
+  return ECODE_EMDRV_DMADRV_CHANNELS_EXHAUSTED;
+}
+
+/***************************************************************************//**
+ * @brief
  *  Deinitialize DMADRV.
  *
  * @details
@@ -207,14 +239,9 @@ Ecode_t DMADRV_DeInit(void)
 #if defined(EMDRV_DMADRV_LDMA)
     LDMA_DeInit();
 #elif defined(EMDRV_DMADRV_LDMA_S3)
-    NVIC_DisableIRQ(LDMA0_CHNL0_IRQn);
-    NVIC_DisableIRQ(LDMA0_CHNL1_IRQn);
-    NVIC_DisableIRQ(LDMA0_CHNL2_IRQn);
-    NVIC_DisableIRQ(LDMA0_CHNL3_IRQn);
-    NVIC_DisableIRQ(LDMA0_CHNL4_IRQn);
-    NVIC_DisableIRQ(LDMA0_CHNL5_IRQn);
-    NVIC_DisableIRQ(LDMA0_CHNL6_IRQn);
-    NVIC_DisableIRQ(LDMA0_CHNL7_IRQn);
+    for (i = 0; i < EMDRV_DMADRV_DMA_CH_COUNT; i++) {
+      NVIC_DisableIRQ(LDMA0_CHNL0_IRQn + i);
+    }
 
     sl_hal_ldma_reset(LDMA0);
 
@@ -319,32 +346,11 @@ Ecode_t DMADRV_Init(void)
   sl_clock_manager_enable_bus_clock(SL_BUS_CLOCK_LDMAXBAR0);
   sl_hal_ldma_init(LDMA0, &dmaInit);
 
-  NVIC_ClearPendingIRQ(LDMA0_CHNL0_IRQn);
-  NVIC_ClearPendingIRQ(LDMA0_CHNL1_IRQn);
-  NVIC_ClearPendingIRQ(LDMA0_CHNL2_IRQn);
-  NVIC_ClearPendingIRQ(LDMA0_CHNL3_IRQn);
-  NVIC_ClearPendingIRQ(LDMA0_CHNL4_IRQn);
-  NVIC_ClearPendingIRQ(LDMA0_CHNL5_IRQn);
-  NVIC_ClearPendingIRQ(LDMA0_CHNL6_IRQn);
-  NVIC_ClearPendingIRQ(LDMA0_CHNL7_IRQn);
-
-  NVIC_SetPriority(LDMA0_CHNL0_IRQn, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
-  NVIC_SetPriority(LDMA0_CHNL1_IRQn, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
-  NVIC_SetPriority(LDMA0_CHNL2_IRQn, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
-  NVIC_SetPriority(LDMA0_CHNL3_IRQn, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
-  NVIC_SetPriority(LDMA0_CHNL4_IRQn, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
-  NVIC_SetPriority(LDMA0_CHNL5_IRQn, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
-  NVIC_SetPriority(LDMA0_CHNL6_IRQn, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
-  NVIC_SetPriority(LDMA0_CHNL7_IRQn, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
-
-  NVIC_EnableIRQ(LDMA0_CHNL0_IRQn);
-  NVIC_EnableIRQ(LDMA0_CHNL1_IRQn);
-  NVIC_EnableIRQ(LDMA0_CHNL2_IRQn);
-  NVIC_EnableIRQ(LDMA0_CHNL3_IRQn);
-  NVIC_EnableIRQ(LDMA0_CHNL4_IRQn);
-  NVIC_EnableIRQ(LDMA0_CHNL5_IRQn);
-  NVIC_EnableIRQ(LDMA0_CHNL6_IRQn);
-  NVIC_EnableIRQ(LDMA0_CHNL7_IRQn);
+  for (i = 0; i < EMDRV_DMADRV_DMA_CH_COUNT; i++) {
+    NVIC_ClearPendingIRQ(LDMA0_CHNL0_IRQn + i);
+    NVIC_SetPriority(LDMA0_CHNL0_IRQn + i, EMDRV_DMADRV_DMA_IRQ_PRIORITY);
+    NVIC_EnableIRQ(LDMA0_CHNL0_IRQn + i);
+  }
 
   sl_hal_ldma_enable(LDMA0);
 #endif
@@ -394,12 +400,12 @@ Ecode_t DMADRV_LdmaStartTransfer(int                channelId,
     return ECODE_EMDRV_DMADRV_NOT_INITIALIZED;
   }
 
-  if (channelId >= (int)EMDRV_DMADRV_DMA_CH_COUNT) {
+  if (channelId >= EMDRV_DMADRV_DMA_CH_COUNT) {
     return ECODE_EMDRV_DMADRV_PARAM_ERROR;
   }
 
   ch = &chTable[channelId];
-  if (!ch->allocated) {
+  if (ch->allocated == false) {
     return ECODE_EMDRV_DMADRV_CH_NOT_ALLOCATED;
   }
 
@@ -437,7 +443,15 @@ Ecode_t DMADRV_LdmaStartTransfer(int                            channelId,
   ch->userParam = cbUserParam;
   ch->callbackCount = 0;
   sl_hal_ldma_init_transfer(LDMA0, channelId, transfer, descriptor);
-  sl_hal_ldma_enable_interrupts(LDMA0, (1 << channelId));
+
+  if (channelId < 16) {
+    sl_hal_ldma_enable_interrupts(LDMA0, (1 << channelId));
+  }
+#if defined(_LDMA_IFH_MASK)
+  else {
+    sl_hal_ldma_enable_high_interrupts(LDMA0, (1 << (channelId - 16)));
+  }
+#endif
   sl_hal_ldma_start_transfer(LDMA0, channelId);
 
   return ECODE_EMDRV_DMADRV_OK;
@@ -890,17 +904,21 @@ Ecode_t DMADRV_TransferCompletePending(unsigned int channelId, bool *pending)
   }
 
 #if defined(EMDRV_DMADRV_UDMA)
-  if (DMA->IF & (1 << channelId))
+  *pending = (DMA->IF & (1 << channelId)) ? true : false;
 #elif defined(EMDRV_DMADRV_LDMA)
-  if (LDMA->IF & (1 << channelId))
+  *pending = (LDMA->IF & (1 << channelId)) ? true : false;
 #elif defined(EMDRV_DMADRV_LDMA_S3)
-  if (sl_hal_ldma_get_pending_interrupts(LDMA0) & (1 << channelId))
-#endif
-  {
-    *pending = true;
-  } else {
-    *pending = false;
+  if (channelId < 16) {
+    *pending = (sl_hal_ldma_get_pending_interrupts(LDMA0) & (1 << channelId))
+               ? true : false;
   }
+#if defined(_LDMA_IFH_MASK)
+  else {
+    *pending = (sl_hal_ldma_get_pending_high_interrupts(LDMA0)
+                & (1 << (channelId - 16))) ? true : false;
+  }
+#endif
+#endif
 
   return ECODE_EMDRV_DMADRV_OK;
 }
@@ -1173,23 +1191,39 @@ static void LDMA_IRQHandlerDefault(uint8_t chnum)
   bool stop;
   ChTable_t *ch;
   uint32_t pending;
-  uint32_t chmask;
+  uint32_t pending_done;
+  uint32_t pending_error;
+  uint32_t chmask = 1 << chnum;
 
   /* Get all pending and enabled interrupts. */
   pending = sl_hal_ldma_get_enabled_pending_interrupts(LDMA0);
+  pending_done = pending & 0xFFFF;
+  pending_error = (pending & 0xFFFF0000) >> 16;
+#if defined(_LDMA_IFH_MASK)
+  uint32_t pending_high =
+    sl_hal_ldma_get_enabled_pending_high_interrupts(LDMA0);
+  pending_done |= ((pending_high & 0xFFFF) << 16);
+  pending_error |= (pending_high & 0xFFFF0000);
+#endif
 
   /* Check for LDMA error. */
-  if (pending & (LDMA_IF_ERROR0 << chnum)) {
+  if (pending_error & chmask) {
     /* Loop to enable debugger to see what has happened. */
     while (true) {
       /* Wait forever. */
     }
   }
 
-  chmask = 1 << chnum;
-  if (pending & chmask) {
+  if (pending_done & chmask) {
     /* Clear the interrupt flag. */
-    sl_hal_ldma_clear_interrupts(LDMA0, chmask);
+    if (chnum < 16) {
+      sl_hal_ldma_clear_interrupts(LDMA0, chmask);
+    }
+#if defined(_LDMA_IFH_MASK)
+    else {
+      sl_hal_ldma_clear_high_interrupts(LDMA0, chmask);
+    }
+#endif
 
     /* Callback called if it was provided for the given channel. */
     ch = &chTable[chnum];
@@ -1278,6 +1312,135 @@ void LDMA0_CHNL7_IRQHandler(void)
   LDMA_IRQHandlerDefault(7);
 }
 
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 8)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 8.
+ ******************************************************************************/
+void LDMA0_CHNL8_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(8);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 9)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 9.
+ ******************************************************************************/
+void LDMA0_CHNL9_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(9);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 10)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 10.
+ ******************************************************************************/
+void LDMA0_CHNL10_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(10);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 11)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 11.
+ ******************************************************************************/
+void LDMA0_CHNL11_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(11);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 12)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 12.
+ ******************************************************************************/
+void LDMA0_CHNL12_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(12);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 13)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 13.
+ ******************************************************************************/
+void LDMA0_CHNL13_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(13);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 14)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 14.
+ ******************************************************************************/
+void LDMA0_CHNL14_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(14);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 15)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 15.
+ ******************************************************************************/
+void LDMA0_CHNL15_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(15);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 16)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 16.
+ ******************************************************************************/
+void LDMA0_CHNL16_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(16);
+}
+
+#endif
+
+#if (EMDRV_DMADRV_DMA_CH_COUNT > 17)
+
+/***************************************************************************//**
+ * @brief
+ *  Root interrupt handler for LDMA channel 17.
+ ******************************************************************************/
+void LDMA0_CHNL17_IRQHandler(void)
+{
+  LDMA_IRQHandlerDefault(17);
+}
+
+#endif
 #endif /* defined( EMDRV_DMADRV_LDMA_S3 ) */
 
 #if defined(EMDRV_DMADRV_UDMA)
@@ -1653,7 +1816,14 @@ static Ecode_t StartTransfer(DmaMode_t             mode,
 
   sl_hal_ldma_init_transfer(LDMA0, channelId, &xfer, desc);
   sl_hal_ldma_start_transfer(LDMA0, channelId);
-  sl_hal_ldma_enable_interrupts(LDMA0, (0x1UL << channelId));
+  if (channelId < 16) {
+    sl_hal_ldma_enable_interrupts(LDMA0, (0x1UL << channelId));
+  }
+#if defined(_LDMA_IFH_MASK)
+  else {
+    sl_hal_ldma_enable_high_interrupts(LDMA0, (0x1UL << (channelId - 16)));
+  }
+#endif
 
   return ECODE_EMDRV_DMADRV_OK;
 }
@@ -1735,9 +1905,10 @@ static Ecode_t StartTransfer(DmaMode_t             mode,
 ///    These functions initialize or deinitialize the DMADRV driver. Typically,
 ///    DMADRV_Init() is called once in the startup code.
 ///
-///   @ref DMADRV_AllocateChannel(), @ref DMADRV_FreeChannel() @n
+///   @ref DMADRV_AllocateChannel(), @ref DMADRV_AllocateChannelById(),
+///   @ref DMADRV_FreeChannel() @n
 ///    DMA channel reserve and release functions. It is recommended that
-///    application code check that DMADRV_AllocateChannel()
+///    application code checks that DMADRV_AllocateChannel()
 ///    returns ECODE_EMDRV_DMADRV_OK before starting a DMA
 ///    transfer.
 ///

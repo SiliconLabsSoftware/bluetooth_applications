@@ -20,9 +20,10 @@ filter:
 component:
   - id: bluetooth_stack
   - id: gatt_configuration
-  - id: gatt_service_device_information
+  - id: gatt_service_device_information_override
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gatt_server
   - id: bluetooth_feature_legacy_scanner
@@ -31,7 +32,7 @@ component:
   - id: rail_util_pti
   - id: app_assert
   - id: mpu
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: device_init
   - id: sl_common
@@ -41,14 +42,13 @@ component:
   - id: app_log
 
 include:
-- path: ../inc
-  file_list:
-  - path: app.h
+  - path: ../inc
+    file_list:
+    - path: app.h
 
 source:
-- path: ../src/main.c
-- path: ../src/app.c
-- path: ../src/app_bm.c
+  - path: ../src/app.c
+  - path: ../src/app_bm.c
 
 config_file:
   - override:
@@ -73,18 +73,18 @@ readme:
   - path: ../README.md
 
 other_file:
-- path: ../image/bluetooth_device.png
-  directory: image
-- path: ../image/gamepad.png
-  directory: image
-- path: ../image/device_manager.png
-  directory: image
-- path: ../image/game_controller.png
-  directory: image
-- path: ../image/joy_cpl.png
-  directory: image
-- path: ../image/example_projects_and_demos.png
-  directory: image
+  - path: ../image/bluetooth_device.png
+    directory: image
+  - path: ../image/gamepad.png
+    directory: image
+  - path: ../image/device_manager.png
+    directory: image
+  - path: ../image/game_controller.png
+    directory: image
+  - path: ../image/joy_cpl.png
+    directory: image
+  - path: ../image/example_projects_and_demos.png
+    directory: image
 
 requires:
   - name: brd4002a

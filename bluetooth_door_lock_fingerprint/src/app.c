@@ -204,9 +204,16 @@ void app_process_action(void)
                                               0);
         show_fp_slot = 0;
         app_show_next_fingerprint();
+        fingerprint_show = false;
+      } else {
+        if (fingerprint_show) {
+          app_show_next_fingerprint();
+          fingerprint_show = false;
+        }
       }
       return;
     }
+
     sl_sleeptimer_stop_timer(&show_fingerprint_timer);
     switch (app_door_mode) {
       case NORMAL_MODE: {
@@ -254,15 +261,6 @@ void app_process_action(void)
         break;
     }
     fingerprint_scan = false;
-  }
-
-  if (fingerprint_show) {
-    if (app_door_mode == MODE_2) {
-      app_show_next_fingerprint();
-    } else {
-      sl_sleeptimer_stop_timer(&show_fingerprint_timer);
-    }
-    fingerprint_show = false;
   }
 
   if (lock) {
@@ -615,6 +613,10 @@ static void app_show_next_fingerprint(void)
     while (is_free)
     {
       show_fp_slot++;
+      if (show_fp_slot >= FINGERPRINT_MAX_SLOT) {
+        show_fp_slot = 0;
+        break;
+      }
       fingerprint_check_slot(show_fp_slot, &is_free);
     }
 

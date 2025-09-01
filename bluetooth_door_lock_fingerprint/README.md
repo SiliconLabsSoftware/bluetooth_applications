@@ -3,12 +3,12 @@
 ![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2024.12.2-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
 [![Required board](https://img.shields.io/badge/Mikroe-A-green)](https://www.mikroe.com/fingerprint-2-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Micro%20OLED%20Breakout%20(Qwiic)-green)](https://www.sparkfun.com/products/14532)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-228.55%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-13.56%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-226.73%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-13.98%20KB-blue)
 
 ## Overview ##
 
@@ -44,8 +44,8 @@ This example is used for a BLE-based device lock system using one Silicon Labs E
 
 ## SDK version ##
 
-- [Simplicity SDK v2024.12.2](https://github.com/SiliconLabs/simplicity_sdk)
-- [Third Party Hardware Drivers v4.3.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 
@@ -157,15 +157,22 @@ Advertisement Packet Device name: **FINGERPRINT DOORLOCK**
 
 - [Service]: **Fingerprint Door Lock**
   - [Char] **Mode**
+    - UUID: f4178e03-9e7e-4080-9aac-f9a2df881e4d
     - [R] Get mode value.
-    - [W] Set operation mode (0 - normal, 1 - register, remove, 2 - show).
+    - [W] Set operation mode (0 - normal, 1 - register/remove, 2 - show).
   - [Char] **Remove Authorized Fingerprint**
+    - UUID: effe5406-3e4c-4f8c-b0fb-f8f34b6c8503
     - [W] Provide authorized fingerprint ID to remove it from the authorized fingerprints.
   - [Char] **Get Fingerprint ID**
+    - UUID: b260e4ed-26c8-422f-a78d-0733fefeeecb
     - [W] Select the index.
     - [R] Provide the status of the index (**EMPTY** or **EXISTS**).
   - [Char] **Open Lock**
+    - UUID: a9b933b4-21da-4fb8-9577-cb26f40aab9e
     - [W] Write 1 to open lock.
+
+> [!NOTE]
+> Since this is a custom service, when connecting with the Si-Connect app, you will not see the characteristic names as mentioned above. Instead, you will need to map them using their UUIDs to correctly identify the corresponding characteristics.
 
 ### Application initialization ###
 
@@ -173,13 +180,32 @@ Advertisement Packet Device name: **FINGERPRINT DOORLOCK**
 
 ### Runtime - Normal Mode ###
 
+When the board powers up, it will automatically enter **Normal Mode**.
+
+If the device is not currently in Normal Mode, you can switch back to it by writing the value 0 (ASCII) to the Mode characteristic, provided that you are already connected to the Si-Connect application.
+
+This mode simulates a real-world scenario where users can scan their fingerprints to unlock a door, assuming the fingerprint has already been registered. If your fingerprint has not been registered yet, please refer to the section [Configuration Mode 1](#runtime---configuration-mode-1---registerremove-fingerprint) for instructions on how to do so.
+
 ![normal_mode](image/normal_mode.png)
 
 ### Runtime - Configuration Mode 1 - Register/Remove Fingerprint ###
 
+To enter **Configuration Mode 1** mode, write the value 1 (ASCII) to the **Mode** characteristic.
+
 ![configuration_mode](image/configuration_mode.png)
 
+In Configuration Mode 1, you can either add a new fingerprint or remove an existing one.
+
+To add a new fingerprint, simply place your finger on the fingerprint sensor. The system will check whether the fingerprint has already been registered. If it is a new fingerprint, the registration process will be triggered automatically.
+You will need to monitor the console log to know when to place your finger on the sensor and when to lift it off, as the process involves multiple steps.
+
+To remove a fingerprint, write the corresponding fingerprint ID (in ASCII format) to the **Remove Authorized Fingerprint** characteristic.
+
 ### Runtime - Configuration Mode 2 - Show Authorized Fingerprints ###
+
+To enter **Configuration Mode 2** mode, write the value 2 (ASCII) to the **Mode** characteristic.
+
+In this mode, the system will sequentially display all indexes of authorized fingerprints, one every 4 seconds.
 
 ![show_mode](image/show_mode.png)
 

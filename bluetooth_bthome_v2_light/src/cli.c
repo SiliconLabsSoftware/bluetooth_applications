@@ -192,8 +192,8 @@ void key_register(sl_cli_command_arg_t *arguments)
   char *mac_str;
   char *key_str;
   char octet[2];
-  uint8_t mac[6];
-  uint8_t key[16];
+  bthome_v2_server_addr_t mac;
+  bthome_v2_server_key_t key;
 
   app_log("<<key register>>\r\n");
 
@@ -204,7 +204,7 @@ void key_register(sl_cli_command_arg_t *arguments)
   // Parse mac to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
     memcpy(octet, (uint8_t *)&mac_str[2 * i], 2);
-    mac[i] = (uint8_t)strtol(octet, NULL, 16);
+    mac.data[i] = (uint8_t)strtol(octet, NULL, 16);
   }
 
   // Check the registered list if device is available
@@ -214,7 +214,7 @@ void key_register(sl_cli_command_arg_t *arguments)
   }
 
   for (uint8_t i = 0; i < registered_count; i++) {
-    if (memcmp(registered_device[i], mac, 6) == 0) {
+    if (memcmp(registered_device[i], mac.data, 6) == 0) {
       app_log("Device already exists\r\n");
       return;
     }
@@ -222,7 +222,7 @@ void key_register(sl_cli_command_arg_t *arguments)
   // Add to registered list
   if (registered_count < (MAX_ENCRYPT_DEVICE - 1)) {
     for (uint8_t i = 0; i < 6; i++) {
-      registered_device[registered_count][i] = mac[i];
+      registered_device[registered_count][i] = mac.data[i];
     }
     registered_count++;
   }
@@ -230,10 +230,10 @@ void key_register(sl_cli_command_arg_t *arguments)
   // Parse key to 16 byte length format
   for (uint8_t i = 0; i < 16; i++) {
     memcpy(octet, (uint8_t *)&key_str[2 * i], 2);
-    key[i] = (uint8_t)strtol(octet, NULL, 16);
+    key.data[i] = (uint8_t)strtol(octet, NULL, 16);
   }
 
-  bthome_v2_server_key_register(mac, key);
+  bthome_v2_server_key_register(&mac, &key);
 }
 
 /***************************************************************************//**
@@ -246,7 +246,7 @@ void key_remove(sl_cli_command_arg_t *arguments)
 {
   char *mac_str;
   char octet[2];
-  uint8_t mac[6];
+  bthome_v2_server_addr_t mac;
   uint8_t index = MAX_ENCRYPT_DEVICE;
 
   app_log("<<key remove>>\r\n");
@@ -257,12 +257,12 @@ void key_remove(sl_cli_command_arg_t *arguments)
   // Parse mac to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
     memcpy(octet, (uint8_t *)&mac_str[2 * i], 2);
-    mac[i] = (uint8_t)strtol(octet, NULL, 16);
+    mac.data[i] = (uint8_t)strtol(octet, NULL, 16);
   }
 
   // Find index of device in registered list
   for (uint8_t i = 0; i < registered_count; i++) {
-    if (memcmp(registered_device[i], mac, 6) == 0) {
+    if (memcmp(registered_device[i], mac.data, 6) == 0) {
       index = i;
       break;
     }
@@ -282,7 +282,7 @@ void key_remove(sl_cli_command_arg_t *arguments)
   }
 
   registered_count--;
-  bthome_v2_server_key_remove(mac);
+  bthome_v2_server_key_remove(&mac);
 }
 
 /***************************************************************************//**
@@ -295,8 +295,8 @@ void key_get(sl_cli_command_arg_t *arguments)
 {
   char *mac_str;
   char octet[2];
-  uint8_t mac[6];
-  uint8_t key[16];
+  bthome_v2_server_addr_t mac;
+  bthome_v2_server_key_t key;
 
   app_log("<<key get>>\r\n");
 
@@ -306,13 +306,13 @@ void key_get(sl_cli_command_arg_t *arguments)
   // Parse mac to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
     memcpy(octet, (uint8_t *)&mac_str[2 * i], 2);
-    mac[i] = (uint8_t)strtol(octet, NULL, 16);
+    mac.data[i] = (uint8_t)strtol(octet, NULL, 16);
   }
 
-  bthome_v2_server_key_get(mac, key);
+  bthome_v2_server_key_get(&mac, &key);
   app_log("->bind key: ");
   for (uint8_t i = 0; i < 16; i++) {
-    app_log("%.2x ", key[i]);
+    app_log("%.2x ", key.data[i]);
   }
   app_log("\r\n");
 }
@@ -336,13 +336,13 @@ void device_list(sl_cli_command_arg_t *arguments)
     if (sc == SL_STATUS_OK) {
       app_log("->MAC: ");
       for (uint8_t j = 0; j < 6; j++) {
-        app_log("%.2x ", tmp.bthome_nvm3.mac[j]);
+        app_log("%.2x ", tmp.bthome_nvm3.mac.data[j]);
       }
       app_log("\r\n");
 
       app_log("  bind key: ");
       for (uint8_t j = 0; j < 16; j++) {
-        app_log("%.2x ", tmp.bthome_nvm3.key[j]);
+        app_log("%.2x ", tmp.bthome_nvm3.key.data[j]);
       }
       app_log("\r\n");
     }
@@ -359,7 +359,7 @@ void interested_add(sl_cli_command_arg_t *arguments)
 {
   char *mac_str;
   char octet[2];
-  uint8_t mac[6];
+  bthome_v2_server_addr_t mac;
 
   app_log("<<interested list add>>\r\n");
 
@@ -369,7 +369,7 @@ void interested_add(sl_cli_command_arg_t *arguments)
   // Parse MAC to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
     memcpy(octet, (uint8_t *)&mac_str[2 * i], 2);
-    mac[i] = (uint8_t)strtol(octet, NULL, 16);
+    mac.data[i] = (uint8_t)strtol(octet, NULL, 16);
   }
 
   if (interested_count == (MAX_INTERESTED_DEVICE - 1)) {
@@ -378,7 +378,7 @@ void interested_add(sl_cli_command_arg_t *arguments)
   }
 
   for (uint8_t i = 0; i < interested_count; i++) {
-    if (memcmp(interested_device[i], mac, 6) == 0) {
+    if (memcmp(interested_device[i], mac.data, 6) == 0) {
       app_log("Device already exists\r\n");
       return;
     }
@@ -386,7 +386,7 @@ void interested_add(sl_cli_command_arg_t *arguments)
   // Add to interested list
   if (interested_count < (MAX_INTERESTED_DEVICE - 1)) {
     for (uint8_t i = 0; i < 6; i++) {
-      interested_device[interested_count][i] = mac[i];
+      interested_device[interested_count][i] = mac.data[i];
     }
     interested_count++;
   }
@@ -402,7 +402,7 @@ void interested_remove(sl_cli_command_arg_t *arguments)
 {
   char *mac_str;
   char octet[2];
-  uint8_t mac[6];
+  bthome_v2_server_addr_t mac;
   uint8_t index = MAX_INTERESTED_DEVICE;
 
   app_log("<<interested list remove>>\r\n");
@@ -413,12 +413,12 @@ void interested_remove(sl_cli_command_arg_t *arguments)
   // Parse mac to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
     memcpy(octet, (uint8_t *)&mac_str[2 * i], 2);
-    mac[i] = (uint8_t)strtol(octet, NULL, 16);
+    mac.data[i] = (uint8_t)strtol(octet, NULL, 16);
   }
 
   // Find index of device in interested list
   for (uint8_t i = 0; i < interested_count; i++) {
-    if (memcmp(interested_device[i], mac, 6) == 0) {
+    if (memcmp(interested_device[i], mac.data, 6) == 0) {
       index = i;
       break;
     }
