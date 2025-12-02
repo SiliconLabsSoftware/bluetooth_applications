@@ -1,12 +1,15 @@
 # Bluetooth - EM4 Energy Mode in iBeacon Application #
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-166.8%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-167.23%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-9.4%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Battery%20Powered%20Tools-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Battery%20Powered%20Tools)
+[![Type badge](https://img.shields.io/badge/Direction%20Finding-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Direction%20Finding)
+[![Type badge](https://img.shields.io/badge/Loss%20Prevention-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Loss%20Prevention)
 
 ## Overview ##
 
@@ -33,7 +36,7 @@ Note that wake-up from EM4 is performed through a reset. Thus, no data is retain
 
 ## SDK version ##
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
 
 ---
 

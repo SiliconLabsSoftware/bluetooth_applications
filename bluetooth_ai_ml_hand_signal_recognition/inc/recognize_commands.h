@@ -33,7 +33,7 @@
 // there are hard limits on the number of results it can store.
 class PreviousResultsQueue {
 public:
-  PreviousResultsQueue(tflite::ErrorReporter *error_reporter)
+  PreviousResultsQueue(tflite::ErrorReporter * error_reporter)
     : error_reporter_(error_reporter), front_index_(0), size_(0)
   {
   }
@@ -45,7 +45,7 @@ public:
     {
     }
 
-    Result(int32_t time, uint8_t *input_scores) : time_(time)
+    Result(int32_t time, uint8_t * input_scores) : time_(time)
     {
       for (int i = 0; i < TFLITE_MODEL_CLASS_COUNT; ++i) {
         scores[i] = input_scores[i];

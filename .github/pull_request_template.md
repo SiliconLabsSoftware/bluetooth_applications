@@ -5,18 +5,28 @@ Please note that:
 - Once a new pull request is opened in the project
 or new commit to an existing pull request will start a new build
 to automatically update the status of every commit on every branch.
-Read https://confluence.silabs.com/spaces/SCLP/pages/623313008/SOSC+-+SiliconLabsSoftware+-+Pull+Request+Process for more.
+Read https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list for more.
 -->
 
-**[Description]**
+## **Description**
 Hi There,
 This is a short description of a pull request.
 It can be multiline with empty lines as well.
 
-**[Files]**
+## **Files**
 - inc/driver.h
 - src/driver.c
 - test/app.c
 - etc.
 
-**[Video]**
+## **Video**
+
+## **Application Lists**
+This is an additional feature to indicate which application type your project belongs to.
+You can find the list of application types here:
+https://siliconlabs-massmarket.github.io/repository-catalog
+
+- project1_folder_name
+  - application type 1
+  - application type 2
+  - application type n

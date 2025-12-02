@@ -1,13 +1,15 @@
 # Bluetooth - SoC Blinky - SparkFun Thing Plus Matter - MGM240P #
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-Thing%20Plus%20Matter-green)](https://www.sparkfun.com/products/20270)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-202.66%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-203.23%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.95%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Smart%20Buildings-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Buildings)
+[![Type badge](https://img.shields.io/badge/IoT%20Gateways-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=IoT%20Gateways)
 
 ## Overview ##
 
@@ -31,7 +33,7 @@ This example application is the "Hello World" of Bluetooth Low Energy (BLE). It 
 
 ## SDK version ##
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
 
 ---
 

@@ -68,10 +68,6 @@ void app_init(void)
 
   app_log("====== BTHome v2 - PIR Alarm Example ========\n");
 
-  sc = bthome_v2_init(device_name, true, device_key, false);
-  app_assert_status(sc);
-  app_log("==        BTHome v2 initialization         ==\n");
-
   sc = mikroe_pl_n823_01_init(sl_i2cspm_mikroe);
   app_assert_status(sc);
   app_log("==     MikroE PIR Click initialization     ==\n");
@@ -100,9 +96,10 @@ void app_process_action(void)
  *****************************************************************************/
 void sl_bt_on_event(sl_bt_msg_t *evt)
 {
-  bthome_v2_bt_on_event(evt);
   switch (SL_BT_MSG_ID(evt->header)) {
     case sl_bt_evt_system_boot_id:
+      bthome_v2_init(device_name, true, device_key, false);
+      app_log("==        BTHome v2 initialization         ==\n");
       bthome_v2_add_measurement(MOTION_OBJECT_ID, 0);
       bthome_v2_send_packet();
       break;

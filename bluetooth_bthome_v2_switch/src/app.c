@@ -78,14 +78,10 @@ static void process_button_press_external_signal_handler(void);
  *****************************************************************************/
 void app_init(void)
 {
-  sl_status_t sc;
-
   app_log("===== BTHome v2 - Switch Application =====\n");
   app_log("======= BTHome v2 initialization =========\n");
 
-  sc = bthome_v2_init(device_name, true, device_key, true);
   sl_power_manager_add_em_requirement(SL_POWER_MANAGER_EM2);
-  app_assert_status(sc);
 }
 
 /**************************************************************************//**
@@ -110,12 +106,13 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 {
   sl_status_t sc;
 
-  bthome_v2_bt_on_event(evt);
   switch (SL_BT_MSG_ID(evt->header)) {
     // -------------------------------
     // This event indicates the device has started and the radio is ready.
     // Do not call any stack command before receiving this boot event!
     case sl_bt_evt_system_boot_id:
+      sc = bthome_v2_init(device_name, true, device_key, true);
+      app_assert_status(sc);
       bthome_v2_add_measurement_state(EVENT_BUTTON, button_type, 0);
       bthome_v2_send_packet();
       app_log("==== Entering EM2 after 5 seconds ... ====\n");

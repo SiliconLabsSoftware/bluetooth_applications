@@ -1,13 +1,16 @@
 # Bluetooth - BTHome v2 - Humidity and Temperature Monitor (SHTC3) #
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-Humidity%20Sensor%20Breakout-green)](https://www.sparkfun.com/products/16467)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-197.16%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-197.41%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-11.19%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Smart%20Buildings-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Buildings)
+[![Type badge](https://img.shields.io/badge/Smart%20Metering-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Metering)
+[![Type badge](https://img.shields.io/badge/Smart%20Wearable%20Devices-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Wearable%20Devices)
 
 ## Overview ##
 
@@ -41,8 +44,8 @@ Raspberry Pi 4 runs a Home Assistant OS that scans for and detects BTHome v2 dev
 
 ## SDK version ##
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
-- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
+- [Third Party Hardware Drivers v4.4.1](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 

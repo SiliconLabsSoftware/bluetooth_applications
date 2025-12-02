@@ -1,6 +1,7 @@
 /***************************************************************************//**
- * @file buzz2_app.h
- * @brief PWM signal on buzzer
+ * @file display_and_sound.h
+ * @brief pulse_oximeter_and_heart_rate_monitor display and sound interface
+ * @version 1.0
  *******************************************************************************
  * # License
  * <b>Copyright 2025 Silicon Laboratories Inc. www.silabs.com</b>
@@ -33,10 +34,14 @@
  * maintained and there may be no bug maintenance planned for these resources.
  * Silicon Labs may update projects from time to time.
  ******************************************************************************/
+#ifndef _DISPLAY_AND_SOUND_H_
+#define _DISPLAY_AND_SOUND_H_
+#include "sl_component_catalog.h"
+#include "sl_status.h"
+#include "pulse_oximeter_and_heart_rate_monitor.h"
 
-#ifndef BUZZ2_APP_H_
-#define BUZZ2_APP_H_
+sl_status_t display_and_sound_init(void);
+sl_status_t display_and_sound_process(const pom_and_hr_monitor_data_t *data,
+                                      const user_config_t *config);
 
-void buzz2_app_init(void);
-
-#endif /* BUZZ2_APP_H_ */
+#endif // _DISPLAY_AND_SOUND_H_

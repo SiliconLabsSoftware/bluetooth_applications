@@ -1,6 +1,6 @@
 /***************************************************************************//**
- * @file temphum9_app.c
- * @brief Measure temperature and humidity with SHTC3 Sensor
+ * @file app_buzzer.h
+ * @brief Buzzer application header
  *******************************************************************************
  * # License
  * <b>Copyright 2025 Silicon Laboratories Inc. www.silabs.com</b>
@@ -33,25 +33,14 @@
  * maintained and there may be no bug maintenance planned for these resources.
  * Silicon Labs may update projects from time to time.
  ******************************************************************************/
-#include "mikroe_shtc3.h"
-#include "app_assert.h"
-#include "sl_i2cspm_instances.h"
 
-/***************************************************************************//**
- * Application Init.
- ******************************************************************************/
-void temphum9_app_init(void)
-{
-  sl_status_t sc;
+#ifndef APP_BUZZER_H
+#define APP_BUZZER_H
 
-  sc = mikroe_shtc3_init(sl_i2cspm_qwiic);
-  app_assert_status(sc);
+#include "sl_status.h"
 
-  sl_sleeptimer_delay_millisecond(100);
-  mikroe_shtc3_send_command(MIKROE_SHTC3_CMD_WAKEUP);
-  sl_sleeptimer_delay_millisecond(100);
-  mikroe_shtc3_send_command(MIKROE_SHTC3_CMD_SLEEP);
+sl_status_t buzzer_init(void);
+void buzzer_set_volume(uint8_t volume);
+void buzzer_control(bool on);
 
-  app_log("> App init done.\n");
-  app_log("> Starting periodic measurement.\n");
-}
+#endif // APP_BUZZER_H

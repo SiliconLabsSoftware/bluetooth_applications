@@ -75,11 +75,41 @@
     </characteristic>
   </service>
 
-  <!--Custom Service-->
-  <service advertise="false" name="Custom Service" requirement="mandatory" sourceId="" type="primary" uuid="35a66b3c-ffa4-4689-a8a4-b547e25c677f">
+  <!--Joystick Service-->
+  <service advertise="false" name="Joystick Service" requirement="mandatory" sourceId="" type="primary" uuid="35a66b3c-ffa4-4689-a8a4-b547e25c677f">
 
-    <!--Custom Characteristic-->
-    <characteristic const="false" id="joystick_data" name="Custom Characteristic" sourceId="" uuid="d3e466fb-b93f-42fc-a49e-4fee668081d5">
+    <!--Joystick Data-->
+    <characteristic const="false" id="joystick_data" name="Joystick Data" sourceId="" uuid="d3e466fb-b93f-42fc-a49e-4fee668081d5">
+      <value length="1" type="hex" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="false" encrypted="false"/>
+        <write authenticated="false" bonded="false" encrypted="false"/>
+        <notify authenticated="false" bonded="false" encrypted="false"/>
+      </properties>
+    </characteristic>
+
+    <!--Joystick Value X-->
+    <characteristic const="false" id="joystick_value_x" name="Joystick Value X" sourceId="" uuid="1954f9d7-5e68-40bd-88c2-c3c96c410fe0">
+      <value length="1" type="hex" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="false" encrypted="false"/>
+        <write authenticated="false" bonded="false" encrypted="false"/>
+        <notify authenticated="false" bonded="false" encrypted="false"/>
+      </properties>
+    </characteristic>
+
+    <!--Joystick Value Y-->
+    <characteristic const="false" id="joystick_value_y" name="Joystick Value Y" sourceId="" uuid="5e8f0838-b2b5-4748-9cfb-4a414a525337">
+      <value length="1" type="hex" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="false" encrypted="false"/>
+        <write authenticated="false" bonded="false" encrypted="false"/>
+        <notify authenticated="false" bonded="false" encrypted="false"/>
+      </properties>
+    </characteristic>
+
+    <!--Joystick Button Status-->
+    <characteristic const="false" id="joystick_button_status" name="Joystick Button Status" sourceId="" uuid="d369fb04-c53f-478e-97f9-054424fa7403">
       <value length="1" type="hex" variable_length="false">00</value>
       <properties>
         <read authenticated="false" bonded="false" encrypted="false"/>

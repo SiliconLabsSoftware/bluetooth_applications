@@ -38,7 +38,7 @@
 #include "sl_bluetooth.h"
 #include "gatt_db.h"
 #include "app.h"
-#include "air_quality_app.h"
+#include "app_air_quality.h"
 #include "app_log.h"
 
 // The advertising set handle allocated from Bluetooth stack.
@@ -59,13 +59,7 @@ static void sm_confirm_bonding_handler(sl_bt_msg_t *evt);
  ******************************************************************************/
 void app_init(void)
 {
-  sl_status_t status;
-
-  status = air_quality_app_init();
-  if (status != SL_STATUS_OK) {
-    app_log_warning("Failed to initialize air quality app.\r\n");
-    app_log_nl();
-  }
+  air_quality_init();
 }
 
 /***************************************************************************//**
@@ -183,6 +177,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
     // -------------------------------
     // This event indicates that a connection was closed.
     case sl_bt_evt_connection_closed_id:
+      air_quality_connection_closed_cb(evt);
       connection_closed_handler(evt);
       break;
 
@@ -214,18 +209,42 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
     // Service the gatt server user write request event
     case sl_bt_evt_gatt_server_user_write_request_id:
       // Service write handlers
-      air_quality_user_write_callback(evt);
+      air_quality_user_write_cb(
+        &evt->data.evt_gatt_server_user_write_request);
       break;
 
     // Service the gatt server user read request event
     case sl_bt_evt_gatt_server_user_read_request_id:
-      air_quality_user_read_callback(evt);
+      air_quality_user_read_cb(
+        &evt->data.evt_gatt_server_user_read_request);
+      break;
+
+    // When the remote device subscribes for notification
+    case sl_bt_evt_gatt_server_characteristic_status_id:
+      if (sl_bt_gatt_server_client_config
+          != (sl_bt_gatt_server_characteristic_status_flag_t)evt->data.
+          evt_gatt_server_characteristic_status.status_flags) {
+        break;
+      }
+      if ((gattdb_co2
+           == evt->data.evt_gatt_server_user_read_request.characteristic)
+          || (gattdb_tvoc
+              == evt->data.evt_gatt_server_user_read_request.characteristic)
+          || (gattdb_alarm_status
+              == evt->data.evt_gatt_server_user_read_request.characteristic)
+          || (gattdb_aqi
+              == evt->data.evt_gatt_server_user_read_request.characteristic)) {
+        // client characteristic configuration changed by remote GATT client
+        air_quality_characteristic_status_cb(
+          &evt->data.evt_gatt_server_characteristic_status);
+      }
       break;
 
     // -------------------------------
     // External signal indication (comes from the interrupt handler)
     case sl_bt_evt_system_external_signal_id:
-      air_quality_process_event(evt->data.evt_system_external_signal.extsignals);
+      air_quality_external_signal_cb(
+        evt->data.evt_system_external_signal.extsignals);
       break;
 
     ///////////////////////////////////////////////////////////////////////////

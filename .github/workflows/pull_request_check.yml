@@ -2,7 +2,7 @@ name: CI-Check
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened, synchronize, edited]
 
 env:
   SL_SLC_PATH: ${{ github.workspace }}/tools/slc_cli/slc
@@ -11,10 +11,16 @@ env:
   STUDIO_ADAPTER_PACK_PATH: ${{ github.workspace }}/tools/SimplicityStudio/developer/adapter_packs
   POST_BUILD_EXE: ${{ github.workspace }}/tools/SimplicityStudio/developer/adapter_packs/commander/commander
   WORKSPACE: ${{ github.workspace }}
+  PR_BODY: ${{ github.event.pull_request.body }}
+  PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   readme_structure:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository_visibility == 'internal' && 'silabs-internal' || 'ubuntu-latest' }}
     outputs:
       result_readme: ${{ steps.check_readme.outputs.result_readme }}
     steps:
@@ -37,7 +43,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: SiliconLabsSoftware/aep_ci_tools
-        ref: 'pr_checking'
+        ref: 'ci_checking'
         token: ${{ steps.app-token.outputs.token }}
         path: 'aep_ci_tools'
 
@@ -83,7 +89,7 @@ jobs:
         fi
 
   coding_convention:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository_visibility == 'internal' && 'silabs-internal' || 'ubuntu-latest' }}
     outputs:
       result_coding: ${{ steps.check_coding.outputs.result_coding }}
     steps:
@@ -106,7 +112,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: SiliconLabsSoftware/aep_ci_tools
-        ref: 'pr_checking'
+        ref: 'ci_checking'
         token: ${{ steps.app-token.outputs.token }}
         path: 'aep_ci_tools'
 
@@ -137,6 +143,13 @@ jobs:
         xargs -I{} -a changed_projects_folder.txt find {} -type f -name "*.[ch]" > source_list.txt
         bash ${{ github.workspace }}/aep_ci_tools/scripts/check_coding_style.sh source_list.txt > coding_style_report.html
 
+        if grep -qe "failed" coding_style_report.html; then
+          echo "Failure detected in coding style report."
+        else
+          echo "No failure detected in coding style report."
+          rm -rf coding_style_report.html
+        fi
+
     - name: Upload Result
       id: html_report
       if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
@@ -144,7 +157,7 @@ jobs:
       with:
         name: coding_style_report
         path: projects/coding_style_report.html
-        retention-days: 90
+        if-no-files-found: ignore
 
     - name: Browse the formatted files by Uncrustify
       id: solution_report
@@ -173,7 +186,7 @@ jobs:
         fi
 
   build_firmware:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository_visibility == 'internal' && 'silabs-internal' || 'ubuntu-latest' }}
     outputs:
       result_build: ${{ steps.check_build.outputs.result_build }}
     steps:
@@ -201,7 +214,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: SiliconLabsSoftware/aep_ci_tools
-        ref: 'pr_checking'
+        ref: 'ci_checking'
         token: ${{ steps.app-token.outputs.token }}
         path: 'aep_ci_tools'
 
@@ -285,7 +298,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: SiliconLabsSoftware/aep_ci_tools
-        ref: 'pr_checking'
+        ref: 'ci_checking'
         token: ${{ steps.app-token.outputs.token }}
         path: 'aep_ci_tools'
 
@@ -353,14 +366,14 @@ jobs:
         -D"sonar.verbose=true" \
         -D"sonar.qualitygate.wait=True" \
         -D"sonar.cfamily.compile-commands=wrapper_out/compile_commands.json" \
-        -D"sonar.branch.name=${{ github.event.pull_request.head.ref }}" \
+        -D"sonar.branch.name=$PR_HEAD_REF" \
         -D"sonar.scm.disabled=True" \
         -D"sonar.projectName=${{ env.repo }}" \
         -D"sonar.projectKey=${{ env.repo }}" \
         -D"sonar.projectBaseDir=ws" \
         -D"sonar.sources=." \
         -D"sonar.inclusions=${{ steps.included_src.outputs.sonar_inclusions }}" \
-        -D"sonar.host.url=${{ secrets.SONAR_HOST_URL }}" \
+        -D"sonar.host.url=${{ vars.SONAR_HOST_URL }}" \
         -D"sonar.token=${{ secrets.SONAR_TOKEN }}" \
         -D"sonar.language=c" \
         -D"sonar.cfamily.cache.enabled=false" > sonar_log.txt
@@ -374,36 +387,39 @@ jobs:
 
         if grep -qe "EXECUTION SUCCESS" sonar_log.txt; then
           echo "Result: Success"
-          echo "Check report here: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=${{ env.repo }}&branch=${{ github.event.pull_request.head.ref }}"
+          echo "Check report here: ${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ env.repo }}&branch=$PR_HEAD_REF"
           echo "result_sonar=success" >> $GITHUB_OUTPUT
         else
           echo "Result: Failure"
           cat sonar_log.txt
           echo ""
           echo "......................"
-          echo "Check report here: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=${{ env.repo }}&branch=${{ github.event.pull_request.head.ref }}"
+          echo "Check report here: ${{ vars.SONAR_HOST_URL }}/dashboard?id=${{ env.repo }}&branch=$PR_HEAD_REF"
           exit 1
         fi
 
     - name: Update Shield
       if: ${{ steps.pr_check.outputs.has_changes == 'true' }}
       run: |
-        cp ${{ github.workspace}}/projects/changed_projects_folder.txt ${{ github.workspace}}/changed_projects_folder.txt
+        echo "$PR_BODY" > ${{ github.workspace }}/pr_desc.txt
+
+        cp ${{ github.workspace }}/projects/changed_projects_folder.txt ${{ github.workspace }}/changed_projects_folder.txt
         cd projects
         git clean -xdf
-        cd ${{ github.workspace}}
-        export SCRIPT_PATH="${{ github.workspace}}/aep_ci_tools/scripts/github_shield.py"
-        python3 -u $SCRIPT_PATH --check_change ${{ github.workspace}}/changed_projects_folder.txt
+
+        cd ${{ github.workspace }}
+        export SCRIPT_PATH="${{ github.workspace }}/aep_ci_tools/scripts/github_shield.py"
+        python3 -u $SCRIPT_PATH --check_change changed_projects_folder.txt --pr_desc_file ${{ github.workspace }}/pr_desc.txt
 
         if [ ${{ steps.check_sonar.outputs.result_sonar }} == success ]; then
-          cd ${{ github.workspace}}/projects
+          cd ${{ github.workspace }}/projects
           if [ -n "$(git status --porcelain)" ]; then
           {
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
             git add .
             git commit -m "Automatically update Shield for README.md"
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+            git push origin HEAD:$PR_HEAD_REF
           }
           else
             echo "No changes README.md";
@@ -432,7 +448,7 @@ jobs:
 
           REQUIRED_CHECKS="$CHECK_README $CHECK_CODING $CHECK_BUILD_FW $CHECK_SONARQUBE"
           echo $REQUIRED_CHECKS
-          if [[ $REQUIRED_CHECKS == *"success"* && $REQUIRED_CHECKS != *"failure"* ]]; then
+          if [[ ("$REQUIRED_CHECKS" == *"success"* && $REQUIRED_CHECKS != *"failure"*) || -z "${REQUIRED_CHECKS// }" ]]; then
             curl -X POST -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
               -d '{"event":"APPROVE"}' \
               https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/${{ github.event.pull_request.number }}/reviews
@@ -463,7 +479,7 @@ jobs:
 
           REQUIRED_CHECKS="$CHECK_README $CHECK_CODING $CHECK_BUILD_FW"
           echo $REQUIRED_CHECKS
-          if [[ $REQUIRED_CHECKS == *"success"* && $REQUIRED_CHECKS != *"failure"* ]]; then
+          if [[ ("$REQUIRED_CHECKS" == *"success"* && $REQUIRED_CHECKS != *"failure"*) || -z "${REQUIRED_CHECKS// }" ]]; then
             curl -X POST -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
               -d '{"event":"APPROVE"}' \
               https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/${{ github.event.pull_request.number }}/reviews

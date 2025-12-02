@@ -90,10 +90,12 @@ other_file:
     directory: image
   - path: ../image/work_flow.png
     directory: image
+  - path: ../image/float.png
+    directory: image
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 4.4.0
+    version: 4.4.1
 
 toolchain_settings:
   - option: gcc_linker_option

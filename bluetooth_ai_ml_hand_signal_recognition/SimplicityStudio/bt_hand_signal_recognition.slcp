@@ -171,9 +171,9 @@ other_file:
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 4.4.0
+    version: 4.4.1
   - id: aiml
-    version: 2.1.0
+    version: 2.1.2
 
 tag:
   - hardware:rf:band:2400

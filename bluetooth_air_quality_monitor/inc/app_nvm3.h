@@ -1,6 +1,6 @@
 /***************************************************************************//**
- * @file nvm3_user.h
- * @brief Define driver structures and APIs for the NVM3
+ * @file app_nvm3.h
+ * @brief NVM3 application header
  *******************************************************************************
  * # License
  * <b>Copyright 2025 Silicon Laboratories Inc. www.silabs.com</b>
@@ -37,7 +37,9 @@
 #ifndef NVM3_USER_H
 #define NVM3_USER_H
 
+#include "sl_status.h"
 #include "nvm3_default.h"
+#include "app_air_quality.h"
 
 /***************************************************************************//**
  * @addtogroup nvm3_user
@@ -50,31 +52,55 @@
  *  Initialize the NVM3.
  *
  ******************************************************************************/
-void nvm3_user_init(void);
+sl_status_t nvm3_user_init(air_quality_config_t *config);
 
 /***************************************************************************//**
  * @brief
- *  Set the notification status to NVM.
+ *  Set the alarm enabled to NVM.
  *
  * @param[in] enable
- *   Status of notification.
+ *   Status of alarm.
  *
  * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
  ******************************************************************************/
-Ecode_t nvm3_user_set_notification_active(uint8_t enable);
+sl_status_t nvm3_user_set_alarm_enabled(uint8_t enable);
 
 /***************************************************************************//**
  * @brief
- *  Set the update period in seconds value to NVM.
+ *  Get the alarm status from NVM.
  *
- * @param[in] period_sec
+ * @param[out] enable
+ *   Status of alarm.
+ *
+ * @return
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
+ ******************************************************************************/
+sl_status_t nvm3_user_get_alarm_enabled(uint8_t *enable);
+
+/***************************************************************************//**
+ * @brief
+ *  Set the Measurement interval in seconds value to NVM.
+ *
+ * @param[in] interval
  *   Data to write.
  *
  * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
  ******************************************************************************/
-Ecode_t nvm3_user_set_update_period(uint8_t period_sec);
+sl_status_t nvm3_user_set_measurement_interval(uint8_t interval);
+
+/***************************************************************************//**
+ * @brief
+ *  Get the Measurement interval in seconds value from NVM.
+ *
+ * @param[out] interval
+ *   Data to read.
+ *
+ * @return
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
+ ******************************************************************************/
+sl_status_t nvm3_user_get_measurement_interval(uint8_t *interval);
 
 /***************************************************************************//**
  * @brief
@@ -84,57 +110,9 @@ Ecode_t nvm3_user_set_update_period(uint8_t period_sec);
  *   Data to write.
  *
  * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
  ******************************************************************************/
-Ecode_t nvm3_user_set_buzzer_volume(uint8_t volume);
-
-/***************************************************************************//**
- * @brief
- *  Set the notification threshold for CO2 level in ppm to NVM.
- *
- * @param[in] threshold_co2
- *   Data to write.
- *
- * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
- ******************************************************************************/
-Ecode_t nvm3_user_set_threshold_co2(uint16_t threshold_co2);
-
-/***************************************************************************//**
- * @brief
- *  Set the notification threshold for TVOC level in ppb to NVM.
- *
- * @param[in] threshold_tvoc
- *   Data to write.
- *
- * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
- ******************************************************************************/
-Ecode_t nvm3_user_set_threshold_tvoc(uint16_t threshold_tvoc);
-
-/***************************************************************************//**
- * @brief
- *  Get the notification status from NVM.
- *
- * @param[out] enable
- *   Status of notification.
- *
- * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
- ******************************************************************************/
-Ecode_t nvm3_user_get_notification_active(uint8_t *enable);
-
-/***************************************************************************//**
- * @brief
- *  Get the Air quality monitor sleep timer period in seconds from NVM.
- *
- * @param[out] update_period
- *   The Air quality monitor sleep timer period in seconds from NVM.
- *
- * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
- ******************************************************************************/
-Ecode_t nvm3_user_get_update_period(uint8_t *update_period);
+sl_status_t nvm3_user_set_buzzer_volume(uint8_t volume);
 
 /***************************************************************************//**
  * @brief
@@ -144,38 +122,57 @@ Ecode_t nvm3_user_get_update_period(uint8_t *update_period);
  *   The Volume value. It should be in [0:10] range.
  *
  * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
  ******************************************************************************/
-Ecode_t nvm3_user_get_buzzer_volume(uint8_t *volume);
+sl_status_t nvm3_user_get_buzzer_volume(uint8_t *volume);
 
 /***************************************************************************//**
  * @brief
- *  Get the notification threshold for CO2 level in ppm from NVM.
+ *  Set the alarm threshold for CO2 level in ppm to NVM.
  *
- * @param[out] threshold_co2
- *   The notification threshold for CO2 level in ppm.
+ * @param[in] threshold
+ *   Data to write.
  *
  * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
  ******************************************************************************/
-Ecode_t nvm3_user_get_threshold_co2(uint16_t *threshold_co2);
+sl_status_t nvm3_user_set_co2_threshold(uint16_t threshold);
 
 /***************************************************************************//**
  * @brief
- *  Get the notification threshold for TVOC level in ppb from NVM.
+ *  Get the alarm threshold for CO2 level in ppm from NVM.
  *
- * @param[out] threshold_tvoc
- *   The notification threshold for CO2 level in ppm.
+ * @param[out] threshold
+ *   The alarm threshold for CO2 level in ppm.
  *
  * @return
- *   @ref ECODE_NVM3_OK on success or a NVM3 @ref Ecode_t on failure.
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
  ******************************************************************************/
-Ecode_t nvm3_user_get_threshold_tvoc(uint16_t *threshold_tvoc);
+sl_status_t nvm3_user_get_co2_threshold(uint16_t *threshold);
 
 /***************************************************************************//**
- * NVM3 ticking function.
+ * @brief
+ *  Set the alarm threshold for tVOC level in ppb to NVM.
+ *
+ * @param[in] threshold
+ *   Data to write.
+ *
+ * @return
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
  ******************************************************************************/
-void nvm3_user_process_action(void);
+sl_status_t nvm3_user_set_tvoc_threshold(uint16_t threshold);
+
+/***************************************************************************//**
+ * @brief
+ *  Get the alarm threshold for tVOC level in ppb from NVM.
+ *
+ * @param[out] threshold
+ *   The alarm threshold for CO2 level in ppm.
+ *
+ * @return
+ *   @ref SL_STATUS_OK  on success or a NVM3 @ref sl_status_t on failure.
+ ******************************************************************************/
+sl_status_t nvm3_user_get_tvoc_threshold(uint16_t *threshold);
 
 /** @} */
 

@@ -1,6 +1,6 @@
 /***************************************************************************//**
- * @file oled_app.h
- * @brief Oled application code
+ * @file app_buzzer.h
+ * @brief Buzzer application header
  *******************************************************************************
  * # License
  * <b>Copyright 2025 Silicon Laboratories Inc. www.silabs.com</b>
@@ -34,34 +34,13 @@
  * Silicon Labs may update projects from time to time.
  ******************************************************************************/
 
-#ifndef OLED_APP_H
-#define OLED_APP_H
+#ifndef APP_BUZZER_H
+#define APP_BUZZER_H
 
-/***************************************************************************//**
- * @brief
- *  Initialize the OLED display.
- *
- ******************************************************************************/
-void oled_app_init(void);
+#include "sl_status.h"
 
-/***************************************************************************//**
- * @brief
- *  Show the temperature, humidity, setpoint and hysteresis on the OLED display
- *
- * @param[in] temperature
- *  The temperature value to display on screen
- *
- * @param[in] humidity
- *  The humidity value to display on screen
- *
- * @param[in] setpoint
- *  The setpoint value to display on screen
- *
- * @param[in] hysteresis
- *  The hysteresis value to display on screen
- *
- ******************************************************************************/
-void oled_update(float temperature, float humidity, float setpoint,
-                 float hysteresis);
+sl_status_t buzzer_init(void);
+void buzzer_set_volume(uint8_t volume);
+void buzzer_control(bool on);
 
-#endif // OLED_APP_H
+#endif // APP_BUZZER_H

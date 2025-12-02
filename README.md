@@ -13,9 +13,9 @@
 
 # Silicon Labs Bluetooth Applications #
 
-[![Version Badge](https://img.shields.io/badge/-v3.2.0-green)](https://github.com/SiliconLabs/bluetooth_applications/releases)
-[![SDK Badge](https://img.shields.io/badge/SiSDK-v2025.6.0-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
-[![TPHD Version Badge](https://img.shields.io/badge/TPHD-v4.4.0-green)](https://github.com/SiliconLabs/third_party_hw_drivers_extension/releases)
+[![Version Badge](https://img.shields.io/badge/-v3.3.0-green)](https://github.com/SiliconLabs/bluetooth_applications/releases)
+[![SDK Badge](https://img.shields.io/badge/SiSDK-v2025.6.2-green)](https://github.com/SiliconLabs/simplicity_sdk/releases)
+[![TPHD Version Badge](https://img.shields.io/badge/TPHD-v4.4.1-green)](https://github.com/SiliconLabs/third_party_hw_drivers_extension/releases)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
 
 The Silicon Labs Bluetooth stack allows for a wide variety applications to be built on its foundation. This repo showcases some example applications using the Silicon Labs Bluetooth stack.
@@ -95,6 +95,7 @@ This repository provides both SLCP projects (as External Repositories) and SLS p
 | 67 | Bluetooth - Channel Sounding Based PC Locking  | [Click Here](./bluetooth_channel_sounding_based_pc_locking/) |
 | 68 | Bluetooth - Channel Sounding Based Presence Detection  | [Click Here](./bluetooth_channel_sounding_presence_detection/) |
 | 69 | Bluetooth - SoC Voltage Monitor  | [Click Here](./bluetooth_soc_voltage_monitor/) |
+| 70 | Bluetooth - Pulse Oximeter and Heart Rate Monitor (MAX30101 & MAX32664) | [Click Here](./bluetooth_pulse_oximeter_and_heart_rate_monitor/) |
 
 
 ## Requirements ##

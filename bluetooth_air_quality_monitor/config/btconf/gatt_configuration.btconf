@@ -78,53 +78,90 @@
   <!--Air Quality-->
   <service advertise="false" name="Air Quality" requirement="mandatory" sourceId="" type="primary" uuid="3a79c933-c922-45c7-b5e7-9bdefd126dd9">
 
-    <!--CO2-->
-    <characteristic const="false" id="co2_data" name="CO2" sourceId="" uuid="1b621ff2-b789-4b7c-985f-b62a50802bbf">
+    <!--Buzzer Volume-->
+    <characteristic const="false" id="buzzer_volume" name="Buzzer Volume" sourceId="" uuid="c5fd8492-9c55-4c18-b761-99b8cf9bca77">
+      <informativeText>Custom characteristic for Buzzer</informativeText>
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="true" encrypted="true"/>
+        <write authenticated="false" bonded="true" encrypted="true"/>
+      </properties>
+    </characteristic>
+
+    <!--Alarm Enabled-->
+    <characteristic const="false" id="alarm_enabled" name="Alarm Enabled" sourceId="" uuid="ec26adea-75af-409d-b267-51a4e753e9ea">
       <informativeText>Custom characteristic for CO2</informativeText>
       <value length="0" type="user" variable_length="false">00</value>
       <properties>
-        <read authenticated="false" bonded="false" encrypted="false"/>
+        <read authenticated="false" bonded="true" encrypted="true"/>
         <write authenticated="false" bonded="true" encrypted="true"/>
+      </properties>
+    </characteristic>
+
+    <!--Measurement Interval-->
+    <characteristic const="false" id="measurement_interval" name="Measurement Interval" sourceId="" uuid="98205b49-a9e1-4bfc-a18d-60d36798397f">
+      <informativeText>Custom characteristic for CO2</informativeText>
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="true" encrypted="true"/>
+        <write authenticated="false" bonded="true" encrypted="true"/>
+      </properties>
+    </characteristic>
+
+    <!--CO2 Threshold-->
+    <characteristic const="false" id="co2_threshold" name="CO2 Threshold" sourceId="" uuid="0af3e688-a5a8-435d-bf6a-0f2443428993">
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="true" encrypted="true"/>
+        <write authenticated="false" bonded="true" encrypted="true"/>
+      </properties>
+    </characteristic>
+
+    <!--tVOC Threshold-->
+    <characteristic const="false" id="tvoc_threshold" name="tVOC Threshold" sourceId="" uuid="aad57e11-edb0-4a0c-8590-aad8adbbd23d">
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="true" encrypted="true"/>
+        <write authenticated="false" bonded="true" encrypted="true"/>
+      </properties>
+    </characteristic>
+
+    <!--CO2-->
+    <characteristic const="false" id="co2" name="CO2" sourceId="" uuid="1b621ff2-b789-4b7c-985f-b62a50802bbf">
+      <informativeText>Custom characteristic for CO2</informativeText>
+      <value length="0" type="user" variable_length="false">00</value>
+      <properties>
+        <read authenticated="false" bonded="true" encrypted="true"/>
+        <notify authenticated="false" bonded="true" encrypted="true"/>
       </properties>
     </characteristic>
 
     <!--tVOC-->
-    <characteristic const="false" id="tvoc_data" name="tVOC" sourceId="" uuid="ec099dd9-7887-4ca6-a169-92a5e9ed7926">
+    <characteristic const="false" id="tvoc" name="tVOC" sourceId="" uuid="ec099dd9-7887-4ca6-a169-92a5e9ed7926">
       <informativeText>Custom characteristic for VOC</informativeText>
       <value length="0" type="user" variable_length="false">00</value>
       <properties>
-        <read authenticated="false" bonded="false" encrypted="false"/>
-        <write authenticated="false" bonded="true" encrypted="true"/>
+        <read authenticated="false" bonded="true" encrypted="true"/>
+        <notify authenticated="false" bonded="true" encrypted="true"/>
       </properties>
     </characteristic>
 
-    <!--Buzzer-->
-    <characteristic const="false" id="buzzer_data" name="Buzzer" sourceId="" uuid="c5fd8492-9c55-4c18-b761-99b8cf9bca77">
-      <informativeText>Custom characteristic for Buzzer</informativeText>
+    <!--Air Quality Index-->
+    <characteristic const="false" id="aqi" name="Air Quality Index" sourceId="" uuid="ca19fb61-b04b-409a-8a18-c37560bdf05a">
       <value length="0" type="user" variable_length="false">00</value>
       <properties>
-        <read authenticated="false" bonded="false" encrypted="false"/>
-        <write authenticated="false" bonded="true" encrypted="true"/>
+        <read authenticated="false" bonded="true" encrypted="true"/>
+        <notify authenticated="false" bonded="true" encrypted="true"/>
       </properties>
     </characteristic>
 
-    <!--Notification-->
-    <characteristic const="false" id="notification_data" name="Notification" sourceId="" uuid="ec26adea-75af-409d-b267-51a4e753e9ea">
+    <!--Alarm Status-->
+    <characteristic const="false" id="alarm_status" name="Alarm Status" sourceId="" uuid="d07aeadd-1633-48ae-a114-800cfdaa0d79">
       <informativeText>Custom characteristic for CO2</informativeText>
       <value length="0" type="user" variable_length="false">00</value>
       <properties>
-        <read authenticated="false" bonded="false" encrypted="false"/>
-        <write authenticated="false" bonded="true" encrypted="true"/>
-      </properties>
-    </characteristic>
-
-    <!--Measurement update period-->
-    <characteristic const="false" id="measurement_period_data" name="Measurement update period" sourceId="" uuid="98205b49-a9e1-4bfc-a18d-60d36798397f">
-      <informativeText>Custom characteristic for CO2</informativeText>
-      <value length="0" type="user" variable_length="false">00</value>
-      <properties>
-        <read authenticated="false" bonded="false" encrypted="false"/>
-        <write authenticated="false" bonded="true" encrypted="true"/>
+        <read authenticated="false" bonded="true" encrypted="true"/>
+        <notify authenticated="false" bonded="true" encrypted="true"/>
       </properties>
     </characteristic>
   </service>

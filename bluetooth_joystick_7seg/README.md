@@ -1,14 +1,17 @@
 # Bluetooth - Joystick 7seg #
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 [![Required board](https://img.shields.io/badge/Mikroe-UT-green)](https://www.mikroe.com/ut-s-7-seg-r-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Qwiic%20Joystick%20Board-green)](https://www.sparkfun.com/products/15168)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-212.65%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-11.29%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-215.48%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-11.35%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Human%20Machine%20Interface-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Human%20Machine%20Interface)
+[![Type badge](https://img.shields.io/badge/Entertainment%20Devices-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Entertainment%20Devices)
+[![Type badge](https://img.shields.io/badge/Smart%20Buildings-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Buildings)
 
 ## Description ##
 
@@ -40,8 +43,8 @@ For more information about the SparkFun Qwiic Joystick, see the [specification p
 
 ## SDK version ##
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
-- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
+- [Third Party Hardware Drivers v4.4.1](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 

@@ -43,6 +43,7 @@ component:
   - id: iostream_usart
     instance: [vcom]
   - id: app_log
+  - id: app_timer
   - id: printf
   - id: i2cspm
     instance: [qwiic]
@@ -59,19 +60,21 @@ include:
   - path: ../inc
     file_list:
       - path: app.h
-      - path: buzz2_app.h
-      - path: oled_app.h
-      - path: temphum9_app.h
-      - path: thermostat_app.h
-      - path: user_config_nvm3.h
+      - path: app_buzzer.h
+      - path: app_display.h
+      - path: app_rht.h
+      - path: app_thermostat.h
+      - path: app_nvm3.h
+      - path: app_actuator.h
 
 source:
   - path: ../src/app.c
-  - path: ../src/buzz2_app.c
-  - path: ../src/oled_app.c
-  - path: ../src/temphum9_app.c
-  - path: ../src/thermostat_app.c
-  - path: ../src/user_config_nvm3.c
+  - path: ../src/app_buzzer.c
+  - path: ../src/app_display.c
+  - path: ../src/app_rht.c
+  - path: ../src/app_thermostat.c
+  - path: ../src/app_nvm3.c
+  - path: ../src/app_actuator.c
 
 config_file:
   - override:
@@ -101,10 +104,6 @@ other_file:
     directory: "image"
   - path: ../image/create_example.png
     directory: "image"
-  - path: ../image/efr32_connect_app1.png
-    directory: "image"
-  - path: ../image/efr32_connect_app2.png
-    directory: "image"
   - path: ../image/hardware_connection.png
     directory: "image"
   - path: ../image/oled_display.png
@@ -116,7 +115,7 @@ other_file:
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 4.4.0
+    version: 4.4.1
 
 ui_hints:
   highlight:

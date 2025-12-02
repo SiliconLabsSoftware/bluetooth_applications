@@ -33,7 +33,7 @@ component:
   - id: clock_manager
   - id: device_init
   - id: sl_common
-  - id: sleeptimer
+  - id: app_timer
   - id: component_catalog
   - id: iostream_usart
     instance: [vcom]
@@ -57,13 +57,19 @@ include:
   - path: ../inc
     file_list:
       - path: app.h
-      - path: air_quality_app.h
-      - path: nvm3_user.h
+      - path: app_air_quality.h
+      - path: app_nvm3.h
+      - path: app_display.h
+      - path: app_sensor.h
+      - path: app_buzzer.h
 
 source:
   - path: ../src/app.c
-  - path: ../src/air_quality_app.c
-  - path: ../src/nvm3_user.c
+  - path: ../src/app_air_quality.c
+  - path: ../src/app_nvm3.c
+  - path: ../src/app_display.c
+  - path: ../src/app_sensor.c
+  - path: ../src/app_buzzer.c
 
 config_file:
   - override:
@@ -109,7 +115,7 @@ other_file:
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 4.4.0
+    version: 4.4.1
 
 tag:
   - hardware:rf:band:2400

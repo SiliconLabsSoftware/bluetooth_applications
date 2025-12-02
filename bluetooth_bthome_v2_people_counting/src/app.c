@@ -377,8 +377,6 @@ static void sm_confirm_bonding_handler(sl_bt_msg_t *evt)
  ******************************************************************************/
 void sl_bt_on_event(sl_bt_msg_t *evt)
 {
-  bthome_v2_bt_on_event(evt);
-
   switch (SL_BT_MSG_ID(evt->header)) {
     // -------------------------------
     // This event indicates the device has started and the radio is ready.

@@ -38,7 +38,7 @@
 #include "sl_bluetooth.h"
 #include "gatt_db.h"
 #include "app.h"
-#include "thermostat_app.h"
+#include "app_thermostat.h"
 #include "app_log.h"
 
 // Advertising flags (common)
@@ -114,7 +114,7 @@ void app_init(void)
   // This is called once during start-up.                                    //
   /////////////////////////////////////////////////////////////////////////////
 
-  thermostat_app_init();
+  thermostat_init();
 }
 
 /**************************************************************************//**
@@ -221,31 +221,42 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       app_assert_status(sc);
       break;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Add additional event handlers here as your application requires!      //
-    ///////////////////////////////////////////////////////////////////////////
-
     // -------------------------------
     // Handle configuration characteristics.
     case sl_bt_evt_gatt_server_attribute_value_id:
       break;
 
     case sl_bt_evt_gatt_server_user_write_request_id:
-      thermostat_process_evt_gatt_server_user_write_request(
-        &(evt->data.evt_gatt_server_user_write_request));
+      thermostat_char_write_cb(&evt->data.evt_gatt_server_user_write_request);
       break;
 
     case sl_bt_evt_gatt_server_user_read_request_id:
-      thermostat_process_evt_gatt_server_user_read_request(
-        &(evt->data.evt_gatt_server_user_read_request));
+      thermostat_char_read_cb(&evt->data.evt_gatt_server_user_read_request);
+      break;
+
+    case sl_bt_evt_gatt_server_characteristic_status_id:
+      if (sl_bt_gatt_server_client_config
+          != (sl_bt_gatt_server_characteristic_status_flag_t)evt->data.
+          evt_gatt_server_characteristic_status.status_flags) {
+        break;
+      }
+      if ((gattdb_temperature
+           == evt->data.evt_gatt_server_user_read_request.characteristic)
+          || (gattdb_actuator
+              == evt->data.evt_gatt_server_user_read_request.characteristic)
+          || (gattdb_humidity
+              == evt->data.evt_gatt_server_user_read_request.characteristic)
+          || (gattdb_alarm_status
+              == evt->data.evt_gatt_server_user_read_request.characteristic)) {
+        // client characteristic configuration changed by remote GATT client
+        thermostat_char_config_changed_cb(
+          &evt->data.evt_gatt_server_characteristic_status);
+      }
       break;
 
     case sl_bt_evt_system_external_signal_id:
-      thermostat_process_evt_external_signal(
+      thermostat_external_signal_cb(
         evt->data.evt_system_external_signal.extsignals);
-      break;
-
-    case sl_bt_evt_system_soft_timer_id:
       break;
 
     // -------------------------------

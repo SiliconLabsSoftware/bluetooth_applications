@@ -47,10 +47,19 @@
 #include "sparkfun_qwiic_joystick.h"
 #include "mikroe_max6969.h"
 
-#define BTN0_IRQ_EVENT                0x01
-#define SOFT_TIMER_JOYSTICK_READ      0x00
+#define BTN0_IRQ_EVENT                      0x01
+#define SOFT_TIMER_JOYSTICK_READ            0x00
 
-static sl_status_t joystick_get_pos(uint8_t *data_pos);
+#define NOTIFICATION_JOYSTICK_DATA          (1 << 0)
+#define NOTIFICATION_JOYSTICK_VALUE_X       (1 << 1)
+#define NOTIFICATION_JOYSTICK_VALUE_Y       (1 << 2)
+#define NOTIFICATION_JOYSTICK_BUTTON_STATUS (1 << 3)
+
+static void notifications_enable(uint16_t characteristic,
+                                 uint16_t client_config_flags);
+static sl_status_t joystick_get_data(uint8_t *data_pos_x,
+                                     uint8_t *data_pos_y,
+                                     uint8_t *data_button_status);
 static void joystick_update_data(void);
 
 // Connection Handle
@@ -124,8 +133,9 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
                  (int)sc);
 
       // Generate data for advertising
-      sc = sl_bt_legacy_advertiser_generate_data(advertising_set_handle,
-                                                 sl_bt_advertiser_general_discoverable);
+      sc = sl_bt_legacy_advertiser_generate_data(
+        advertising_set_handle,
+        sl_bt_advertiser_general_discoverable);
 
       // Set advertising interval to 100ms.
       sc = sl_bt_advertiser_set_timing(
@@ -210,12 +220,10 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
           != sl_bt_gatt_server_client_config) {
         break;
       }
-      if (evt->data.evt_gatt_server_characteristic_status.characteristic
-          != gattdb_joystick_data) {
-        break;
-      }
-      notifications_enabled =
-        evt->data.evt_gatt_server_characteristic_status.client_config_flags;
+      notifications_enable(
+        evt->data.evt_gatt_server_characteristic_status.characteristic,
+        evt->data.evt_gatt_server_characteristic_status.client_config_flags
+        );
       break;
 
     // -------------------------------
@@ -262,17 +270,65 @@ void sl_button_on_change(const sl_button_t *handle)
   }
 }
 
+static void notifications_enable(uint16_t characteristic,
+                                 uint16_t client_config_flags)
+{
+  switch (characteristic) {
+    case gattdb_joystick_data:
+      if (client_config_flags) {
+        app_log("Enable notification: Joystick data\n");
+        notifications_enabled |= NOTIFICATION_JOYSTICK_DATA;
+      } else {
+        notifications_enabled &= ~NOTIFICATION_JOYSTICK_DATA;
+      }
+      break;
+
+    case gattdb_joystick_value_x:
+      if (client_config_flags) {
+        app_log("Enable notification: Joystick X\n");
+        notifications_enabled |= NOTIFICATION_JOYSTICK_VALUE_X;
+      } else {
+        notifications_enabled &= ~NOTIFICATION_JOYSTICK_VALUE_X;
+      }
+      break;
+
+    case gattdb_joystick_value_y:
+      if (client_config_flags) {
+        app_log("Enable notification: Joystick Y\n");
+        notifications_enabled |= NOTIFICATION_JOYSTICK_VALUE_Y;
+      } else {
+        notifications_enabled &= ~NOTIFICATION_JOYSTICK_VALUE_Y;
+      }
+      break;
+
+    case gattdb_joystick_button_status:
+      if (client_config_flags) {
+        app_log("Enable notification: Joystick Button Status\n");
+        notifications_enabled |= NOTIFICATION_JOYSTICK_BUTTON_STATUS;
+      } else {
+        notifications_enabled &= ~NOTIFICATION_JOYSTICK_BUTTON_STATUS;
+      }
+      break;
+  }
+}
+
 /**************************************************************************//**
  * For simplicity, reading is the current vertical position from joystick.
  * And only look at the MSB and get an 8-bit reading (for 256 positions).
  *****************************************************************************/
-static sl_status_t joystick_get_pos(uint8_t *data_pos)
+static sl_status_t joystick_get_data(uint8_t *data_pos_x,
+                                     uint8_t *data_pos_y,
+                                     uint8_t *data_button_status)
 {
   sl_status_t sc;
 
   uint16_t data_pos_tmp;
+  uint8_t data_button_status_tmp;
 
-  sc = sparkfun_joystick_read_vertical_position(&data_pos_tmp);
+  sc = sparkfun_joystick_read_horizontal_position(&data_pos_tmp);
+  if (SL_STATUS_OK != sc) {
+    return sc;
+  }
 
   /* In the registers for the joystick position, the MSB contains the first
    *    8 bits of the 10-bit ADC value and the LSB contains the last two bits.
@@ -281,8 +337,22 @@ static sl_status_t joystick_get_pos(uint8_t *data_pos)
    *    a 10-bit value
    *    For simplicity, reading is the current vertical position from joystick.
    *    And only look at the MSB and get an 8-bit reading (for 256 positions).*/
-  *data_pos = (uint8_t)(data_pos_tmp >> 2);
-  return sc;
+  *data_pos_x = (uint8_t)(data_pos_tmp >> 2);
+
+  sc = sparkfun_joystick_read_vertical_position(&data_pos_tmp);
+  if (SL_STATUS_OK != sc) {
+    return sc;
+  }
+  *data_pos_y = (uint8_t)(data_pos_tmp >> 2);
+
+  // Read current Button Status
+  sc = sparkfun_joystick_read_button_position(&data_button_status_tmp);
+  if (SL_STATUS_OK != sc) {
+    return sc;
+  }
+  *data_button_status = data_button_status_tmp;
+
+  return SL_STATUS_OK;
 }
 
 /**************************************************************************//**
@@ -291,19 +361,25 @@ static sl_status_t joystick_get_pos(uint8_t *data_pos)
 static void joystick_update_data(void)
 {
   sl_status_t sc;
-  uint8_t joystick_current_pos;
+  size_t len;
+  uint8_t joystick_last_pos_x = 0, joystick_last_pos_y = 0;
+  uint8_t joystick_last_button_status = 0;
+  uint8_t joystick_current_pos_x = 0, joystick_current_pos_y = 0;
+  uint8_t joystick_current_button_status = 0;
 
-  app_log("update data\n");
+//  app_log("update data\n");
   // Read the current position from joystick board
-  sc = joystick_get_pos(&joystick_current_pos);
+  sc = joystick_get_data(&joystick_current_pos_x,
+                         &joystick_current_pos_y,
+                         &joystick_current_button_status);
   if (sc != SL_STATUS_OK) {
     app_log("Warning! Invalid Joystick reading\n");
   }
 
-  if (abs(joystick_pre_pos - joystick_current_pos) > 4) {
-    if (joystick_current_pos == 255) {
+  if (abs(joystick_pre_pos - joystick_current_pos_y) > 4) {
+    if (joystick_current_pos_y == 255) {
       joystick_data++;
-    } else if ((joystick_current_pos == 0) && (joystick_data > 0)) {
+    } else if ((joystick_current_pos_y == 0) && (joystick_data > 0)) {
       joystick_data--;
     }
 
@@ -325,9 +401,9 @@ static void joystick_update_data(void)
                (int)sc);
   }
 
-  joystick_pre_pos = joystick_current_pos;
+  joystick_pre_pos = joystick_current_pos_y;
 
-  if (notifications_enabled) {
+  if (notifications_enabled & NOTIFICATION_JOYSTICK_DATA) {
     sc = sl_bt_gatt_server_send_notification(connection_handle,
                                              gattdb_joystick_data,
                                              1,
@@ -335,5 +411,105 @@ static void joystick_update_data(void)
     app_assert(sc == SL_STATUS_OK,
                "[E: 0x%04x] Failed to send notifications\n",
                (int)sc);
+  }
+
+  // Read last X
+  sc = sl_bt_gatt_server_read_attribute_value(gattdb_joystick_value_x,
+                                              0,
+                                              1,
+                                              &len,
+                                              &joystick_last_pos_x);
+  app_assert(sc == SL_STATUS_OK,
+             "[E: 0x%04x] Failed to read attribute: X position value\n",
+             (int)sc);
+  // Write the value of an attribute in the local GATT database
+  sc = sl_bt_gatt_server_write_attribute_value(gattdb_joystick_value_x,
+                                               0,
+                                               1,
+                                               &joystick_current_pos_x);
+  app_assert(
+    sc == SL_STATUS_OK,
+    "[E: 0x%04x] Failed to write attribute: X position value\n",
+    (int)sc);
+  if (joystick_last_pos_x != joystick_current_pos_x) {
+    app_log("Current joystick X: %d\n",
+            (int)joystick_current_pos_x);
+    if (notifications_enabled & NOTIFICATION_JOYSTICK_VALUE_X) {
+      sc = sl_bt_gatt_server_send_notification(connection_handle,
+                                               gattdb_joystick_value_x,
+                                               1,
+                                               &joystick_current_pos_x);
+      app_assert(
+        sc == SL_STATUS_OK,
+        "[E: 0x%04x] Failed to send notifications: X position value\n",
+        (int)sc);
+    }
+  }
+
+  // Read last Y
+  sc = sl_bt_gatt_server_read_attribute_value(gattdb_joystick_value_y,
+                                              0,
+                                              1,
+                                              &len,
+                                              &joystick_last_pos_y);
+  app_assert(sc == SL_STATUS_OK,
+             "[E: 0x%04x] Failed to read attribute: Y position value\n",
+             (int)sc);
+  // Write the value of an attribute in the local GATT database
+  sc = sl_bt_gatt_server_write_attribute_value(gattdb_joystick_value_y,
+                                               0,
+                                               1,
+                                               &joystick_current_pos_y);
+  app_assert(
+    sc == SL_STATUS_OK,
+    "[E: 0x%04x] Failed to write attribute: Y position value\n",
+    (int)sc);
+  if (joystick_last_pos_y != joystick_current_pos_y) {
+    app_log("Current joystick Y: %d\n",
+            (int)joystick_current_pos_y);
+    if (notifications_enabled & NOTIFICATION_JOYSTICK_VALUE_Y) {
+      sc = sl_bt_gatt_server_send_notification(connection_handle,
+                                               gattdb_joystick_value_y,
+                                               1,
+                                               &joystick_current_pos_y);
+      app_assert(
+        sc == SL_STATUS_OK,
+        "[E: 0x%04x] Failed to send notifications: Y position value\n",
+        (int)sc);
+    }
+  }
+
+  // Read last Button Status
+  sc = sl_bt_gatt_server_read_attribute_value(gattdb_joystick_button_status,
+                                              0,
+                                              1,
+                                              &len,
+                                              &joystick_last_button_status);
+  app_assert(sc == SL_STATUS_OK,
+             "[E: 0x%04x] Failed to read attribute: button status\n",
+             (int)sc);
+  // Write the value of an attribute in the local GATT database
+  sc = sl_bt_gatt_server_write_attribute_value(
+    gattdb_joystick_button_status,
+    0,
+    1,
+    &joystick_current_button_status);
+  app_assert(
+    sc == SL_STATUS_OK,
+    "[E: 0x%04x] Failed to write attribute: button status\n",
+    (int)sc);
+  if (joystick_last_button_status != joystick_current_button_status) {
+    app_log("Current joystick button status: %d\n",
+            (int)joystick_current_button_status);
+    if (notifications_enabled & NOTIFICATION_JOYSTICK_BUTTON_STATUS) {
+      sc = sl_bt_gatt_server_send_notification(
+        connection_handle,
+        gattdb_joystick_button_status,
+        1,
+        &joystick_current_button_status);
+      app_assert(sc == SL_STATUS_OK,
+                 "[E: 0x%04x] Failed to send notifications: button status\n",
+                 (int)sc);
+    }
   }
 }

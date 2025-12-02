@@ -1,14 +1,18 @@
 # Bluetooth - AI/ML Hand Signal Recognition #
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 [![Required board](https://img.shields.io/badge/SparkFun-Micro%20OLED%20Breakout-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/SparkFun-MLX90640%20IR%20Array-green)](https://www.sparkfun.com/products/14844)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
 ![Flash badge](https://img.shields.io/badge/Flash-36.29%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-308.61%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Entertainment%20Devices-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Entertainment%20Devices)
+[![Type badge](https://img.shields.io/badge/Human%20Machine%20Interface-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Human%20Machine%20Interface)
+[![Type badge](https://img.shields.io/badge/Industrial%20Wearables-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Industrial%20Wearables)
+[![Type badge](https://img.shields.io/badge/Smart%20Wearable%20Devices-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Wearable%20Devices)
 
 ## Overview ##
 
@@ -55,8 +59,8 @@ The hand gestures:
 
 ## SDK version ##
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
-- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
+- [Third Party Hardware Drivers v4.4.1](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 - [AI/ML - Alpha - 2.1.0](https://github.com/SiliconLabsSoftware/aiml-extension)
 
 ---

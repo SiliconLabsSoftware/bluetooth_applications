@@ -1,6 +1,6 @@
 /***************************************************************************//**
- * @file buzz2_app.c
- * @brief PWM signal on buzzer
+ * @file app_thermostat_sensor.c
+ * @brief Measure temperature and humidity with SHTC3 Sensor
  *******************************************************************************
  * # License
  * <b>Copyright 2025 Silicon Laboratories Inc. www.silabs.com</b>
@@ -33,37 +33,43 @@
  * maintained and there may be no bug maintenance planned for these resources.
  * Silicon Labs may update projects from time to time.
  ******************************************************************************/
-#include <mikroe_cmt_8540s_smt.h>
-#include "app_log.h"
-#include "app_assert.h"
-#include "sl_pwm_instances.h"
+#include "sl_i2cspm_instances.h"
+#include "app_rht.h"
 
-// -----------------------------------------------------------------------------
-// Define
-#define VOLUME 100 // goes up to 1000
-
-/***************************************************************************//**
- * @addtogroup buzz2_app
- * @brief  Buzzer Application.
- * @details
- * @{
- ******************************************************************************/
 /***************************************************************************//**
  * Application Init.
  ******************************************************************************/
-void buzz2_app_init(void)
+sl_status_t rht_init(void)
 {
-  sl_status_t sc;
+  sl_status_t stt;
 
-  sc = mikroe_cmt_8540s_smt_init(&sl_pwm_mikroe);
-  app_assert_status(sc);
+  stt = mikroe_shtc3_init(sl_i2cspm_qwiic);
+  if (stt != SL_STATUS_OK) {
+    return SL_STATUS_FAIL;
+  }
 
-  app_log("> Buzzer 2 Click board driver init successfully.\n");
-
-  mikroe_cmt_8540s_smt_play_sound(MIKROE_BUZZ2_NOTE_A6, VOLUME, 0);
   sl_sleeptimer_delay_millisecond(100);
+  mikroe_shtc3_send_command(MIKROE_SHTC3_CMD_WAKEUP);
+  sl_sleeptimer_delay_millisecond(100);
+  mikroe_shtc3_send_command(MIKROE_SHTC3_CMD_SLEEP);
+
+  return SL_STATUS_OK;
 }
 
-/** @} (end group buzz2_app) *
- *
- */
+sl_status_t rht_get_data(app_rht_data_t *data)
+{
+  sl_status_t stt;
+  mikroe_shtc3_measurement_data_t measurement_data;
+
+  mikroe_shtc3_send_command(MIKROE_SHTC3_CMD_WAKEUP);
+  sl_udelay_wait(100);
+  stt = mikroe_shtc3_get_temperature_and_humidity(SHTC3_DATA_MODE_NORMAL,
+                                                  &measurement_data);
+  mikroe_shtc3_send_command(MIKROE_SHTC3_CMD_SLEEP);
+  if (stt != SL_STATUS_OK) {
+    return stt;
+  }
+  *data = measurement_data;
+
+  return SL_STATUS_OK;
+}

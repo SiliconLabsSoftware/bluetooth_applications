@@ -1,12 +1,16 @@
 # Bluetooth - HID Tripwire
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-186.72%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-187.2%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-10.07%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Security%20Cameras-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Security%20Cameras)
+[![Type badge](https://img.shields.io/badge/Access%20Control-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Access%20Control)
+[![Type badge](https://img.shields.io/badge/Smart%20Buildings-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Buildings)
+[![Type badge](https://img.shields.io/badge/Sensors-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Sensors)
 
 ## Description
 
@@ -34,7 +38,7 @@ There are other methods of detecting when someone enters the door such as using 
 
 ## SDK version
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
 
 ---
 
@@ -65,7 +69,7 @@ Please note there are different BG22 Thunderboard revisions: BRD4184A and BRD418
 
 No matter the version of the board you have, the BG22 Thunderboard contains all the parts needed for this project. All the necessary connections will automatically be selected for the drivers if you create a studio project targeted specifically for the BG22 Thunderboard version that you have.
 
-As a reference, the connections between the BG22 and IMU for the BRD4184B can be found in the [UG464: BG22 Thunderboard User Guide Figure 3.8](https://www.silabs.com/documents/public/user-guides/ug464-brd4184b-user-guide.pdf) and are the following:
+As a reference, the connections between the BG22 and IMU for the BRD4184B is as below:
 
 ![BG22 to IMU connections](image/ug464_icm20648_connections.png)
 

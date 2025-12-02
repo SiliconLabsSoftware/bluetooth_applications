@@ -1,6 +1,6 @@
 /***************************************************************************//**
- * @file temphum9_app.h
- * @brief Measure temperature and humidity with SHTC3 sensor
+ * @file app_buzzer.c
+ * @brief Buzzer application code
  *******************************************************************************
  * # License
  * <b>Copyright 2025 Silicon Laboratories Inc. www.silabs.com</b>
@@ -33,15 +33,39 @@
  * maintained and there may be no bug maintenance planned for these resources.
  * Silicon Labs may update projects from time to time.
  ******************************************************************************/
+#include "mikroe_cmt_8540s_smt.h"
+#include "sl_pwm_instances.h"
+#include "app_buzzer.h"
 
-#ifndef TEMPHUM9_APP_H_
-#define TEMPHUM9_APP_H_
+// -----------------------------------------------------------------------------
+// Define
+#define VOLUME 100 // goes up to 100
 
-/***************************************************************************//**
- * @brief
- *    Initialize temphum9 application.
- *
- ******************************************************************************/
-void temphum9_app_init(void);
+sl_status_t buzzer_init(void)
+{
+  sl_status_t sc;
 
-#endif /* TEMPHUM9_APP_H_ */
+  sc = mikroe_cmt_8540s_smt_init(&sl_pwm_mikroe);
+  if (sc != SL_STATUS_OK) {
+    return SL_STATUS_FAIL;
+  }
+
+  mikroe_cmt_8540s_smt_play_sound(MIKROE_BUZZ2_NOTE_A6, VOLUME, 0);
+  sl_sleeptimer_delay_millisecond(100);
+
+  return SL_STATUS_OK;
+}
+
+void buzzer_set_volume(uint8_t volume)
+{
+  mikroe_cmt_8540s_smt_set_duty_cycle((float)volume / 10.0);
+}
+
+void buzzer_control(bool on)
+{
+  if (on) {
+    mikroe_cmt_8540s_smt_pwm_start();
+  } else {
+    mikroe_cmt_8540s_smt_pwm_stop();
+  }
+}

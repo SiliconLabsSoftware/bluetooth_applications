@@ -1,5 +1,5 @@
 /***************************************************************************//**
- * @file air_quality_app.h
+ * @file app_air_quality.h
  * @brief Define driver structures and APIs for the air_quality_app.c
  *******************************************************************************
  * # License
@@ -38,59 +38,71 @@
 
 #include "sl_bt_api.h"
 
-/*  External Events  */
-#define AIR_QUALITY_MONITOR_EVENT           (1)
-#define AIR_QUALITY_MONITOR_BUTTON_EVENT    (2)
+#define DATA_BUFFER_SIZE                    5
 
-#define NOTIFICATION_ATT_LENGTH             (1)
-#define BUZZER_ATT_LENGTH                   (1)
-#define CO2_ATT_LENGTH                      (2)
-#define TVOC_ATT_LENGTH                     (2)
-#define UPDATE_PERIOD_ATT_LENGTH            (1)
+// External Events
+#define AIR_QUALITY_MONITOR_BUTTON_EVENT    1
 
-#define IS_NOTIFICATION_ACTIVE_MIN          (0)
-#define IS_NOTIFICATION_ACTIVE_MAX          (1)
-#define IS_NOTIFICATION_ACTIVE_DEFAULT      (1)
+/***************************************************************************//**
+ * @brief
+ *    Typedef for holding air quality notification config.
+ ******************************************************************************/
+typedef struct {
+  bool co2;
+  bool tvoc;
+  bool alarm_status;
+  bool aqi;
+} air_quality_notification_t;
 
-#define UPDATE_PERIOD_IN_SECOND_MIN         (1)
-#define UPDATE_PERIOD_IN_SECOND_MAX         (30)
-#define UPDATE_PERIOD_IN_SECOND_DEFAULT     (10)
+/***************************************************************************//**
+ * @brief
+ *    Typedef for holding air quality configuration parameters.
+ ******************************************************************************/
+typedef struct {
+  uint16_t co2_threshold;
+  uint16_t tvoc_threshold;
+  uint8_t alarm_enabled;
+  uint8_t measurement_interval;
+  uint8_t buzzer_volume;
+  air_quality_notification_t notification;
+} air_quality_config_t;
 
-#define BUZZER_VOLUME_MIN                   (1)
-#define BUZZER_VOLUME_MAX                   (10)
-#define BUZZER_VOLUME_DEFAULT               (6)
+/***************************************************************************//**
+ * @brief
+ *    Typedef for holding measurement data.
+ ******************************************************************************/
+typedef struct {
+  uint16_t co2;
+  uint16_t tvoc;
+  bool is_invalid_data;
+  uint8_t alarm_status;
+  uint8_t aqi;
+  uint16_t co2_buffer[DATA_BUFFER_SIZE];
+  uint16_t tvoc_buffer[DATA_BUFFER_SIZE];
+  uint32_t samples_counter;
+  bool is_buffer_full;
+} air_quality_data_t;
 
-#define THRESHOLD_CO2_PPM_MIN               (400)
-#define THRESHOLD_CO2_PPM_MAX               (8192)
-#define THRESHOLD_CO2_PPM_DEFAULT           (1000)
-
-#define THRESHOLD_TVOC_PPB_MIN              (1)
-#define THRESHOLD_TVOC_PPB_MAX              (1187)
-#define THRESHOLD_TVOC_PPB_DEFAULT          (100)
+/***************************************************************************//**
+ * @brief
+ *    Typedef for holding air quality application.
+ ******************************************************************************/
+typedef struct {
+  air_quality_data_t data;
+  air_quality_config_t config;
+} app_air_quality_t;
 
 /***************************************************************************//**
  * @addtogroup air_quality_app
  * @brief air_quality_app interface.
  * @{
  ******************************************************************************/
-/***************************************************************************//**
- * @brief
- *    Typedef for holding application configuration parameters.
- ******************************************************************************/
-typedef struct {
-  uint8_t notification_data;       ///<  Notification status (0: disabled, 1:
-                                   ///<   enabled)
-  uint8_t buzzer_data;             ///<  Buzzer volume (0-10)
-  uint8_t measurement_period_data; ///<  Measurement update period in s (1-30)
-  uint16_t threshold_co2_ppm;      ///<  co2 threshold value in ppm.
-  uint16_t threshold_tvoc_ppb;     ///<  tvoc threshold value in ppb.
-} air_quality_data_t;
 
 /***************************************************************************//**
  * @brief
  *    Return codes for the status of air quality index function.
  ******************************************************************************/
-typedef enum air_quality_status {
+typedef enum air_quality_index {
   EXCELLENT   = 1, ///< The air inside is as fresh as the air outside.
   FINE        = 2, ///< The air quality inside remains at harmless levels.
   MODERATE    = 3, ///< The air quality inside has reached conspicuous levels.
@@ -98,28 +110,35 @@ typedef enum air_quality_status {
   VERY_POOR   = 5, ///< The air quality inside has reached unacceptable levels.
   SEVERE      = 6  ///< The air quality inside has exceeded maximum workplace
                    ///<   concentration values.
-} air_quality_status_t;
+} air_quality_index_t;
 
 /*********************************************************************&*****//**
  * @brief
  *   Initialize the AIR QUALITY application.
  *
  * @return
- *   @ref SL_STATUS_OK on success or @ref SL_STATUS_FAIL on failure
+ *   None
  ********************************************************************&*********/
-sl_status_t air_quality_app_init(void);
+void air_quality_init(void);
 
-/*******************************************************************&*******//**
+/*******************************************************************************
  * @brief
- *   Process Bluetooth external events.
- *
- * @param[in] event_flags
- *   Event Handler
+ *   Function to get air quality data
  *
  * @return
- *   None
- *******************************************************************&**********/
-void air_quality_process_event(uint32_t event_flags);
+ *   Data to get
+ ******************************************************************************/
+air_quality_data_t air_quality_get_data(void);
+
+/***************************************************************************//**
+ * @brief
+ *    Handle bluetooth event external signal.
+ *
+ * @param[in] extsignals
+ *    Event flags.
+ *
+ ******************************************************************************/
+void air_quality_external_signal_cb(uint32_t event_flags);
 
 /*******************************************************************************
  * @brief
@@ -131,11 +150,12 @@ void air_quality_process_event(uint32_t event_flags);
  * @return
  *   None
  ******************************************************************************/
-void air_quality_user_write_callback(sl_bt_msg_t *evt);
+void air_quality_user_write_cb(
+  sl_bt_evt_gatt_server_user_write_request_t *data);
 
 /*******************************************************************************
  * @brief
- *   Function to handle disconnect event.
+ *   Function to handle read event.
  *
  * @param[in] evt
  *   Gecko event
@@ -143,7 +163,33 @@ void air_quality_user_write_callback(sl_bt_msg_t *evt);
  * @return
  *   None
  ******************************************************************************/
-void air_quality_user_read_callback(sl_bt_msg_t *evt);
+void air_quality_user_read_cb(
+  sl_bt_evt_gatt_server_user_read_request_t *data);
+
+/*******************************************************************************
+ * @brief
+ *   Function to handle characteristic status event.
+ *
+ * @param[in] data
+ *   characteristic_status event
+ *
+ * @return
+ *   None
+ ******************************************************************************/
+void air_quality_characteristic_status_cb(
+  sl_bt_evt_gatt_server_characteristic_status_t *data);
+
+/*******************************************************************************
+ * @brief
+ *   Function to handle connection closed event.
+ *
+ * @param[in] evt
+ *   Gecko event
+ *
+ * @return
+ *   None
+ ******************************************************************************/
+void air_quality_connection_closed_cb(sl_bt_msg_t *evt);
 
 /** @} */
 

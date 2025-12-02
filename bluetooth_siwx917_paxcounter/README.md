@@ -1,12 +1,17 @@
 # Bluetooth - SiWx917 - Paxcounter
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-98.82%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-109.03%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-98.95%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-109.34%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Connected%20Outdoor-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Connected%20Outdoor)
+[![Type badge](https://img.shields.io/badge/Factory%20Automation-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Factory%20Automation)
+[![Type badge](https://img.shields.io/badge/Smart%20Buildings-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Buildings)
+[![Type badge](https://img.shields.io/badge/Smart%20Hospitals-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Hospitals)
+[![Type badge](https://img.shields.io/badge/Smart%20HVAC-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20HVAC)
 
 ## Purpose and Scope
 
@@ -56,7 +61,7 @@ The BLE PAX Counter operates by passively scanning for BLE beacons from nearby d
 
 ## SDK version
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
 
 ## Hardware Requirements
 
@@ -80,12 +85,12 @@ The BLE PAX Counter operates by passively scanning for BLE beacons from nearby d
 - Simplicity Studio
   - Download the [Simplicity Studio v5 IDE](https://www.silabs.com/developers/simplicity-studio)
   - Follow the [Simplicity Studio User Guide](https://docs.silabs.com/simplicity-studio-5-users-guide/1.1.0/ss-5-users-guide-getting-started/install-ss-5-and-software#install-ssv5) to install Simplicity Studio IDE
-- [Simplicity SDK Version 2024.12.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
-- [WiSeConnect 3 SDK extension version 3.4.2](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.4.2)
+- [Simplicity SDK Version 2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
+- [WiSeConnect 3 SDK extension version](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.5.2)
 
 > NOTE:
 >
-> The project has been only built and tested with [Simplicity SDK Version 2024.12.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0) and [WiSeConnect 3 SDK extension version 3.4.2](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.4.2).
+> The project has been only built and tested with [Simplicity SDK Version 2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2) and [WiSeConnect 3 SDK extension version 3.5.2](https://github.com/SiliconLabs/wiseconnect/releases/tag/v3.5.2).
 
 ---
 
@@ -113,7 +118,7 @@ Connect the **SiWx917 Wi-Fi 6 and Bluetooth LE 8 MB Flash SoC Pro Kit** or the *
 
 3. Open the *.slcp file. Select the **SOFTWARE COMPONENTS tab** and install the software component:
 
-   - [WiSeConnect 3 SDK v3.4.2] → [Device] → [Si91x] → [MCU] → [Service] → [NVM3 for Si91x]
+   - [WiSeConnect 3 SDK] → [Device] → [Si91x] → [MCU] → [Service] → [NVM3 for Si91x]
      ![Figure: NVM3](image/nvm3_install.png)
 
 4. Build and flash the project onto the board.

@@ -1,12 +1,18 @@
 # Bluetooth - RSSI-based position estimation for PEPS #
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-302.58%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-303.15%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-79.7%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Access%20Control-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Access%20Control)
+[![Type badge](https://img.shields.io/badge/Asset%20Tracking-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Asset%20Tracking)
+[![Type badge](https://img.shields.io/badge/Direction%20Finding-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Direction%20Finding)
+[![Type badge](https://img.shields.io/badge/Process%20Automation-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Process%20Automation)
+[![Type badge](https://img.shields.io/badge/Security%20Cameras-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Security%20Cameras)
+[![Type badge](https://img.shields.io/badge/Smart%20Locks-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Locks)
 
 ## Summary ##
 
@@ -36,7 +42,7 @@ The project implements a rough RSSI-based position estimation for a Passive Entr
 
 ## SDK version ##
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
 
 ---
 
@@ -167,7 +173,7 @@ To test this application, you can either create a project based on an example pr
 > - The DMADRV component had to be patched with a new callback registration function to allow changing DMA callbacks on the fly. So, after a new project has been created, the files that are located in the `patch/dmadrv` folder are copied into the new project into the appropriate folders:
 >   - `<Project’s SDK folder>/dmadrv/inc/dmadrv.h`
 >   - `<Project’s SDK folder>/dmadrv/src/dmadrv.c`
-> - The patched DMADRV component comes from the Simplicity SDK v2025.6.0 and should work directly with the newer SDK versions. In case of issues, the `DMADRV_SetCallback()` and the `DMADRV_SetCallbackParam()` functions and their declarations should be copied into the new SDK files.
+> - The patched DMADRV component comes from the Simplicity SDK v2025.6.2 and should work directly with the newer SDK versions. In case of issues, the `DMADRV_SetCallback()` and the `DMADRV_SetCallbackParam()` functions and their declarations should be copied into the new SDK files.
 
 ---
 

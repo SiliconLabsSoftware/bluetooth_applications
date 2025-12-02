@@ -1,15 +1,22 @@
 # Bluetooth - Thermostat (SHTC3)
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-OLED%20Display-green)](https://www.sparkfun.com/products/14532)
 [![Required board](https://img.shields.io/badge/Mikroe-Buzzer%202%20Click%20Board-green)](https://www.mikroe.com/buzz-2-click)
 [![Required board](https://img.shields.io/badge/Sparkfun-Humidity%20Sensor-green)](https://www.sparkfun.com/products/16467)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-221.55%20KB-blue)
-![RAM badge](https://img.shields.io/badge/RAM-11.58%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-223.09%20KB-blue)
+![RAM badge](https://img.shields.io/badge/RAM-11.64%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Factory%20Automation-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Factory%20Automation)
+[![Type badge](https://img.shields.io/badge/Process%20Automation-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Process%20Automation)
+[![Type badge](https://img.shields.io/badge/Smart%20Agriculture-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Agriculture)
+[![Type badge](https://img.shields.io/badge/Smart%20Buildings-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Buildings)
+[![Type badge](https://img.shields.io/badge/Smart%20Hospitals-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Hospitals)
+[![Type badge](https://img.shields.io/badge/Smart%20HVAC-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20HVAC)
+[![Type badge](https://img.shields.io/badge/Smart%20Metering-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Metering)
 
 ## Summary
 
@@ -56,8 +63,8 @@ This code example referred to the following code examples. More detailed informa
 
 ## SDK version
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
-- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
+- [Third Party Hardware Drivers v4.4.1](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 
@@ -126,10 +133,10 @@ To test this application, you can either create a project based on an example pr
 
 4. Open the .slcp file. Select the **SOFTWARE COMPONENTS** tab and install the software components:
 
-   - [Services] → [Timers] → [Sleep Timer]
    - [Services] → [IO Stream] → [IO Stream: USART] → default instance name: "vcom"
    - [Application] → [Utility] → [Log]
    - [Application] → [Utility] → [Assert]
+   - [Application] → [Utility] → [Timer]
    - [Third Party] → [Tiny printf]
    - [Platform] → [Driver] → [Button] → [Simple Button] → default instance name: "btn0"
    - [Platform] → [Driver] → [LED] → [Simple LED] → default instance name: "led0"
@@ -158,47 +165,57 @@ To test this application, you can either create a project based on an example pr
 
 The application is based on the Bluetooth - SoC Empty example. Since the example already has the Bluetooth GATT server, advertising, and connection mechanisms, only minor changes are required.
 
-The GATT changes were adding a new custom service (Thermostat ) which are 8 characteristics:
+- BLE advertiser name: **Thermostat**
 
-- **Mode**:
+- [**Service**] **Thermostat** - UUID: `9d164130-ebf2-4039-b84d-5d6bae5e5a19`
 
-  - [**Readable**] - Get mode value
+- [**Char**] **Mode** - UUID: `1dd848fb-f503-4620-b57b-b14d8ae2368f`
+  - [**Read**] - Get mode value
+  - [**Write**] - Set mode value (0 - heat, 1 - cool)
 
-  - [**Writable**] - Set mode value - mode (0 - heat, 1 - cool)
+  - [**Char**] **Buzzer Volume** - UUID: `3af4ef21-00d9-4ead-b184-abec5949d69b`
+    - [**Read**] - Get configured buzzer volume
+    - [**Write**] - Set buzzer volume (0 - 10)
 
-- **Setpoint (SV)**:
+- [**Char**] **Setpoint (SV)** - UUID: `e0c54049-479c-4a11-aa8d-1838f88fcd98`
+  - [**Read**] - Get setpoint value
+  - [**Write**] - Set setpoint value (e.g.: 250 ↔ 25.0 °C; limits: -35 °C → + 120 °C ↔ -350 → 1200)
 
-  - [**Readable**] - Get setpoint value
+- [**Char**] **Hysteresis (HYS)** - UUID: `a6b2bc71-70da-426c-840c-281cdd578212`
+  - [**Read**] - Get hysteresis value
+  - [**Write**] - Set hysteresis value - hysteresis  (e.g.: 51 ↔ 5.1 °C, limits: 0 → (Upper threshold value - Lower threshold value))
 
-  - [**Writable**] - Set setpoint value - setpoint (e.g.: 2500 => 25.0 °C, limits: -35 °C ↔ + 120 °C, -3500 ↔ 12000)
+- [**Char**] **Lower Threshold** - UUID: `d21dd9c4-79eb-4b02-b549-d26b289dcc3d`
+  - [**Read**] - Get lower threshold value
+  - [**Write**] - Set lower threshold value (-350 <= Lower threshold value < Upper threshold value)
 
-- **Temperature (PV)**:
+- [**Char**] **Upper Threshold** - UUID: `a3ff7bb1-28b2-4d3c-b74c-63bdd602b2e9`
+  - [**Read**] - Get upper threshold value
+  - [**Write**] - Set upper threshold value - upper_threshold (Lower threshold value < Upper threshold value <= 1200)
 
-  - [**Readable**] - Get current averaged temperature value (e.g.: 2500 => 25.0 °C)
+- [**Char**] **Alarm Enabled** - UUID: `d7761e08-fe9e-4929-9149-76c858c37fe5`
+  - [**Read**] - Get alarm enabled state (0 - disabled, 1 - enabled)
+  - [**Write**] - Set alarm enabled state (0 - disabled, 1 - enabled)
 
-- **Humidity**:
+  - [**Char**] **Measurement Interval** - UUID: `99f98ed2-1760-4712-bb98-dc61a733cdbd`
+    - [**Read**] - Get configured measurement interval in s
+    - [**Write**] -  Set configured measurement interval  in s (1 - 30)
 
-  - [**Readable**] - Get current averaged humidity value (e.g.: 2500 => 25.0 %)
+- [**Char**] **Temperature (PV)** - UUID: `4085650b-5f18-48e8-b48b-81805883ee83`
+  - [**Read**] - Get current averaged temperature value (e.g.: 251 ↔ 25.1 °C)
+  - [**Notify**] - Get current averaged temperature value (e.g.: 251 ↔ 25.1 °C) automatically
 
-- **Hysteresis (HYS)**:
-  - [**Readable**] - Get hysteresis value
+- [**Char**] **Humidity** - UUID: `f3bf7dad-5ef4-4e6d-b3fe-46113aec0a49`
+  - [**Read**] - Get current averaged humidity value (e.g.: 251 ↔ 25.1 %)
+  - [**Notify**] - Get current averaged humidity value (e.g.: 251 ↔ 25.1 %) automatically
 
-  - [**Writable**] - Set hysteresis value - hysteresis  (e.g.: 2500 => 25.0 °C, limits:  0 ↔ (HIGH-LOW) thresholds)
+- [**Char**] **Actuator** - UUID: `d047362d-ec99-4639-a09c-30e35e066e3a`
+  - [**Read**] - Get actuator status (0 - off, 1 - on)
+  - [**Notify**] - Get actuator status (0 - off, 1 - on) automatically
 
-- **Lower threshold**:
-  - [**Readable**] - Get a lower threshold value
-
-  - [**Writable**] - Set lower threshold value - lower_threshold (-3500 <= VAL < Upper threshold value)
-
-- **Upper threshold**:
-  - [**Readable**] - Get upper threshold value
-
-  - [**Writable**] - Set upper threshold value - upper_threshold (-3500 <= VAL < Upper threshold value)
-
-- **Threshold alarm status**:
-  - [**Readable**] - Get threshold alarm status (0 - disabled, 1 - enabled, 2 - alarm active)
-
-  - [**Writable**] - Set threshold alarm status - is_alarm_active (0 - disabled or 1 - enabled )
+- [**Char**] **Alarm Status** - UUID: `5c846592-ebec-4097-a8c2-df3ea2ec8926`
+  - [**Read**] - Get alarm status (0 - inactive, 1 - active)
+  - [**Notify**] - Get alarm status (0 - inactive, 1 - active) automatically
 
 ### Thermostat Implementation
 
@@ -253,31 +270,18 @@ Follow the below steps to test the example with the Simplicity Connect applicati
 
 2. Find your device in the Bluetooth Browser, advertising as *Thermostat*, and tap Connect.
 
-   | ![EFR32 Connect App](image/efr32_connect_app1.png) | ![EFR32 Connect App](image/efr32_connect_app2.png) |
-   |-|-|
-
 #### Read/Write characteristics
 
-The parameters of this example application can be easily configured via BLE characteristics. Values for the characteristics are handled by the application as ASCII strings. Tap on the main service to see the available characteristics. Please refer [GATT Configurator](#gatt-configurator) to choose the correct characteristic.
+The parameters of this example application can be easily configured via BLE characteristics. Values for the characteristics are handled by the application as HEX number. Tap on the main service to see the available characteristics. Please refer [GATT Configurator](#gatt-configurator) to choose the correct characteristic.
 
 **Read**
-Push read button to request the value of a characteristic. (See ASCII fields.)
+Push read button to request the value of a characteristic (see HEX fields).
 
 **Write**
-For setting a parameter select a characteristic and tap on its write button. Type a new value in the ASCII field and push the **Send** button.
+For setting a parameter select a characteristic and tap on its write button. Type a new value in the HEX field and push the **Send** button.
 
-| Characteristics | Read  | Write |
-| :-------------- | ----- |------ |
-| **Mode** | - Read to get mode value | - Write to set mode value - mode (0 - heat, 1 - cool) |
-| **Setpoint** | - Read to get setpoint value | - Write to set setpoint value - setpoint (e.g.: 2500 => 25.0 °C, limits: -35 °C ↔ + 120 °C, -3500 ↔ 12000) |
-| **Temperature(SV)** | - Read to get current averaged temperature value (e.g.: 2500 => 25.0 °C) | |
-| **Humidity (PV)** | - Read to get current averaged humidity value (e.g.: 2500 => 25.0 %) | |
-| **Hysteresis** | - Read to get hysteresis value | - Write to set hysteresis value - hysteresis (e.g.: 2500 => 25.0 °C, limits: 0 ↔ (HIGH-LOW) thresholds) |
-| **Lower threshold** | - Read to get lower threshold value | - Write to set lower threshold value - lower_threshold (-3500 <= VAL < Upper threshold value) |
-| **Upper threshold** | - Read to get upper threshold value | - Write to set upper threshold value - upper_threshold (-3500 <= VAL < Upper threshold value) |
-| **Threshold alarm status** | - Read to get threshold alarm status (0 - disabled, 1 - enabled, 2 - alarm active). | - Write to set threshold alarm status - is_alarm_active (0 - disabled or 1 - enabled) |
-
----
+> [!TIP]
+> The application handles characteristic values as hexadecimal numbers in Little Endian format. So, to write a 2-byte attribute—for example, to configure the setpoint parameter to 300 (representing 30 °C)—the value 2C01 should be entered in the HEX field.
 
 ## Report Bugs & Get Support
 

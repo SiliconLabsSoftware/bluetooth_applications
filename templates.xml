@@ -635,7 +635,7 @@
     <properties key="keywords" value="universal\ configurator"/>
     <properties key="projectFilePaths" value="bluetooth_pawr_thermometer/bluetooth_pawr_thermometer_broadcaster/SimplicityStudio/bt_pawr_thermometer_broadcaster.slcp"/>
     <properties key="readmeFiles" value="bluetooth_pawr_thermometer/README.md"/>
-    <properties key="boardCompatibility" value="brd4180a brd4180b brd4186c com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd4180a brd4180b brd4186c brd4187c com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.*"/>
     <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
     <properties key="toolchainCompatibility" value="gcc iar"/>
@@ -1237,6 +1237,21 @@
     <properties key="projectFilePaths" value="bluetooth_soc_voltage_monitor/SimplicityStudio/bt_soc_voltage_monitor.slcp"/>
     <properties key="readmeFiles" value="bluetooth_soc_voltage_monitor/README.md"/>
     <properties key="boardCompatibility" value="brd4186c com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32mg24.*"/>
+    <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc iar"/>
+    <properties key="category" value="Bluetooth Examples"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Bluetooth"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+  </descriptors>
+  <descriptors name="bluetooth_pulse_oximeter_and_heart_rate_monitor" label="Bluetooth - Pulse Oximeter and Heart Rate Monitor (MAX30101 - MAX32664)"
+               description="This project aims to implement a pulse oximeter and heart rate monitor and notification system using Silabs development kits and external sensors integrated with the BLE wireless stack.">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="bluetooth_pulse_oximeter_and_heart_rate_monitor/SimplicityStudio/bt_pulse_oximeter_and_heart_rate_monitor.slcp"/>
+    <properties key="readmeFiles" value="bluetooth_pulse_oximeter_and_heart_rate_monitor/README.md"/>
+    <properties key="boardCompatibility" value="brd2703a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg24.*"/>
     <properties key="ideCompatibility" value="generic-template iar-embedded-workbench makefile-ide simplicity-ide visual-studio-code"/>
     <properties key="toolchainCompatibility" value="gcc iar"/>

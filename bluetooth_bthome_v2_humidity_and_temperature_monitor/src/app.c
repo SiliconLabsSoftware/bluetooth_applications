@@ -118,8 +118,6 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 {
   sl_status_t sc;
 
-  bthome_v2_bt_on_event(evt);
-
   switch (SL_BT_MSG_ID(evt->header)) {
     // -------------------------------
     // This event indicates the device has started and the radio is ready.

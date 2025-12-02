@@ -24,6 +24,7 @@ component:
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
   - id: bluetooth_feature_connection_role_peripheral
+  - id: bluetooth_feature_connection_role_central
   - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gatt_server
   - id: bluetooth_feature_legacy_scanner
@@ -43,8 +44,7 @@ component:
   - id: board_control
   - id: dmd_memlcd
   - id: glib
-  - id: iostream_usart
-    instance: [vcom]
+  - id: iostream_recommended_stream
   - id: app_log
   - id: simple_button
     instance: [btn0]

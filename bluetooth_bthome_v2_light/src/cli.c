@@ -39,6 +39,7 @@
 #include "sl_cli_instances.h"
 #include "sl_cli_arguments.h"
 #include "sl_cli_handles.h"
+#include "sl_string.h"
 
 #include "bthome_v2_server_config.h"
 #include "bthome_v2_server_nvm3.h"
@@ -87,7 +88,7 @@ static const sl_cli_command_info_t cmd__scan = \
 static const sl_cli_command_info_t cmd__key_register = \
   SL_CLI_COMMAND(key_register,
                  "Register encryption key by MAC",
-                 "parameter: MAC in string"SL_CLI_UNIT_SEPARATOR "parameter: Key in string",
+                 "parameter: MAC in string and Key in string",
                  { SL_CLI_ARG_WILDCARD, SL_CLI_ARG_END, });
 
 static const sl_cli_command_info_t cmd__key_remove = \
@@ -164,17 +165,27 @@ void scan(sl_cli_command_arg_t *arguments)
 {
   char *instruction;
 
-  app_log("<<scan network>>\r\n");
+  // Check the arguments provided
+  if (sl_cli_get_argument_count(arguments) != 1) {
+    app_log("Incorrect instruction! Please use with start or stop.\r\n");
+    return;
+  }
 
   // Get the instruction provided
   instruction = sl_cli_get_argument_string(arguments, 0);
 
   if (strcmp(instruction, "start") == 0) {
+    app_log("<<scan network>>\r\n");
     // scan start instruction provided
-    bthome_v2_server_start_scan_network();
+    if (bthome_v2_server_start_scan_network() != SL_STATUS_OK) {
+      app_log("<<scan network: start error>>\r\n");
+    }
   } else if (strcmp(instruction, "stop") == 0) {
+    app_log("<<scan network: stop>>\r\n");
     // scan stop instruction provided
-    sl_bt_scanner_stop();
+    if (sl_bt_scanner_stop() != SL_STATUS_OK) {
+      app_log("<<scan network: stop error>>\r\n");
+    }
   } else {
     // valid instruction provided
     app_log("Incorrect instruction. Please use start or stop\r\n");
@@ -197,9 +208,29 @@ void key_register(sl_cli_command_arg_t *arguments)
 
   app_log("<<key register>>\r\n");
 
+  // Check the arguments provided
+  if (sl_cli_get_argument_count(arguments) != 2) {
+    app_log("Incorrect instruction! Please use with MAC address and KEY.\r\n");
+    return;
+  }
+
   // Get the parameter provided
   mac_str = sl_cli_get_argument_string(arguments, 0);
+  if (sl_strlen(mac_str) != 12) {
+    app_log("Incorrect length MAC address!\r\n");
+    return;
+  }
   key_str = sl_cli_get_argument_string(arguments, 1);
+  if (sl_strlen(key_str) != 32) {
+    app_log("Incorrect length KEY!\r\n");
+    return;
+  }
+
+  // Check the registered list for adding new device
+  if (registered_count >= MAX_ENCRYPT_DEVICE) {
+    app_log("List of registered device is full\r\n");
+    return;
+  }
 
   // Parse mac to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
@@ -208,23 +239,11 @@ void key_register(sl_cli_command_arg_t *arguments)
   }
 
   // Check the registered list if device is available
-  if (registered_count == (MAX_ENCRYPT_DEVICE - 1)) {
-    app_log("List of registered device is full\r\n");
-    return;
-  }
-
   for (uint8_t i = 0; i < registered_count; i++) {
     if (memcmp(registered_device[i], mac.data, 6) == 0) {
       app_log("Device already exists\r\n");
       return;
     }
-  }
-  // Add to registered list
-  if (registered_count < (MAX_ENCRYPT_DEVICE - 1)) {
-    for (uint8_t i = 0; i < 6; i++) {
-      registered_device[registered_count][i] = mac.data[i];
-    }
-    registered_count++;
   }
 
   // Parse key to 16 byte length format
@@ -232,6 +251,12 @@ void key_register(sl_cli_command_arg_t *arguments)
     memcpy(octet, (uint8_t *)&key_str[2 * i], 2);
     key.data[i] = (uint8_t)strtol(octet, NULL, 16);
   }
+
+  // Add to registered list
+  for (uint8_t i = 0; i < 6; i++) {
+    registered_device[registered_count][i] = mac.data[i];
+  }
+  registered_count++;
 
   bthome_v2_server_key_register(&mac, &key);
 }
@@ -251,8 +276,18 @@ void key_remove(sl_cli_command_arg_t *arguments)
 
   app_log("<<key remove>>\r\n");
 
+  // Check the arguments provided
+  if (sl_cli_get_argument_count(arguments) != 1) {
+    app_log("Incorrect instruction! Please use with MAC address.\r\n");
+    return;
+  }
+
   // Get the mac provided
   mac_str = sl_cli_get_argument_string(arguments, 0);
+  if (sl_strlen(mac_str) != 12) {
+    app_log("Incorrect length MAC address!\r\n");
+    return;
+  }
 
   // Parse mac to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
@@ -300,8 +335,18 @@ void key_get(sl_cli_command_arg_t *arguments)
 
   app_log("<<key get>>\r\n");
 
+  // Check the arguments provided
+  if (sl_cli_get_argument_count(arguments) != 1) {
+    app_log("Incorrect instruction! Please use with MAC address.\r\n");
+    return;
+  }
+
   // Get the mac provided
   mac_str = sl_cli_get_argument_string(arguments, 0);
+  if (sl_strlen(mac_str) != 12) {
+    app_log("Incorrect length MAC address!\r\n");
+    return;
+  }
 
   // Parse mac to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
@@ -363,18 +408,29 @@ void interested_add(sl_cli_command_arg_t *arguments)
 
   app_log("<<interested list add>>\r\n");
 
+  // Check the arguments provided
+  if (sl_cli_get_argument_count(arguments) != 1) {
+    app_log("Incorrect instruction! Please use with MAC address.\r\n");
+    return;
+  }
+
   // Get the MAC provided
   mac_str = sl_cli_get_argument_string(arguments, 0);
+  if (sl_strlen(mac_str) != 12) {
+    app_log("Incorrect length MAC address!\r\n");
+    return;
+  }
+
+  // Check the interested list for adding new device
+  if (interested_count >= MAX_INTERESTED_DEVICE) {
+    app_log("List of interested device is full\r\n");
+    return;
+  }
 
   // Parse MAC to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
     memcpy(octet, (uint8_t *)&mac_str[2 * i], 2);
     mac.data[i] = (uint8_t)strtol(octet, NULL, 16);
-  }
-
-  if (interested_count == (MAX_INTERESTED_DEVICE - 1)) {
-    app_log("List of interested device is full\r\n");
-    return;
   }
 
   for (uint8_t i = 0; i < interested_count; i++) {
@@ -384,12 +440,10 @@ void interested_add(sl_cli_command_arg_t *arguments)
     }
   }
   // Add to interested list
-  if (interested_count < (MAX_INTERESTED_DEVICE - 1)) {
-    for (uint8_t i = 0; i < 6; i++) {
-      interested_device[interested_count][i] = mac.data[i];
-    }
-    interested_count++;
+  for (uint8_t i = 0; i < 6; i++) {
+    interested_device[interested_count][i] = mac.data[i];
   }
+  interested_count++;
 }
 
 /***************************************************************************//**
@@ -407,8 +461,18 @@ void interested_remove(sl_cli_command_arg_t *arguments)
 
   app_log("<<interested list remove>>\r\n");
 
+  // Check the arguments provided
+  if (sl_cli_get_argument_count(arguments) != 1) {
+    app_log("Incorrect instruction! Please use with MAC address.\r\n");
+    return;
+  }
+
   // Get the mac provided
   mac_str = sl_cli_get_argument_string(arguments, 0);
+  if (sl_strlen(mac_str) != 12) {
+    app_log("Incorrect length MAC address!\r\n");
+    return;
+  }
 
   // Parse mac to 6 byte length format
   for (uint8_t i = 0; i < 6; i++) {
@@ -451,6 +515,12 @@ void light_system(sl_cli_command_arg_t *arguments)
   char *instruction;
 
   app_log("<<light system>>\r\n");
+
+  // Check the arguments provided
+  if (sl_cli_get_argument_count(arguments) != 1) {
+    app_log("Incorrect instruction! Please use with start or stop.\r\n");
+    return;
+  }
 
   // Get the instruction provided
   instruction = sl_cli_get_argument_string(arguments, 0);

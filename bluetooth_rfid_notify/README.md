@@ -1,14 +1,15 @@
 # Bluetooth - RFID Notify #
 
-![Type badge](https://img.shields.io/badge/Type-Virtual%20Application-green)
 ![Technology badge](https://img.shields.io/badge/Technology-Bluetooth-green)
 ![License badge](https://img.shields.io/badge/License-Zlib-green)
-![SDK badge](https://img.shields.io/badge/SDK-v2025.6.0-green)
+![SDK badge](https://img.shields.io/badge/SDK-v2025.6.2-green)
 [![Required board](https://img.shields.io/badge/Sparkfun-125kHz%20RFID%20Card-green)](https://www.sparkfun.com/products/14325)
 [![Required board](https://img.shields.io/badge/Sparkfun-ID-green)](https://www.sparkfun.com/products/11827)
 ![Build badge](https://img.shields.io/badge/Build-passing-green)
-![Flash badge](https://img.shields.io/badge/Flash-192.29%20KB-blue)
+![Flash badge](https://img.shields.io/badge/Flash-192.74%20KB-blue)
 ![RAM badge](https://img.shields.io/badge/RAM-11.27%20KB-blue)
+
+[![Type badge](https://img.shields.io/badge/Smart%20Locks-salmon)](https://siliconlabs-massmarket.github.io/repository-catalog/#applications-list?filter=Smart%20Locks)
 
 ## Overview ##
 
@@ -36,8 +37,8 @@ This example is also the foundation for developing automatic door lock systems, 
 
 ## SDK version ##
 
-- [Simplicity SDK v2025.6.0](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.0)
-- [Third Party Hardware Drivers v4.4.0](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
+- [Simplicity SDK v2025.6.2](https://github.com/SiliconLabs/simplicity_sdk/releases/tag/v2025.6.2)
+- [Third Party Hardware Drivers v4.4.1](https://github.com/SiliconLabs/third_party_hw_drivers_extension)
 
 ---
 

@@ -79,7 +79,7 @@ other_file:
 
 sdk_extension:
   - id: third_party_hw_drivers
-    version: 2.0.1
+    version: 4.4.1
 
 tag:
   - hardware:rf:band:2400
